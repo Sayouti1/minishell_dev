@@ -172,7 +172,7 @@ void	exec_simple_cmd(char *cmd)
 {
 	char	**split;
 
-	split = split_on_two(cmd, "		");
+	split = split_on_two(cmd, " \t");
 	if (built_in(split[0]))
 		execute_built_in(split);
 	else

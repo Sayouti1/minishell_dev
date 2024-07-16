@@ -24,7 +24,7 @@ void	ft_echo(char *str)
 	char	**split;
 	int		i;
 
-	split = ft_split_del(str, "		");
+	split = ft_split_del(str, " \t");
 	if (NULL == split)
 		return ;
 	n_flag = 0;
