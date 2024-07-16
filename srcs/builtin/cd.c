@@ -1,0 +1,49 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aes-sayo <aes-sayo@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/28 09:28:29 by aes-sayo          #+#    #+#             */
+/*   Updated: 2024/06/28 09:28:37 by aes-sayo         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../include/include.h"
+
+/*
+ *cd ✅
+ *norminette 25 line ❌
+ */
+int	cd(char **split)
+{
+	char	*home;
+	char	*full_path;
+
+	home = NULL;
+	if (split_len(split) > 2)
+		return (printf("cd: too many arguments\n"), set_exit_status(1));
+	if (NULL == split[1] || (split[1] && split[1][0] == '~' && !split[1][1]))
+	{
+		home = get_env_v1("HOME");
+		if (NULL == home)
+			return (set_exit_status(1));
+		if (chdir(home))
+			return (printf("CANNOT CHANGE TO HOME \n"), set_exit_status(1));
+		return (set_exit_status(0));
+	}
+	if (split[1][0] == '/')
+	{
+		if (chdir(split[1]))
+			return (printf("cd: %s: No such file or directory\n", split[1]), set_exit_status(1));
+		return (set_exit_status(0));
+	}
+	home = getcwd(NULL, 0);
+	full_path = ft_strjoin_prefixed(home, '/', split[1]);
+	if (NULL == full_path)
+		return (set_exit_status(1));
+	if (chdir(full_path))
+		return (printf("cd: %s: No such file or directory\n", split[1]), 	set_exit_status(1));
+	return (free(full_path), set_exit_status(0));
+}
