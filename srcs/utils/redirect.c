@@ -18,9 +18,9 @@ int redirect_to_file(char *cmd, char *arg, int append)
     while (split[++fd])
         split[fd] = trim_and_free(split[fd]);
     if (append)
-        fd = open(split[1], O_CREAT | O_APPEND | O_RDWR);
+        fd = open(split[1], O_CREAT | O_APPEND | O_RDWR , 0644);
     else
-        fd = open(split[1], O_CREAT | O_TRUNC | O_RDWR);
+        fd = open(split[1], O_CREAT | O_TRUNC | O_RDWR , 0644);
     std_out = dup(STDOUT_FILENO);
     printf("split[0] = [%s]\nsplit[1] = [%s]\n", split[0], split[1]);
     dup2(fd , 1);

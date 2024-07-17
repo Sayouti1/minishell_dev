@@ -175,7 +175,7 @@ void	exec_simple_cmd(char *cmd)
 	split = split_on_two(cmd, " \t");
     if (ft_char_in('>', split[1]))
     {
-        redirect_to_file(cmd, split[1], 0);
+        redirect_to_file(cmd, split[1], 1);
         free_split(split);
         return ;
     }
