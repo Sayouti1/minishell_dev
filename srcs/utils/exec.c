@@ -173,6 +173,12 @@ void	exec_simple_cmd(char *cmd)
 	char	**split;
 
 	split = split_on_two(cmd, " \t");
+    if (ft_char_in('>', split[1]))
+    {
+        redirect_to_file(cmd, split[1], 0);
+        free_split(split);
+        return ;
+    }
 	if (built_in(split[0]))
 		execute_built_in(split);
 	else
