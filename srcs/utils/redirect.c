@@ -12,7 +12,7 @@ int redirect_to_file(char *cmd, char *arg, int append)
 
     (void)arg;
     split = ft_split_del(cmd, ">");
-    if (!split)
+    if (NULL == split)
         return (0);
     fd = -1;
     while (split[++fd])
