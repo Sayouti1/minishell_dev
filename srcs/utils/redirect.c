@@ -25,13 +25,39 @@ int redirect_to_file(char *cmd, char *arg, int append)
     printf("split[0] = [%s]\nsplit[1] = [%s]\n", split[0], split[1]);
     dup2(fd , 1);
     exec_simple_cmd(split[0]);
-//    close(fd);
+    close(fd);
     dup2(std_out, 1);
     return  (1);
 }
 
+/*
+ * [1 => '>'], ouput
+ * [2 => '>>'], append
+ * [3 => '<'] input
+ * [4 => '<<'] her-doc
+ */
+
 int has_redirect(char *cmd)
 {
-    (void)cmd;
-    return (1);
+    int i;
+
+    if (NULL == cmd)
+        return (0);
+    i = 0;
+    while (cmd[i])
+    {
+        if (cmd[i] == '>')
+        {
+            if (cmd[i + 1] == '>')
+                return (2);
+            return (1);
+        }
+        if (cmd[i] == '<') {
+            if (cmd[i + 1] == '<')
+                return (4);
+            return (3);
+        }
+        ++i;
+    }
+    return (0);
 }

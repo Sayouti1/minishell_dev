@@ -171,11 +171,13 @@ int	execute_pipes(char **pipes)
 void	exec_simple_cmd(char *cmd)
 {
 	char	**split;
+	int		redirect;
 
 	split = split_on_two(cmd, " \t");
-    if (ft_char_in('>', split[1]))
+	redirect = has_redirect(split[1]);
+	if (redirect == 1 || redirect == 2)
     {
-        redirect_to_file(cmd, split[1], 1);
+        redirect_to_file(cmd, split[1], redirect - 1);
         free_split(split);
         return ;
     }

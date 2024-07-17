@@ -109,5 +109,6 @@ int				    ft_char_in(char c, char *str);
 int				    ft_exit(char *arg);
 
 int                 redirect_to_file(char *cmd, char *file, int append);
+int					has_redirect(char *cmd);
 
 #endif
