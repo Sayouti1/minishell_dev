@@ -77,46 +77,47 @@ int	execute_command(char **split)
 	return (set_exit_status(g_vars.exit_status));
 }
 
-void	execute_built_in(char **arg)
+void	execute_built_in(t_command *cmd)
 {
-	if (!ft_strcmp(arg[0], "echo"))
+	if (!ft_strcmp(cmd->command, "echo"))
 	{
-		if (arg[1])
-			ft_echo(arg[1]);
+		if (cmd->args)
+			ft_echo(cmd->args);
 		else
 			printf("\n");
 		set_exit_status(0);
 	}
-	else if (!ft_strcmp(arg[0], "cd"))
-		cd(arg);
-	else if (!ft_strcmp(arg[0], "pwd"))
+	else if (!ft_strcmp(cmd->command, "cd"))
+		cd(cmd->args);
+	else if (!ft_strcmp(cmd->command, "pwd"))
 		pwd();
-	else if (!ft_strcmp(arg[0], "export"))
+	else if (!ft_strcmp(cmd->command, "export"))
 	{
-		if (arg[1])
-			ft_export(arg[1]);
+		if (cmd->args)
+			ft_export(cmd->args);
 		else
 			ft_print_export();
 	}
-	else if (!ft_strcmp(arg[0], "unset"))
+	else if (!ft_strcmp(cmd->command, "unset"))
 	{
-		if (arg[1])
-			ft_unset(arg[1]);
+		if (cmd->args)
+			ft_unset(cmd->args);
 	}
-	else if (!ft_strcmp(arg[0], "env"))
+	else if (!ft_strcmp(cmd->command, "env"))
 	{
-		if (NULL == arg[1])
+		if (NULL == cmd->args)
 			ft_env();
 		else
 			set_exit_status(127);
 	}
-	else if (!ft_strcmp(arg[0], "exit"))
-		ft_exit(arg[1]);
+	else if (!ft_strcmp(cmd->command, "exit"))
+		ft_exit(cmd->args);
 }
 
 /*
  * TO BE FIXED
  */
+/*
 int	execute_pipes(char **pipes)
 {
 	int	i;
@@ -167,23 +168,51 @@ int	execute_pipes(char **pipes)
 		wait(&g_vars.exit_status);
 	return (set_exit_status(g_vars.exit_status));
 }
+*/
+void	external_command(t_command *cmd) {
+	int	pid;
 
-void	exec_simple_cmd(char *cmd)
-{
-	char	**split;
-	int		redirect;
-
-	split = split_on_two(cmd, " \t");
-	redirect = has_redirect(split[1]);
-	if (redirect == 1 || redirect == 2)
-    {
-        redirect_to_file(cmd, split[1], redirect - 1);
-        free_split(split);
-        return ;
-    }
-	if (built_in(split[0]))
-		execute_built_in(split);
-	else
-		execute_command(split);
-	free_split(split);
+	pid = fork();
+	if (0 == pid)
+	{
+		execve(cmd->command, cmd->args, g_vars.envp);
+		printf("ERROR IN EXECVE EXTERNAL CMD\n");
+		exit(1);
+	}
+	wait(&g_vars.exit_status);
+	set_exit_status(g_vars.exit_status);
 }
+// grep 10 > greep.txt | sort < greep.txt -r | uniq
+void	exec_simple_cmd(t_command *cmd)
+{
+	// char	**split;
+	// int		redirect;
+
+	if (cmd->redirection != NULL)
+	{
+		if (cmd->redirection->type == OUTPUT || cmd->redirection->type == APPEND)
+			dup2(cmd->redirection->fd, 1);
+		else if (cmd->redirection->type == INPUT)
+			dup2(cmd->redirection->fd, 0);
+		close(cmd->redirection->fd);
+	}
+
+	if (built_in(cmd->command))
+		execute_built_in(cmd);
+	else
+		external_command(cmd);
+	// split = split_on_two(cmd, " \t");
+	// redirect = has_redirect(split[1]);
+	// if (redirect == 1 || redirect == 2)
+ //    {
+ //        redirect_to_file(cmd, split[1], redirect - 1);
+ //        free_split(split);
+ //        return ;
+ //    }
+	// if (built_in(split[0]))
+	// 	execute_built_in(split);
+	// else
+	// 	execute_command(split);
+	// free_split(split);
+}
+

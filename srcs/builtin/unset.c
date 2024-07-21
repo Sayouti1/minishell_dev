@@ -16,30 +16,39 @@
 
 #include "../../include/include.h"
 
-int	ft_unset(char *key)
+int	ft_unset(char **key)
 {
 	t_env	*iter;
 	t_env	*tmp;
+	char	**split;
+	int		i;
 
+	split = ft_split_del(key[0], " \t");
+	if (NULL == split)
+		return (1);
 	iter = g_vars.env;
-	if (iter && !ft_strcmp(iter->key, key))
+	i = -1;
+	while (split[++i])
 	{
-		g_vars.env = iter->next;
-		delete_env(iter);
-	}
-	else
-	{
-		while (iter)
+		if (iter && !ft_strcmp(iter->key, split[i]))
 		{
-			if (iter->next && !ft_strcmp(iter->next->key, key))
-				break ;
-			iter = iter->next;
+			g_vars.env = iter->next;
+			delete_env(iter);
 		}
+		else
+		{
+			while (iter)
+			{
+				if (iter->next && !ft_strcmp(iter->next->key, split[i]))
+					break ;
+				iter = iter->next;
+			}
+		}
+		if (NULL == iter)
+			return (set_exit_status(0));
+		tmp = iter->next;
+		iter->next = iter->next->next;
+		delete_env(tmp);
 	}
-	if (NULL == iter)
-		return (set_exit_status(0));
-	tmp = iter->next;
-	iter->next = iter->next->next;
-	delete_env(tmp);
 	return (set_exit_status(0));
 }

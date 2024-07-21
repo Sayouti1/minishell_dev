@@ -18,27 +18,22 @@
 /*
  * ECHO FUNCTION ✅
  */
-void	ft_echo(char *str)
+void	ft_echo(char **str)
 {
 	int		n_flag;
-	char	**split;
 	int		i;
 
-	split = ft_split_del(str, " \t");
-	if (NULL == split)
-		return ;
 	n_flag = 0;
-	if (!ft_strcmp(split[0], "-n"))
+	printf("str[0] = [%s], str[1] = [%s]\n", str[0], str[1]);
+	if (!ft_strcmp(str[0], "-n"))
 		n_flag = 1;
 	i = n_flag;
-	while (split[i])
+	while (str[i])
 	{
-		printf("%s", split[i]);
-		if (split[i + 1])
+		printf("%s", str[i++]);
+		if (str[i])
 			printf(" ");
-		++i;
 	}
-	if (!n_flag)
+	if (n_flag == 0)
 		printf("\n");
-	free_split(split);
 }

@@ -3,7 +3,7 @@
 //
 // Created by abdelaziz on 7/17/24.
 //
-
+/*
 int redirect_to_file(char *cmd, char *arg, int append)
 {
     int fd;
@@ -29,7 +29,7 @@ int redirect_to_file(char *cmd, char *arg, int append)
     dup2(std_out, 1);
     return  (1);
 }
-
+*/
 /*
  * [1 => '>'], ouput
  * [2 => '>>'], append

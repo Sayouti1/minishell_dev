@@ -42,12 +42,43 @@ typedef struct s_global_vars
 
 extern t_global_vars	g_vars;
 
+enum e_redirection {
+	OUTPUT,
+	APPEND,
+	INPUT,
+	HER_DOC
+};
+
+typedef struct s_redirection {
+	int		type; // output | append | input | her_doc
+	char	*file_name;
+	int		fd;
+}	t_redirection;
+
+typedef struct s_command {
+	char *command;
+	char **args;
+
+	t_redirection	    *redirection;
+
+	int				    input_fd;
+	int				    output_fd;
+	int				    error_fd;
+
+	int				    is_piped;
+	int				    pipe_read;
+	int				    pipe_write;
+
+	struct s_command	*next;
+	struct s_command	*prev;
+}	t_command;
+
 int					cd(char **split);
 
 int					closed_quotes(char *str);
 int					built_in(char *str);
 
-void				ft_echo(char *str);
+void				ft_echo(char **str);
 
 int					add_to_env(char *key, char *value);
 void				init_env();
@@ -59,11 +90,11 @@ int					ft_env_replace(char *key, char *new_value);
 
 char				*ft_strjoin_prefixed(char *s1, char c, char *s2);
 int					execute_command(char **split);
-void				execute_built_in(char **arg);
+void				execute_built_in(t_command *cmd);
 int					execute_pipes(char **pipes);
-void				exec_simple_cmd(char *cmd);
+void				exec_simple_cmd(t_command *cmd);
 
-int					ft_export(char *var);
+int					ft_export(char **var);
 void				ft_print_export();
 
 void				free_env();
@@ -93,7 +124,7 @@ int					pwd(void);
 char				**get_path_dirs();
 char				*bin_in_path(char *bin);
 
-int					ft_unset(char *key);
+int					ft_unset(char **key);
 
 int					str_isdigit(char *str);
 int					ft_isspace(char c);
@@ -105,8 +136,8 @@ int					set_exit_status(int n);
 char				**ft_split_del(char const *s, char *del);
 int				    ft_char_in(char c, char *str);
 
-
-int				    ft_exit(char *arg);
+ 
+int				    ft_exit(char **arg);
 
 int                 redirect_to_file(char *cmd, char *file, int append);
 int					has_redirect(char *cmd);

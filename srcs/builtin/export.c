@@ -16,13 +16,13 @@
 
 #include "../../include/include.h"
 
-int	ft_export(char *var)
+int	ft_export(char **var)
 {
 	char	**key_value;
 	char	**split;
 	int		i;
 
-	split = ft_split_del(var, " \t");
+	split = ft_split_del(var[0], " \t");
 	if (NULL == split)
 		return (set_exit_status(1), 1);
 	i = 0;

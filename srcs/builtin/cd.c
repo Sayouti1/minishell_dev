@@ -22,9 +22,9 @@ int	cd(char **split)
 	char	*full_path;
 
 	home = NULL;
-	if (split_len(split) > 2)
+	if (split_len(split) > 1)
 		return (printf("cd: too many arguments\n"), set_exit_status(1));
-	if (NULL == split[1] || (split[1] && split[1][0] == '~' && !split[1][1]))
+	if (NULL == split[0] || (split[0] && split[0][0] == '~' && !split[0][1]))
 	{
 		home = get_env_v1("HOME");
 		if (NULL == home)
@@ -33,17 +33,17 @@ int	cd(char **split)
 			return (printf("CANNOT CHANGE TO HOME \n"), set_exit_status(1));
 		return (set_exit_status(0));
 	}
-	if (split[1][0] == '/')
+	if (split[0][0] == '/')
 	{
-		if (chdir(split[1]))
-			return (printf("cd: %s: No such file or directory\n", split[1]), set_exit_status(1));
+		if (chdir(split[0]))
+			return (printf("cd: %s: No such file or directory\n", split[0]), set_exit_status(1));
 		return (set_exit_status(0));
 	}
 	home = getcwd(NULL, 0);
-	full_path = ft_strjoin_prefixed(home, '/', split[1]);
+	full_path = ft_strjoin_prefixed(home, '/', split[0]);
 	if (NULL == full_path)
 		return (set_exit_status(1));
 	if (chdir(full_path))
-		return (printf("cd: %s: No such file or directory\n", split[1]), 	set_exit_status(1));
+		return (printf("cd: %s: No such file or directory\n", split[0]), 	set_exit_status(1));
 	return (free(full_path), set_exit_status(0));
 }
