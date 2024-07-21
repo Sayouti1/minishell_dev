@@ -46,7 +46,7 @@ enum e_redirection {
 	OUTPUT,
 	APPEND,
 	INPUT,
-	HER_DOC
+	HEREDOC
 };
 
 typedef struct s_redirection {

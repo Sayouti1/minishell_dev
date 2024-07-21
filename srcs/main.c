@@ -90,7 +90,7 @@ t_redirection	*new_redirection(int type, char	*file_name, int	fd)
 		fd = open(file_name, O_CREAT | O_APPEND | O_RDWR, 0666);
 	else if (type == INPUT)
 		fd = open(file_name, O_RDONLY);
-	else if (type == HER_DOC || fd == -1)
+	else if (type == HEREDOC)
 		printf("HER_DOC TO BE ADDED LATER , ERROR FD\n");
 	redirection->fd = fd;
 	return (redirection);
@@ -128,14 +128,30 @@ void	add_to_cmds(t_command *head, t_command *cmd) {
 // cat file.txt | grep 10 > greep.txt | sort < greep.txt -r | uniq
 int	fake_commands(t_command **command)
 {
-	// *command = new_command("echo", ft_split("Hello World From echo HHHHHHHHH", '|'), new_redirection(OUTPUT, "file.txt", 0), 1, 0, 1);
+	*command = new_command("/usr/bin/grep", ft_split("/usr/bin/grep 0", ' '),
+		new_redirection(HEREDOC, "file.txt", 0), 1, 0, 1);
 	/* *command = new_command("/usr/bin/cat", ft_split("/usr/bin/cat file.txt", ' '), NULL, 1, 0, 1);
-	add_to_cmds(*command, new_command("/usr/bin/grep", ft_split("/usr/bin/grep 10", ' '), new_redirection(OUTPUT, "greep.txt", 0), 1, 0, 1));
-	add_to_cmds(*command, new_command("/usr/bin/sort", ft_split("/usr/bin/sort greep.txt -r", ' '), new_redirection(INPUT, "greep.txt", 0), 1, 0, 1));
+	add_to_cmds(*command, new_command("/usr/bin/grep", ft_split("/usr/bin/grep 10", ' '),
+		new_redirection(OUTPUT, "greep.txt", 0), 1, 0, 1));
+	add_to_cmds(*command, new_command("/usr/bin/sort", ft_split("/usr/bin/sort greep.txt -r", ' '),
+		new_redirection(INPUT, "greep.txt", 0), 1, 0, 1));
 	add_to_cmds(*command, new_command("/usr/bin/uniq", ft_split("/usr/bin/uniq", ' '), NULL, 0, 0, 1));*/
 
-	*command = new_command("echo", ft_split("Hello World From echo", ' '), NULL, 1, 0, 1);
 
+
+	t_command *tmp;
+
+	tmp = *command;
+
+	while (tmp)
+	{
+		if (tmp->redirection && tmp->redirection->fd == -1)
+		{
+			printf("ERROR IN FD = -1 ERRRRROOOORR\n");
+			return (0);
+		}
+		tmp = tmp->next;
+	}
 	return (1);
 }
 
@@ -252,7 +268,7 @@ int	main(int ac, char **av, char **envp)
 	signal(SIGINT, sig_handler);
 	while (1)
 	{
-		read_line = readline("\033[1;32mminiSHELL :)=> \033[0m");
+		read_line = readline("\033[1;32m└─$minishell[~]->\033[0m");
 		if (NULL == read_line)
 			break ;
 		add_history(read_line);

@@ -194,6 +194,8 @@ void	exec_simple_cmd(t_command *cmd)
 			dup2(cmd->redirection->fd, 1);
 		else if (cmd->redirection->type == INPUT)
 			dup2(cmd->redirection->fd, 0);
+		else if (cmd->redirection->type == HEREDOC)
+
 		close(cmd->redirection->fd);
 	}
 
