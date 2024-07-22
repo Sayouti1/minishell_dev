@@ -176,16 +176,80 @@ char	*ft_strjoin_gnl(char *old_line, char *buff)
     while (buff[i])
         new_line[j++] = buff[i++];
     new_line[j] = '\0';
-    if (old_line)
-        free(old_line);
+//    if (old_line)
+//        free(old_line);
     return (new_line);
 }
 
+char	*get_dollar_key_v1(char *line, int *i)
+{
+    int		j;
+    int		k;
+    char	*key;
+
+    j = *i + 1;
+    while (line[j] && line[j] != ' ' && line[j] != '$' && line[j] != '\''
+           && line[j] != '"' && line[j] != '\n')
+        j++;
+    key = (char *)malloc(sizeof(char) * (j - *i));
+    if (NULL == key)
+        return (NULL);
+    k = 0;
+    (*i)++;
+    while (*i < j && line[*i])
+        key[k++] = line[(*i)++];
+    key[k] = '\0';
+    return (key);
+}
+
+
+
+char *substitute_var(char *str)
+{
+    int     i;
+    char    *concat;
+    char    *key;
+
+    if (NULL == str)
+        return (NULL);
+    concat = NULL;
+    i = 0;
+    while(str[i])
+    {
+        while (str[i] && str[i] != '$')
+            concat = char_concat(concat, str[i++]);
+        if (str[i] == '$')
+        {
+            key = get_dollar_key_v1(str, &i);
+            concat = string_concat(concat, ft_strdup(get_env_v1(key)));
+            free(key);
+        }
+    }
+    return (concat);
+}
+
+int check_curly_braces(char *str)
+{
+    int open_curly_braces;
+    int i;
+
+    if (!str)
+        return (1);
+    open_curly_braces = 0;
+    i = 0;
+    while (str[i])
+    {
+        if (str[i] == '{')
+            open_curly_braces = 0;
+    }
+    return (0);
+}
 int open_heredoc(t_command *cmd)
 {
     char        buff[1000];
     size_t      byte_read;
     char        *del;
+    int         fds[2];
 
     del = char_concat(cmd->redirection->file_name, '\n');
     //free(cmd->redirection->file_name)
@@ -198,13 +262,18 @@ int open_heredoc(t_command *cmd)
             break ;
         cmd->redirection->file_name = ft_strjoin_gnl(cmd->redirection->file_name, buff);
     }
-    if (ft_char_in('\'', del) || ft_char_in('"', del))
-        return (0); // should return cmd->redirection->file_name
-    else
-           //variable substitution in the cmd->redirection->file_name
-           //
-
-    return (0);
+    pipe(fds);
+    if (!ft_char_in('\'', del) && !ft_char_in('"', del)) {
+        if (check_curly_braces(cmd->redirection->file_name))
+        {
+            return (printf("bad substitution\n"), 1);
+        }
+        cmd->redirection->file_name = substitute_var(cmd->redirection->file_name);
+    }
+    write(fds[1], cmd->redirection->file_name, ft_strlen(cmd->redirection->file_name));
+    close(fds[1]);
+    cmd->redirection->fd = fds[0];
+    return (dup2(cmd->redirection->fd, 0), 0);
 }
 
 // grep 10 > greep.txt | sort < greep.txt -r | uniq
