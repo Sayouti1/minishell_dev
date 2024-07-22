@@ -128,6 +128,7 @@ void	external_command(t_command *cmd) {
 	set_exit_status(g_vars.exit_status);
 }
 
+/*
 int open_heredoc(t_command *cmd)
 {
     char    buff[1000];
@@ -150,6 +151,59 @@ int open_heredoc(t_command *cmd)
     close(fds[1]);
     dup2(fds[0], STDIN_FILENO);
     cmd->redirection->fd = fds[0];
+    return (0);
+}
+ */
+
+char	*ft_strjoin_gnl(char *old_line, char *buff)
+{
+    int		i;
+    int		j;
+    char	*new_line;
+
+    j = ft_strlen(buff) + ft_strlen(old_line);
+    new_line = (char *)malloc(sizeof(char) * (j + 1));
+    if (!new_line)
+    {
+        free(old_line);
+        return (NULL);
+    }
+    i = 0;
+    j = 0;
+    while (old_line && old_line[i])
+        new_line[j++] = old_line[i++];
+    i = 0;
+    while (buff[i])
+        new_line[j++] = buff[i++];
+    new_line[j] = '\0';
+    if (old_line)
+        free(old_line);
+    return (new_line);
+}
+
+int open_heredoc(t_command *cmd)
+{
+    char        buff[1000];
+    size_t      byte_read;
+    char        *del;
+
+    del = char_concat(cmd->redirection->file_name, '\n');
+    //free(cmd->redirection->file_name)
+    cmd->redirection->file_name = NULL;
+    while (1)
+    {
+        byte_read = read(0, buff, 1000);
+        buff[byte_read] = '\0';
+        if (byte_read <= 0 || !ft_strncmp(buff, del, ft_strlen(del)))
+            break ;
+        cmd->redirection->file_name = ft_strjoin_gnl(cmd->redirection->file_name, buff);
+    }
+    if (ft_char_in('\'', del) || ft_char_in('"', del))
+        return (0); // should return cmd->redirection->file_name
+    else
+           //variable substitution in the cmd->redirection->file_name
+           //
+
     return (0);
 }
 
