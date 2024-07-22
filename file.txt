@@ -1,6 +1,0 @@
-echo "This is a test for heredoc" > infile.txt
-
-cat infile.txt | grep "test" > outfile.txt
-echo "Another test" >> outfile.txt
-cat < outfile.txt
-
