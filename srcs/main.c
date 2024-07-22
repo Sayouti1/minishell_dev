@@ -87,7 +87,6 @@ void	add_to_cmds(t_command **head, t_command *cmd) {
 	tmp->next = cmd;
 }
 
-// cat file.txt | grep 10 > greep.txt | sort < greep.txt -r | uniq
 int	fake_commands(t_command **command)
 {
 	/**command = new_command("/usr/bin/grep", ft_split("/usr/bin/grep 0 --color=auto", ' '),
@@ -99,22 +98,6 @@ int	fake_commands(t_command **command)
 		new_redirection(APPEND, "outfile.txt", 0), 1, 0, 1));
 	*/ add_to_cmds(command, new_command("/usr/bin/bash", ft_split("/usr/bin/bash b", ' '),
                                       NULL, 0, 0, 1));
-
-
-
-//	t_command *tmp;
-//
-//	tmp = *command;
-//
-//	while (tmp)
-//	{
-//		if (tmp->redirection && tmp->redirection->fd == -1)
-//		{
-//			printf("ERROR IN FD = -1 ERRRRROOOORR\n");
-//			return (0);
-//		}
-//		tmp = tmp->next;
-//	}
 	return (1);
 }
 
