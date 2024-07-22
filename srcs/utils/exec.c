@@ -114,61 +114,6 @@ void	execute_built_in(t_command *cmd)
 		ft_exit(cmd->args);
 }
 
-/*
- * TO BE FIXED
- */
-/*
-int	execute_pipes(char **pipes)
-{
-	int	i;
-	int	prev_pipes[2];
-	int	curr_pipes[2];
-
-	i = 0;
-	while (i < split_len(pipes))
-	{
-		if (i != 0)
-		{
-			prev_pipes[0] = curr_pipes[0];
-			prev_pipes[1] = curr_pipes[1];
-		}
-		if (i != split_len(pipes) - 1)
-			if (pipe(curr_pipes))
-				return (printf("ERROR IN pipe()\n"), 1);
-		if (fork() == 0)
-		{
-			if (i != 0)
-			{
-				close(prev_pipes[1]);
-				dup2(prev_pipes[0], 0);
-				close(prev_pipes[0]);
-			}
-			if (i != split_len(pipes) - 1)
-			{
-				close(curr_pipes[0]);
-				dup2(curr_pipes[1], 1);
-				close(curr_pipes[0]);
-			}
-			exec_simple_cmd(pipes[i]);
-			exit(0);
-		}
-		else
-		{
-			if (i != 0)
-			{
-				close(prev_pipes[0]);
-				close(prev_pipes[1]);
-			}
-		}
-		++i;
-	}
-	close(curr_pipes[0]);
-	close(curr_pipes[1]);
-	while (i-- > 0)
-		wait(&g_vars.exit_status);
-	return (set_exit_status(g_vars.exit_status));
-}
-*/
 void	external_command(t_command *cmd) {
 	int	pid;
 
@@ -182,12 +127,35 @@ void	external_command(t_command *cmd) {
 	wait(&g_vars.exit_status);
 	set_exit_status(g_vars.exit_status);
 }
+
+int open_heredoc(t_command *cmd)
+{
+    char    buff[1000];
+    int     byte_read;
+    char    *tmp;
+    int     fds[2];
+
+    tmp = ft_strjoin(cmd->redirection->file_name, "\n");
+    cmd->redirection->file_name = tmp;
+    byte_read = 1;
+    pipe(fds);
+    while(1)
+    {
+        byte_read = read(0, buff, 1000);
+        if (byte_read <= 0 || !ft_strncmp(buff, cmd->redirection->file_name,
+                    ft_strlen(cmd->redirection->file_name)))
+            break ;
+        write(fds[1], buff, byte_read);
+    }
+    close(fds[1]);
+    dup2(fds[0], STDIN_FILENO);
+    cmd->redirection->fd = fds[0];
+    return (0);
+}
+
 // grep 10 > greep.txt | sort < greep.txt -r | uniq
 void	exec_simple_cmd(t_command *cmd)
 {
-	// char	**split;
-	// int		redirect;
-
 	if (cmd->redirection != NULL)
 	{
 		if (cmd->redirection->type == OUTPUT || cmd->redirection->type == APPEND)
@@ -195,26 +163,13 @@ void	exec_simple_cmd(t_command *cmd)
 		else if (cmd->redirection->type == INPUT)
 			dup2(cmd->redirection->fd, 0);
 		else if (cmd->redirection->type == HEREDOC)
-
+            open_heredoc(cmd);
 		close(cmd->redirection->fd);
 	}
 
 	if (built_in(cmd->command))
 		execute_built_in(cmd);
 	else
-		external_command(cmd);
-	// split = split_on_two(cmd, " \t");
-	// redirect = has_redirect(split[1]);
-	// if (redirect == 1 || redirect == 2)
- //    {
- //        redirect_to_file(cmd, split[1], redirect - 1);
- //        free_split(split);
- //        return ;
- //    }
-	// if (built_in(split[0]))
-	// 	execute_built_in(split);
-	// else
-	// 	execute_command(split);
-	// free_split(split);
+        external_command(cmd);
 }
 

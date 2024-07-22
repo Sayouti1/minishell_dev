@@ -22,57 +22,12 @@ void	sig_handler(int sig) {
 	rl_redisplay();
 }
 
-/*
- * SPLIT THE COMMAND BY | PIPE
- * TRIM EACH COMMAND PIPE
- * WAIT THE COMMANDS TO FINISH EXECUTING
- */
-/*
-void	process_command(char *line)
-{
-	char	**pipes;
-	int		i;
-
-	pipes = ft_split(line, '|');
-	if (NULL == pipes)
-		return ;
-	i = 0;
-	while (pipes[i])
-	{
-		pipes[i] = trim_and_free(pipes[i]);
-		++i;
-	}
-	if (split_len(pipes) == 1)
-		exec_simple_cmd(pipes[0]);
-	else
-		execute_pipes(pipes);
-	free_split(pipes);
-}
-*/
 void	init_g_vars(char **envp)
 {
 	g_vars.env = NULL;
 	g_vars.envp = envp;
 	g_vars.exit_status = 0;
 }
-
-// int	parse_commands(char *line, t_command *command)
-// {
-// 	char	**pipes;
-// 	int		i;
-//
-// 	pipes = ft_split(line, '|');
-// 	if (NULL == pipes)
-// 		return (1);
-// 	i = 0;
-// 	while (pipes[i])
-// 	{
-// 		pipes[i] = trim_and_free(pipes[i]);
-// 		++i;
-// 	}
-//
-// 	return (0);
-// }
 
 t_redirection	*new_redirection(int type, char	*file_name, int	fd)
 {
@@ -91,7 +46,8 @@ t_redirection	*new_redirection(int type, char	*file_name, int	fd)
 	else if (type == INPUT)
 		fd = open(file_name, O_RDONLY);
 	else if (type == HEREDOC)
-		printf("HER_DOC TO BE ADDED LATER , ERROR FD\n");
+//		printf("HER_DOC TO BE ADDED LATER , ERROR FD\n");
+        redirection->file_name = file_name;
 	redirection->fd = fd;
 	return (redirection);
 }
@@ -115,43 +71,50 @@ t_command *new_command(char *command, char **args, t_redirection *redirection,
 	return (cmd);
 }
 
-void	add_to_cmds(t_command *head, t_command *cmd) {
+void	add_to_cmds(t_command **head, t_command *cmd) {
 	t_command *tmp;
 
-	tmp = head;
+    if (*head == NULL)
+    {
+        *head = cmd;
+        return;
+    }
+	tmp = *head;
 	while (tmp->next)
 		tmp = tmp->next;
-	cmd->prev = tmp;
+    if (cmd)
+	    cmd->prev = tmp;
 	tmp->next = cmd;
 }
 
 // cat file.txt | grep 10 > greep.txt | sort < greep.txt -r | uniq
 int	fake_commands(t_command **command)
 {
-	*command = new_command("/usr/bin/grep", ft_split("/usr/bin/grep 0", ' '),
-		new_redirection(HEREDOC, "file.txt", 0), 1, 0, 1);
-	/* *command = new_command("/usr/bin/cat", ft_split("/usr/bin/cat file.txt", ' '), NULL, 1, 0, 1);
-	add_to_cmds(*command, new_command("/usr/bin/grep", ft_split("/usr/bin/grep 10", ' '),
-		new_redirection(OUTPUT, "greep.txt", 0), 1, 0, 1));
-	add_to_cmds(*command, new_command("/usr/bin/sort", ft_split("/usr/bin/sort greep.txt -r", ' '),
-		new_redirection(INPUT, "greep.txt", 0), 1, 0, 1));
-	add_to_cmds(*command, new_command("/usr/bin/uniq", ft_split("/usr/bin/uniq", ' '), NULL, 0, 0, 1));*/
+	/**command = new_command("/usr/bin/grep", ft_split("/usr/bin/grep 0 --color=auto", ' '),
+		new_redirection(HEREDOC, "END", 0), 1, 0, 1);*/
+    /* *command = new_command("/usr/bin/cat", ft_split("/usr/bin/cat infile.txt", ' '), NULL, 1, 0, 1);
+	add_to_cmds(command, new_command("/usr/bin/grep", ft_split("/usr/bin/grep test --color=auto", ' '),
+		new_redirection(OUTPUT, "outfile.txt", 0), 1, 0, 1));
+	add_to_cmds(command, new_command("echo", ft_split("Another test", '|'),
+		new_redirection(APPEND, "outfile.txt", 0), 1, 0, 1));
+	*/ add_to_cmds(command, new_command("/usr/bin/bash", ft_split("/usr/bin/bash b", ' '),
+                                      NULL, 0, 0, 1));
 
 
 
-	t_command *tmp;
-
-	tmp = *command;
-
-	while (tmp)
-	{
-		if (tmp->redirection && tmp->redirection->fd == -1)
-		{
-			printf("ERROR IN FD = -1 ERRRRROOOORR\n");
-			return (0);
-		}
-		tmp = tmp->next;
-	}
+//	t_command *tmp;
+//
+//	tmp = *command;
+//
+//	while (tmp)
+//	{
+//		if (tmp->redirection && tmp->redirection->fd == -1)
+//		{
+//			printf("ERROR IN FD = -1 ERRRRROOOORR\n");
+//			return (0);
+//		}
+//		tmp = tmp->next;
+//	}
 	return (1);
 }
 

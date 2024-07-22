@@ -24,7 +24,6 @@ void	ft_echo(char **str)
 	int		i;
 
 	n_flag = 0;
-	printf("str[0] = [%s], str[1] = [%s]\n", str[0], str[1]);
 	if (!ft_strcmp(str[0], "-n"))
 		n_flag = 1;
 	i = n_flag;
