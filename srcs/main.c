@@ -89,14 +89,15 @@ void	add_to_cmds(t_command **head, t_command *cmd) {
 
 int	fake_commands(t_command **command)
 {
-	*command = new_command("/usr/bin/grep", ft_split("/usr/bin/grep 0 --color=auto", ' '),
+	 *command = new_command("/usr/bin/grep", ft_split("/usr/bin/grep 0 --color=auto", ' '),
 		new_redirection(HEREDOC, "END", 0), 1, 0, 1);
-    /* *command = new_command("/usr/bin/cat", ft_split("/usr/bin/cat infile.txt", ' '), NULL, 1, 0, 1);
+    /*
+     *command = new_command("/usr/bin/cat", ft_split("/usr/bin/cat infile.txt", ' '), NULL, 1, 0, 1);
 	add_to_cmds(command, new_command("/usr/bin/grep", ft_split("/usr/bin/grep test --color=auto", ' '),
 		new_redirection(OUTPUT, "outfile.txt", 0), 1, 0, 1));
 	add_to_cmds(command, new_command("echo", ft_split("Another test", '|'),
 		new_redirection(APPEND, "outfile.txt", 0), 1, 0, 1));
-	*/ /*add_to_cmds(command, new_command("/usr/bin/bash", ft_split("/usr/bin/bash b", ' '),
+	 add_to_cmds(command, new_command("/usr/bin/bash", ft_split("/usr/bin/bash b", ' '),
                                       NULL, 0, 0, 1));*/
 	return (1);
 }
