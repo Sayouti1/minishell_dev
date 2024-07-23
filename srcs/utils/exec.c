@@ -6,7 +6,7 @@
 /*   By: aes-sayo <aes-sayo@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 09:29:27 by aes-sayo          #+#    #+#             */
-/*   Updated: 2024/06/28 09:29:31 by aes-sayo         ###   ########.fr       */
+/*   Updated: 2024/07/23 06:49:59 by abdelaziz        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,6 +188,8 @@ char	*get_dollar_key_v1(char *line, int *i)
     char	*key;
 
     j = *i + 1;
+    if (NULL == line)
+        return (NULL);
     while (line[j] && line[j] != ' ' && line[j] != '$' && line[j] != '\''
            && line[j] != '"' && line[j] != '\n')
         j++;
@@ -218,6 +220,10 @@ char *substitute_var(char *str)
     {
         while (str[i] && str[i] != '$')
             concat = char_concat(concat, str[i++]);
+        if (str[i] == '$' && str[i + 1] == '$' && ++i && ++i)
+            concat = string_concat(concat, ft_itoa(getpid()));
+        if (str[i] == '$' && str[i + 1] == '?' && ++i && ++i)
+            concat = string_concat(concat, ft_itoa(g_vars.exit_status));
         if (str[i] == '$')
         {
             key = get_dollar_key_v1(str, &i);
@@ -230,20 +236,28 @@ char *substitute_var(char *str)
 
 int check_curly_braces(char *str)
 {
-    int open_curly_braces;
     int i;
 
     if (!str)
         return (1);
-    open_curly_braces = 0;
     i = 0;
     while (str[i])
     {
-        if (str[i] == '{')
-            open_curly_braces = 0;
+        if (str[i] == '$' && (!str[i + 1] || ft_isspace(str[i + 1])) && ++i)
+            continue ;
+        if (str[i] == '$' && str[i + 1] == '{')
+        {
+            i += 2;
+            while (str[i] && !ft_char_in(str[i], "\n{}"))
+                ++i;
+            if (str[i] != '}')
+                return (1);
+        }
+        ++i;
     }
     return (0);
 }
+
 int open_heredoc(t_command *cmd)
 {
     char        buff[1000];
@@ -266,7 +280,8 @@ int open_heredoc(t_command *cmd)
     if (!ft_char_in('\'', del) && !ft_char_in('"', del)) {
         if (check_curly_braces(cmd->redirection->file_name))
         {
-            return (printf("bad substitution\n"), 1);
+            set_exit_status(1);
+            return (printf(" : bad substitution\n"), 1);
         }
         cmd->redirection->file_name = substitute_var(cmd->redirection->file_name);
     }
