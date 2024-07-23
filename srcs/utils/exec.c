@@ -190,8 +190,7 @@ char	*get_dollar_key_v1(char *line, int *i)
     j = *i + 1;
     if (NULL == line)
         return (NULL);
-    while (line[j] && line[j] != ' ' && line[j] != '$' && line[j] != '\''
-           && line[j] != '"' && line[j] != '\n')
+    while (line[j] && !ft_char_in(line[j], " $\'\"\n{}"))
         j++;
     key = (char *)malloc(sizeof(char) * (j - *i));
     if (NULL == key)
@@ -226,7 +225,11 @@ char *substitute_var(char *str)
             concat = string_concat(concat, ft_itoa(g_vars.exit_status));
         if (str[i] == '$')
         {
+            if (str[i + 1] == '{')
+                ++i;
             key = get_dollar_key_v1(str, &i);
+            while (str[i] && ft_char_in(str[i], " \t}"))
+                ++i;
             concat = string_concat(concat, ft_strdup(get_env_v1(key)));
             free(key);
         }
@@ -248,7 +251,7 @@ int check_curly_braces(char *str)
         if (str[i] == '$' && str[i + 1] == '{')
         {
             i += 2;
-            while (str[i] && !ft_char_in(str[i], "\n{}"))
+            while (str[i] && !ft_char_in(str[i], " \n{}"))
                 ++i;
             if (str[i] != '}')
                 return (1);
