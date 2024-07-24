@@ -49,6 +49,7 @@ t_redirection	*new_redirection(int type, char	*file_name, int	fd)
 //		printf("HER_DOC TO BE ADDED LATER , ERROR FD\n");
         redirection->file_name = file_name;
 	redirection->fd = fd;
+	redirection->next = NULL;
 	return (redirection);
 }
 
@@ -89,8 +90,13 @@ void	add_to_cmds(t_command **head, t_command *cmd) {
 
 int	fake_commands(t_command **command)
 {
-	 *command = new_command("/usr/bin/grep", ft_split("/usr/bin/grep 0 --color=auto", ' '),
-		new_redirection(HEREDOC, "END", 0), 1, 0, 1);
+	t_redirection	*red;
+
+	red = new_redirection(HEREDOC, "ff", 0);
+	red->next = new_redirection(OUTPUT, "hhhh", 0);
+
+	 *command = new_command("/usr/bin/cat", ft_split("/usr/bin/cat", ' '),
+		red, 1, 0, 1);
     /*
      *command = new_command("/usr/bin/cat", ft_split("/usr/bin/cat infile.txt", ' '), NULL, 1, 0, 1);
 	add_to_cmds(command, new_command("/usr/bin/grep", ft_split("/usr/bin/grep test --color=auto", ' '),
