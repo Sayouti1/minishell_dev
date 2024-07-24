@@ -50,9 +50,11 @@ enum e_redirection {
 };
 
 typedef struct s_redirection {
-	int		type; // output | append | input | her_doc
-	char	*file_name;
-	int		fd;
+	int						type; // output | append | input | her_doc
+	char					*file_name;
+	int						fd;
+	struct s_redirection	*next;
+
 }	t_redirection;
 
 typedef struct s_command {

@@ -110,12 +110,9 @@ char	*parse_command_vars(char *line)
 				sq_open = !sq_open;
 			continue ;
 		}
-		if (line[i] == '$' && (line[i + 1] == '$' || line[i + 1] == '?'))
+		if (line[i] == '$' && line[i + 1] == '?')
 		{
-			if (line[i + 1] == '$')
-				concat = string_concat(concat, ft_itoa(getpid()));
-			else if (line[i + 1] == '?')
-				concat = string_concat(concat, ft_itoa(g_vars.exit_status));
+			concat = string_concat(concat, ft_itoa(g_vars.exit_status));
 			i += 2;
 		}
 		if (line[i] == '$')

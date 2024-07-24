@@ -163,7 +163,7 @@ char	*ft_strjoin_gnl(char *old_line, char *buff)
 
     j = ft_strlen(buff) + ft_strlen(old_line);
     new_line = (char *)malloc(sizeof(char) * (j + 1));
-    if (!new_line)
+    if (NULL == new_line)
     {
         free(old_line);
         return (NULL);
@@ -219,8 +219,6 @@ char *substitute_var(char *str)
     {
         while (str[i] && str[i] != '$')
             concat = char_concat(concat, str[i++]);
-        if (str[i] == '$' && str[i + 1] == '$' && ++i && ++i)
-            concat = string_concat(concat, ft_itoa(getpid()));
         if (str[i] == '$' && str[i + 1] == '?' && ++i && ++i)
             concat = string_concat(concat, ft_itoa(g_vars.exit_status));
         if (str[i] == '$')
@@ -261,51 +259,55 @@ int check_curly_braces(char *str)
     return (0);
 }
 
-int open_heredoc(t_command *cmd)
+int open_heredoc(t_redirection *redirection)
 {
     char        buff[1000];
     size_t      byte_read;
     char        *del;
     int         fds[2];
 
-    del = char_concat(cmd->redirection->file_name, '\n');
+    del = char_concat(redirection->file_name, '\n');
     //free(cmd->redirection->file_name)
-    cmd->redirection->file_name = NULL;
+    redirection->file_name = NULL;
     while (1)
     {
         byte_read = read(0, buff, 1000);
         buff[byte_read] = '\0';
         if (byte_read <= 0 || !ft_strncmp(buff, del, ft_strlen(del)))
             break ;
-        cmd->redirection->file_name = ft_strjoin_gnl(cmd->redirection->file_name, buff);
+        redirection->file_name = ft_strjoin_gnl(redirection->file_name, buff);
     }
     pipe(fds);
     if (!ft_char_in('\'', del) && !ft_char_in('"', del)) {
-        if (check_curly_braces(cmd->redirection->file_name))
+        if (check_curly_braces(redirection->file_name))
         {
             set_exit_status(1);
             return (printf(" : bad substitution\n"), 1);
         }
-        cmd->redirection->file_name = substitute_var(cmd->redirection->file_name);
+        redirection->file_name = substitute_var(redirection->file_name);
     }
-    write(fds[1], cmd->redirection->file_name, ft_strlen(cmd->redirection->file_name));
+    write(fds[1], redirection->file_name, ft_strlen(redirection->file_name));
     close(fds[1]);
-    cmd->redirection->fd = fds[0];
-    return (dup2(cmd->redirection->fd, 0), 0);
+    redirection->fd = fds[0];
+    return (dup2(redirection->fd, 0), 0);
 }
 
 // grep 10 > greep.txt | sort < greep.txt -r | uniq
 void	exec_simple_cmd(t_command *cmd)
 {
-	if (cmd->redirection != NULL)
+	t_redirection	*tmp;
+
+	tmp = cmd->redirection;
+	while (tmp)
 	{
-		if (cmd->redirection->type == OUTPUT || cmd->redirection->type == APPEND)
-			dup2(cmd->redirection->fd, 1);
-		else if (cmd->redirection->type == INPUT)
-			dup2(cmd->redirection->fd, 0);
-		else if (cmd->redirection->type == HEREDOC)
-            open_heredoc(cmd);
-		close(cmd->redirection->fd);
+		if (tmp->type == OUTPUT || tmp->type == APPEND)
+			dup2(tmp->fd, 1);
+		else if (tmp->type == INPUT)
+			dup2(tmp->fd, 0);
+		else if (tmp->type == HEREDOC)
+            open_heredoc(tmp);
+		close(tmp->fd);
+		tmp = tmp->next;
 	}
 
 	if (built_in(cmd->command))
