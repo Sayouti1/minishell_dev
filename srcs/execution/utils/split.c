@@ -1,4 +1,4 @@
-#include "../../include/include.h"
+#include "../../../include/include.h"
 
 int    ft_char_in(char c, char *str)
 {

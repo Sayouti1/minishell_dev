@@ -10,7 +10,18 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/include.h"
+#include "../../../include/include.h"
+
+int	cd_home(char *home)
+{
+	home = get_env_v1("HOME");
+	if (NULL == home)
+		return (printf("cd: HOME not set\n"), set_exit_status(1));
+	if (chdir(home))
+		return (printf("%s : No such file or directory\n", home),
+			set_exit_status(1));
+	return (set_exit_status(0));
+}
 
 /*
  *cd ✅
@@ -25,18 +36,12 @@ int	cd(char **split)
 	if (split_len(split) > 1)
 		return (printf("cd: too many arguments\n"), set_exit_status(1));
 	if (NULL == split[0] || (split[0] && split[0][0] == '~' && !split[0][1]))
-	{
-		home = get_env_v1("HOME");
-		if (NULL == home)
-			return (set_exit_status(1));
-		if (chdir(home))
-			return (printf("CANNOT CHANGE TO HOME \n"), set_exit_status(1));
-		return (set_exit_status(0));
-	}
+		return (cd_home(home));
 	if (split[0][0] == '/')
 	{
 		if (chdir(split[0]))
-			return (printf("cd: %s: No such file or directory\n", split[0]), set_exit_status(1));
+			return (printf("cd: %s: No such file or directory\n", split[0]),
+				set_exit_status(1));
 		return (set_exit_status(0));
 	}
 	home = getcwd(NULL, 0);
@@ -44,6 +49,8 @@ int	cd(char **split)
 	if (NULL == full_path)
 		return (set_exit_status(1));
 	if (chdir(full_path))
-		return (printf("cd: %s: No such file or directory\n", split[0]), 	set_exit_status(1));
+		return (printf("cd: %s: No such file or directory\n", split[0]),
+			free(full_path),
+			set_exit_status(1));
 	return (free(full_path), set_exit_status(0));
 }

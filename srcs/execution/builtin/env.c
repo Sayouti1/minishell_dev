@@ -13,7 +13,7 @@
 //
 // Created by abdelaziz on 6/3/24.
 //
-#include "../../include/include.h"
+#include "../../../include/include.h"
 
 /*
  * APPENDING ENV[KEY=>VLAUE] TO THE LINKED LIST ENV ✅
@@ -42,7 +42,7 @@ int	add_to_env(char *key, char *value)
  * INITIALIZING ENVIRMENT VARIABLES
  * ✅
  */
-void	init_env()
+void	init_env(void)
 {
 	char	**split;
 	int		i;
@@ -96,7 +96,7 @@ t_env	*new_node(char *key, char *value)
 /*
  * PRINT ENVIRONMENT VARIABLES ✅
  */
-void	ft_env()
+void	ft_env(void)
 {
 	t_env	*tmp;
 

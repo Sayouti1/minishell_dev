@@ -14,7 +14,7 @@
 // Created by abdelaziz on 6/8/24.
 //
 
-#include "../../include/include.h"
+#include "../../../include/include.h"
 
 int	ft_export(char **var)
 {
@@ -31,7 +31,8 @@ int	ft_export(char **var)
 		key_value = split_on_two(split[i++], "=");
 		if (NULL == key_value || NULL == key_value[1])
 			return (set_exit_status(0), 1);
-		printf("split[%d] => [%s], [%s=>%s]\n", i - 1, split[i - 1], key_value[0], key_value[1]);
+		printf("split[%d] => [%s], [%s=>%s]\n", i - 1, split[i - 1],
+			key_value[0], key_value[1]);
 		if (!ft_env_replace(key_value[0], key_value[1]))
 			add_to_env(ft_strdup(key_value[0]), ft_strdup(key_value[1]));
 		free_split(key_value);
@@ -40,7 +41,7 @@ int	ft_export(char **var)
 	return (set_exit_status(0), 0);
 }
 
-void	ft_print_export()
+void	ft_print_export(void)
 {
 	while (g_vars.env)
 	{

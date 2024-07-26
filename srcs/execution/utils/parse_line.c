@@ -14,7 +14,7 @@
 // Created by abdelaziz on 6/23/24.
 //
 
-#include "../../include/include.h"
+#include "../../../include/include.h"
 
 /*
  * TRIM USER INPUT IN A NEW ALLOCATED STRING,

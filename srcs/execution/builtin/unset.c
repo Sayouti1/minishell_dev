@@ -10,45 +10,48 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-//
-// Created by abdelaziz on 6/8/24.
-//
+#include "../../../include/include.h"
 
-#include "../../include/include.h"
+void	search_and_delete(t_env *iter, char *split)
+{
+	t_env	*tmp;
+
+	if (iter && !ft_strcmp(iter->key, split))
+	{
+		g_vars.env = iter->next;
+		delete_env(iter);
+		return ;
+	}
+	while (iter)
+	{
+		if (iter->next && !ft_strcmp(iter->next->key, split))
+			break ;
+		iter = iter->next;
+	}
+	if (NULL == iter)
+		return ;
+	tmp = iter->next;
+	iter->next = iter->next->next;
+	delete_env(tmp);
+}
 
 int	ft_unset(char **key)
 {
 	t_env	*iter;
-	t_env	*tmp;
 	char	**split;
 	int		i;
 
+	if (NULL == key || NULL == key[0])
+		return (set_exit_status(1));
 	split = ft_split_del(key[0], " \t");
 	if (NULL == split)
 		return (1);
-	iter = g_vars.env;
-	i = -1;
-	while (split[++i])
+	i = 0;
+	while (split[i])
 	{
-		if (iter && !ft_strcmp(iter->key, split[i]))
-		{
-			g_vars.env = iter->next;
-			delete_env(iter);
-		}
-		else
-		{
-			while (iter)
-			{
-				if (iter->next && !ft_strcmp(iter->next->key, split[i]))
-					break ;
-				iter = iter->next;
-			}
-		}
-		if (NULL == iter)
-			return (set_exit_status(0));
-		tmp = iter->next;
-		iter->next = iter->next->next;
-		delete_env(tmp);
+		iter = g_vars.env;
+		search_and_delete(iter, split[i++]);
 	}
+	free_split(split);
 	return (set_exit_status(0));
 }

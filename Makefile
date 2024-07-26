@@ -3,9 +3,11 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror #-fsanitize=address -g3 \
 
 SRCS= srcs/main.c \
-	srcs/builtin/cd.c srcs/builtin/env.c srcs/builtin/pwd.c srcs/builtin/export.c srcs/builtin/exit.c srcs/builtin/unset.c srcs/builtin/echo.c \
-	srcs/utils/free.c srcs/utils/exec.c srcs/utils/checkers.c srcs/utils/parse_line.c srcs/utils/getters.c srcs/utils/setters.c srcs/utils/split.c \
-	srcs/utils/utils.c
+	srcs/execution/builtin/cd.c srcs/execution/builtin/env.c srcs/execution/builtin/pwd.c srcs/execution/builtin/export.c \
+	srcs/execution/builtin/exit.c srcs/execution/builtin/unset.c srcs/execution/builtin/echo.c \
+	srcs/execution/utils/free.c srcs/execution/utils/exec.c srcs/execution/utils/checkers.c srcs/execution/utils/parse_line.c \
+	srcs/execution/utils/getters.c srcs/execution/utils/setters.c srcs/execution/utils/split.c \
+	srcs/execution/utils/utils.c
 
 OBJS=$(SRCS:.c=.o)
 LIBFT= Libft/libft.a
