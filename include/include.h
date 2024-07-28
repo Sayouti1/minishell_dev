@@ -141,4 +141,7 @@ int				    ft_char_in(char c, char *str);
  
 int				    ft_exit(char **arg);
 
+
+int	execute_pipes_v2(int len, int i, t_command *tmp);
+
 #endif
