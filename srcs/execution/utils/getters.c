@@ -59,18 +59,18 @@ char	*get_var_dollar(char *line)
 /*
  * ✅
  */
-char	*get_correct_path(char **split, char *curr_dir)
+char	*get_correct_path(char *split, char *curr_dir)
 {
 	char	*full_path;
 
-	if (NULL == split || NULL == split[0])
+	if (NULL == split)
 		return (NULL);
-	if (split[0][0] == '.')
-		full_path = ft_strjoin_prefixed(curr_dir, '/', split[0]);
-	else if (split[0][0] == '/')
-		full_path = ft_strdup(split[0]);
+	if (split[0] == '.')
+		full_path = ft_strjoin_prefixed(curr_dir, '/', split);
+	else if (split[0] == '/')
+		full_path = ft_strdup(split);
 	else
-		full_path = bin_in_path(split[0]);
+		full_path = bin_in_path(split);
 	if (NULL == full_path)
 		return (NULL);
 	return (full_path);

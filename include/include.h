@@ -105,7 +105,7 @@ void				free_split(char **arr);
 
 char				*get_dollar_key(char *line, int *i);
 char				*get_var_dollar(char *line);
-char				*get_correct_path(char **split, char *curr_dir);
+char				*get_correct_path(char *split, char *curr_dir);
 char				**get_exec_arg(char *fullpath, char *split);
 
 // char	*get_word(char *str, char c, int *start);
