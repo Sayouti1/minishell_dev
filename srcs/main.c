@@ -157,9 +157,11 @@ void	treat_commands(char *read_line, t_command **command)
 	while (split[i])
 	{
 		cmd = split_on_two(split[i], " \t");
-		add_to_cmds(command, new_command(cmd[0], ft_split(cmd[1], ' '), NULL, 1, 1, 1));
+		add_to_cmds(command, new_command(ft_strdup(cmd[0]), ft_split(cmd[1], ' '), NULL, 1, 1, 1));
+		free_split(cmd);
 		++i;
 	}
+	free_split(split);
 }
 
 void	free_cmds(t_command *cmd)

@@ -319,6 +319,7 @@ char **fix_cmd_arg(t_command *cmd)
 
 void	exec_simple_cmd(t_command *cmd) {
 	t_redirection	*tmp;
+	char			*cwd;
 
 	tmp = cmd->redirection;
 	while (tmp)
@@ -337,7 +338,9 @@ void	exec_simple_cmd(t_command *cmd) {
 		execute_built_in(cmd);
 	else
 	{
-		cmd->command = get_correct_path(cmd->command, getcwd(NULL, 0));
+		cwd = getcwd(NULL, 0);
+		cmd->command = get_correct_path(cmd->command, cwd);
+		free(cwd);
 		fix_cmd_arg(cmd);
 		external_command(cmd);
 	}
