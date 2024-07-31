@@ -208,6 +208,7 @@ int	main(int ac, char **av, char **envp)
 		command = NULL;
 
 	}
+	rl_clear_history();
 	free_cmds(command);
 	free_env();
 	return (0);
