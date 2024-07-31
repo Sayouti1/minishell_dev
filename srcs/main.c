@@ -147,9 +147,9 @@ void	treat_commands(char *read_line, t_command **command)
 	char	**cmd;
 
 	split = ft_split(read_line, '|');
-	i = -1;
 	if (NULL == split)
 		return;
+	i = -1;
 	while (split[++i])
 		split[i] = trim_and_free(split[i]);
 
@@ -157,7 +157,7 @@ void	treat_commands(char *read_line, t_command **command)
 	while (split[i])
 	{
 		cmd = split_on_two(split[i], " \t");
-		add_to_cmds(command, new_command(ft_strdup(cmd[0]), ft_split(cmd[1], ' '), NULL, 1, 1, 1));
+		add_to_cmds(command, new_command(ft_strdup(cmd[0]), ft_split_del(cmd[1], " \t"), NULL, 1, 1, 1));
 		free_split(cmd);
 		++i;
 	}
@@ -168,6 +168,7 @@ void	free_cmds(t_command *cmd)
 {
 	t_command *tmp;
 
+	tmp = NULL;
 	while (cmd)
 	{
 		tmp = cmd->next;
@@ -201,13 +202,13 @@ int	main(int ac, char **av, char **envp)
 			break ;
 		add_history(read_line);
 		treat_commands(read_line, &command);
-		// sleep(2);
+		free(read_line);
 		process_command_V1(command);
 		free_cmds(command);
 		command = NULL;
-		free(read_line);
-	}
 
+	}
+	free_cmds(command);
 	free_env();
 	return (0);
 }

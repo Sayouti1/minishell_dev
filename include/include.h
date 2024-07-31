@@ -79,7 +79,7 @@ int					cd(char **split);
 
 int					closed_quotes(char *str);
 int					built_in(char *str);
-
+void				free_cmds(t_command *cmd);
 void				ft_echo(char **str);
 
 int					add_to_env(char *key, char *value);

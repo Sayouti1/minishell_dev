@@ -338,9 +338,11 @@ void	exec_simple_cmd(t_command *cmd) {
 		execute_built_in(cmd);
 	else
 	{
+		char *tmp = cmd->command;
 		cwd = getcwd(NULL, 0);
 		cmd->command = get_correct_path(cmd->command, cwd);
 		free(cwd);
+		free(tmp);
 		fix_cmd_arg(cmd);
 		external_command(cmd);
 	}
