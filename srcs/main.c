@@ -95,8 +95,8 @@ int	fake_commands(t_command **command)
 	red = new_redirection(HEREDOC, "ff", 0);
 	red->next = new_redirection(OUTPUT, "hhhh", 0);
 
-	 *command = new_command("/usr/bin/cat", ft_split("/usr/bin/cat", ' '),
-		red, 1, 0, 1);
+	 *command = new_command("echo", ft_split_del("hello    \t\t\t\t\t\t  How      are     you", " \t"),
+		NULL, 1, 0, 1);
     /*
      *command = new_command("/usr/bin/cat", ft_split("/usr/bin/cat infile.txt", ' '), NULL, 1, 0, 1);
 	add_to_cmds(command, new_command("/usr/bin/grep", ft_split("/usr/bin/grep test --color=auto", ' '),
