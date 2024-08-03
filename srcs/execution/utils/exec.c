@@ -49,7 +49,7 @@ int	execute_command(char **split)
 	curr_dir = getcwd(NULL, 0);
 	if (NULL == curr_dir && (split[0] && split[0][0] != '/'))
 		return (printf("getcwd error!\n"), set_exit_status(1));
-	fullpath = get_correct_path(split, curr_dir);
+	fullpath = get_correct_path(split[0], curr_dir);
 	free(curr_dir);
 	if (NULL == fullpath)
 		return (printf("COMMAND NOT FOUND : %s\n", split[0]), set_exit_status(127));
@@ -293,9 +293,33 @@ int open_heredoc(t_redirection *redirection)
 }
 
 // grep 10 > greep.txt | sort < greep.txt -r | uniq
-void	exec_simple_cmd(t_command *cmd)
+
+
+char **fix_cmd_arg(t_command *cmd)
 {
+	char	**new_arg;
+	int		i;
+
+	new_arg = (char **)malloc(sizeof(char *) * (split_len(cmd->args) + 2));
+	if (NULL == new_arg)
+		return (NULL);
+	new_arg[0] =  ft_strdup(cmd->command);
+	i = 0;
+	while (cmd->args && cmd->args[i])
+	{
+		new_arg[i + 1] = ft_strdup(cmd->args[i]);
+		++i;
+	}
+	new_arg[i + 1] = NULL;
+	free_split(cmd->args);
+	cmd->args = new_arg;
+	return (new_arg);
+}
+
+
+void	exec_simple_cmd(t_command *cmd) {
 	t_redirection	*tmp;
+	char			*cwd;
 
 	tmp = cmd->redirection;
 	while (tmp)
@@ -305,7 +329,7 @@ void	exec_simple_cmd(t_command *cmd)
 		else if (tmp->type == INPUT)
 			dup2(tmp->fd, 0);
 		else if (tmp->type == HEREDOC)
-            open_heredoc(tmp);
+			open_heredoc(tmp);
 		close(tmp->fd);
 		tmp = tmp->next;
 	}
@@ -313,6 +337,14 @@ void	exec_simple_cmd(t_command *cmd)
 	if (built_in(cmd->command))
 		execute_built_in(cmd);
 	else
-        external_command(cmd);
+	{
+		char *tmp = cmd->command;
+		cwd = getcwd(NULL, 0);
+		cmd->command = get_correct_path(cmd->command, cwd);
+		free(cwd);
+		free(tmp);
+		fix_cmd_arg(cmd);
+		external_command(cmd);
+	}
 }
 

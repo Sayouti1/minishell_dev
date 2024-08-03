@@ -79,7 +79,7 @@ int					cd(char **split);
 
 int					closed_quotes(char *str);
 int					built_in(char *str);
-
+void				free_cmds(t_command *cmd);
 void				ft_echo(char **str);
 
 int					add_to_env(char *key, char *value);
@@ -105,7 +105,7 @@ void				free_split(char **arr);
 
 char				*get_dollar_key(char *line, int *i);
 char				*get_var_dollar(char *line);
-char				*get_correct_path(char **split, char *curr_dir);
+char				*get_correct_path(char *split, char *curr_dir);
 char				**get_exec_arg(char *fullpath, char *split);
 
 // char	*get_word(char *str, char c, int *start);
@@ -140,5 +140,8 @@ int				    ft_char_in(char c, char *str);
 
  
 int				    ft_exit(char **arg);
+
+
+int	execute_pipes_v2(int len, int i, t_command *tmp);
 
 #endif

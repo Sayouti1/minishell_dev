@@ -7,7 +7,7 @@ SRCS= srcs/main.c \
 	srcs/execution/builtin/exit.c srcs/execution/builtin/unset.c srcs/execution/builtin/echo.c \
 	srcs/execution/utils/free.c srcs/execution/utils/exec.c srcs/execution/utils/checkers.c srcs/execution/utils/parse_line.c \
 	srcs/execution/utils/getters.c srcs/execution/utils/setters.c srcs/execution/utils/split.c \
-	srcs/execution/utils/utils.c
+	srcs/execution/utils/utils.c srcs/execution/utils/pipe_exec.c
 
 OBJS=$(SRCS:.c=.o)
 LIBFT= Libft/libft.a

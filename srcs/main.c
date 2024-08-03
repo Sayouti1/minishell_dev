@@ -15,11 +15,13 @@
 t_global_vars	g_vars;
 
 void	sig_handler(int sig) {
-	(void)sig;
-	ft_putchar_fd('\n', 1);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
+	if (sig == SIGINT)
+	{
+		ft_putchar_fd('\n', 1);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+	}
 }
 
 void	init_g_vars(char **envp)
@@ -90,12 +92,12 @@ void	add_to_cmds(t_command **head, t_command *cmd) {
 
 int	fake_commands(t_command **command)
 {
-	t_redirection	*red;
+	/*t_redirection	*red;
 
-	red = new_redirection(HEREDOC, "ff", 0);
+	red = new_redirection(HEREDOC, "end", 0);
 	red->next = new_redirection(OUTPUT, "hhhh", 0);
-
-	 *command = new_command("echo", ft_split_del("hello    \t\t\t\t\t\t  How      are     you", " \t"),
+*/
+	 *command = new_command("echo", ft_split(" ", ' '),
 		NULL, 1, 0, 1);
     /*
      *command = new_command("/usr/bin/cat", ft_split("/usr/bin/cat infile.txt", ' '), NULL, 1, 0, 1);
@@ -121,71 +123,66 @@ int	list_len(t_command *head)
 	return (i);
 }
 
-int	execute_pipes_v2(t_command *cmd, int len)
-{
-	int			i;
-	t_command	*tmp_cmd;
-	int			prev_pipes[2];
-	int			curr_pipes[2];
-
-	i = 0;
-	tmp_cmd = cmd;
-	while (i < len)
-	{
-		if (i != 0)
-		{
-			prev_pipes[0] = curr_pipes[0];
-			prev_pipes[1] = curr_pipes[1];
-		}
-		if (i != len - 1)
-			if (pipe(curr_pipes))
-				return (printf("ERROR IN pipe()\n"), 1);
-		if (fork() == 0)
-		{
-			if (i != 0)
-			{
-				close(prev_pipes[1]);
-				dup2(prev_pipes[0], 0);
-				close(prev_pipes[0]);
-			}
-			if (i != len - 1)
-			{
-				close(curr_pipes[0]);
-				dup2(curr_pipes[1], 1);
-				close(curr_pipes[0]);
-			}
-			exec_simple_cmd(tmp_cmd);
-			exit(0);
-		}
-		if (i != 0)
-		{
-			close(prev_pipes[0]);
-			close(prev_pipes[1]);
-		}
-		tmp_cmd = tmp_cmd->next;
-		++i;
-	}
-	close(curr_pipes[0]);
-	close(curr_pipes[1]);
-	while (i-- > 0)
-		wait(&g_vars.exit_status);
-	return (set_exit_status(g_vars.exit_status));
-}
-
 // cat file.txt | grep 10 > greep.txt | sort < greep.txt -r | uniq
 
 void		process_command_V1(t_command *command)
 {
+	int			i;
+	t_command	*tmp_cmd;
+
 	if (list_len(command) == 1)
 		exec_simple_cmd(command);
 	else
-		execute_pipes_v2(command, list_len(command));
+	{
+		i = -1;
+		tmp_cmd = command;
+		execute_pipes_v2(list_len(command), i, tmp_cmd);
+	}
+}
 
+void	treat_commands(char *read_line, t_command **command)
+{
+	char	**split;
+	int		i;
+	char	**cmd;
+
+	split = ft_split(read_line, '|');
+	if (NULL == split)
+		return;
+	i = -1;
+	while (split[++i])
+		split[i] = trim_and_free(split[i]);
+
+	i = 0;
+	while (split[i])
+	{
+		cmd = split_on_two(split[i], " \t");
+		add_to_cmds(command, new_command(ft_strdup(cmd[0]), ft_split_del(cmd[1], " \t"), NULL, 1, 1, 1));
+		free_split(cmd);
+		++i;
+	}
+	free_split(split);
+}
+
+void	free_cmds(t_command *cmd)
+{
+	t_command *tmp;
+
+	tmp = NULL;
+	while (cmd)
+	{
+		tmp = cmd->next;
+		free(cmd->command);
+		free_split(cmd->args);
+		free(cmd);
+		cmd = tmp;
+	}
 }
 
 int	main(int ac, char **av, char **envp)
 {
 	t_command	*command;
+	char		*read_line;
 
 	(void)ac;
 	(void)av;
@@ -193,11 +190,26 @@ int	main(int ac, char **av, char **envp)
 	init_g_vars(envp);
 	init_env();
 	signal(SIGINT, sig_handler);
+	signal(SIGQUIT, sig_handler);
 
 	// ✅ CREATE FAKE COMMANDS TO TEST EXECUTION ⬇
-	// cat file.txt | grep 10 > greep.txt | sort < greep.txt -r | uniq
-	fake_commands(&command);
-	process_command_V1(command);
+	//fake_commands(&command);
+
+	while (1)
+	{
+		read_line = readline("Minishell=>\n");
+		if (NULL == read_line)
+			break ;
+		add_history(read_line);
+		treat_commands(read_line, &command);
+		free(read_line);
+		process_command_V1(command);
+		free_cmds(command);
+		command = NULL;
+
+	}
+	rl_clear_history();
+	free_cmds(command);
 	free_env();
 	return (0);
 }
