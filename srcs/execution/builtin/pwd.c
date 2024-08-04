@@ -25,9 +25,9 @@ int	pwd(void)
 	curr_dir = getcwd(NULL, 0);
 	if (NULL == curr_dir)
 		return (printf("pwd: error retrieving current directory: getcwd:"
-				"cannot access parent directories:"
-				" No such file or directory\n"),
-			set_exit_status(1));
+						"cannot access parent directories:"
+						" No such file or directory\n"),
+				set_exit_status(1));
 	printf("%s\n", curr_dir);
 	free(curr_dir);
 	return (set_exit_status(0));

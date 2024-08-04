@@ -6,35 +6,11 @@
 /*   By: aes-sayo <aes-sayo@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 09:29:27 by aes-sayo          #+#    #+#             */
-/*   Updated: 2024/07/23 06:49:59 by abdelaziz        ###   ########.fr       */
+/*   Updated: 2024/08/04 13:18:48 by aes-sayo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/include.h"
-
-char	*ft_strjoin_prefixed(char *s1, char c, char *s2)
-{
-	int		i;
-	int		j;
-	char	*join;
-
-	if (NULL == s1 || NULL == s2)
-		return (NULL);
-	i = (int)ft_strlen(s1) + (int)ft_strlen(s2) + 2;
-	join = (char *)malloc(sizeof(char) * i--);
-	if (NULL == join)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (s1[i])
-		join[j++] = s1[i++];
-	join[j++] = c;
-	i = 0;
-	while (s2[i])
-		join[j++] = s2[i++];
-	join[j] = '\0';
-	return (join);
-}
 
 /*
  * ✅ ❌Norminette
@@ -52,11 +28,14 @@ int	execute_command(char **split)
 	fullpath = get_correct_path(split[0], curr_dir);
 	free(curr_dir);
 	if (NULL == fullpath)
-		return (printf("COMMAND NOT FOUND : %s\n", split[0]), set_exit_status(127));
+		return (printf("COMMAND NOT FOUND : %s\n", split[0]),
+			set_exit_status(127));
 	if (access(fullpath, F_OK))
-		return (printf("NO SUCH FILE OR DIRECTORY !!\n"), free(fullpath), set_exit_status(1));
+		return (printf("NO SUCH FILE OR DIRECTORY !!\n"), free(fullpath),
+			set_exit_status(1));
 	if (access(fullpath, X_OK))
-		return (printf("PERMISSION DENIED : !!\n"), free(fullpath), set_exit_status(126));
+		return (printf("PERMISSION DENIED : !!\n"), free(fullpath),
+			set_exit_status(126));
 	pid = fork();
 	if (pid == 0)
 	{
@@ -114,7 +93,8 @@ void	execute_built_in(t_command *cmd)
 		ft_exit(cmd->args);
 }
 
-void	external_command(t_command *cmd) {
+void	external_command(t_command *cmd)
+{
 	int	pid;
 
 	pid = fork();
@@ -128,198 +108,33 @@ void	external_command(t_command *cmd) {
 	set_exit_status(g_vars.exit_status);
 }
 
-/*
-int open_heredoc(t_command *cmd)
-{
-    char    buff[1000];
-    int     byte_read;
-    char    *tmp;
-    int     fds[2];
-
-    tmp = ft_strjoin(cmd->redirection->file_name, "\n");
-    cmd->redirection->file_name = tmp;
-    byte_read = 1;
-    pipe(fds);
-    while(1)
-    {
-        byte_read = read(0, buff, 1000);
-        if (byte_read <= 0 || !ft_strncmp(buff, cmd->redirection->file_name,
-                    ft_strlen(cmd->redirection->file_name)))
-            break ;
-        write(fds[1], buff, byte_read);
-    }
-    close(fds[1]);
-    dup2(fds[0], STDIN_FILENO);
-    cmd->redirection->fd = fds[0];
-    return (0);
-}
- */
-
-char	*ft_strjoin_gnl(char *old_line, char *buff)
-{
-    int		i;
-    int		j;
-    char	*new_line;
-
-    j = ft_strlen(buff) + ft_strlen(old_line);
-    new_line = (char *)malloc(sizeof(char) * (j + 1));
-    if (NULL == new_line)
-    {
-        free(old_line);
-        return (NULL);
-    }
-    i = 0;
-    j = 0;
-    while (old_line && old_line[i])
-        new_line[j++] = old_line[i++];
-    i = 0;
-    while (buff[i])
-        new_line[j++] = buff[i++];
-    new_line[j] = '\0';
-//    if (old_line)
-//        free(old_line);
-    return (new_line);
-}
-
 char	*get_dollar_key_v1(char *line, int *i)
 {
-    int		j;
-    int		k;
-    char	*key;
+	int		j;
+	int		k;
+	char	*key;
 
-    j = *i + 1;
-    if (NULL == line)
-        return (NULL);
-    while (line[j] && !ft_char_in(line[j], " $\'\"\n{}"))
-        j++;
-    key = (char *)malloc(sizeof(char) * (j - *i));
-    if (NULL == key)
-        return (NULL);
-    k = 0;
-    (*i)++;
-    while (*i < j && line[*i])
-        key[k++] = line[(*i)++];
-    key[k] = '\0';
-    return (key);
-}
-
-
-
-char *substitute_var(char *str)
-{
-    int     i;
-    char    *concat;
-    char    *key;
-
-    if (NULL == str)
-        return (NULL);
-    concat = NULL;
-    i = 0;
-    while(str[i])
-    {
-        while (str[i] && str[i] != '$')
-            concat = char_concat(concat, str[i++]);
-        if (str[i] == '$' && str[i + 1] == '?' && ++i && ++i)
-            concat = string_concat(concat, ft_itoa(g_vars.exit_status));
-        if (str[i] == '$')
-        {
-            if (str[i + 1] == '{')
-                ++i;
-            key = get_dollar_key_v1(str, &i);
-            while (str[i] && ft_char_in(str[i], " \t}"))
-                ++i;
-            concat = string_concat(concat, ft_strdup(get_env_v1(key)));
-            free(key);
-        }
-    }
-    return (concat);
-}
-
-int check_curly_braces(char *str)
-{
-    int i;
-
-    if (!str)
-        return (1);
-    i = 0;
-    while (str[i])
-    {
-        if (str[i] == '$' && (!str[i + 1] || ft_isspace(str[i + 1])) && ++i)
-            continue ;
-        if (str[i] == '$' && str[i + 1] == '{')
-        {
-            i += 2;
-            while (str[i] && !ft_char_in(str[i], " \n{}"))
-                ++i;
-            if (str[i] != '}')
-                return (1);
-        }
-        ++i;
-    }
-    return (0);
-}
-
-int open_heredoc(t_redirection *redirection)
-{
-    char        buff[1000];
-    size_t      byte_read;
-    char        *del;
-    int         fds[2];
-
-    del = char_concat(redirection->file_name, '\n');
-    //free(cmd->redirection->file_name)
-    redirection->file_name = NULL;
-    while (1)
-    {
-        byte_read = read(0, buff, 1000);
-        buff[byte_read] = '\0';
-        if (byte_read <= 0 || !ft_strncmp(buff, del, ft_strlen(del)))
-            break ;
-        redirection->file_name = ft_strjoin_gnl(redirection->file_name, buff);
-    }
-    pipe(fds);
-    if (!ft_char_in('\'', del) && !ft_char_in('"', del)) {
-        if (check_curly_braces(redirection->file_name))
-        {
-            set_exit_status(1);
-            return (printf(" : bad substitution\n"), 1);
-        }
-        redirection->file_name = substitute_var(redirection->file_name);
-    }
-    write(fds[1], redirection->file_name, ft_strlen(redirection->file_name));
-    close(fds[1]);
-    redirection->fd = fds[0];
-    return (dup2(redirection->fd, 0), 0);
-}
-
-// grep 10 > greep.txt | sort < greep.txt -r | uniq
-
-
-char **fix_cmd_arg(t_command *cmd)
-{
-	char	**new_arg;
-	int		i;
-
-	new_arg = (char **)malloc(sizeof(char *) * (split_len(cmd->args) + 2));
-	if (NULL == new_arg)
+	j = *i + 1;
+	if (NULL == line)
 		return (NULL);
-	new_arg[0] =  ft_strdup(cmd->command);
-	i = 0;
-	while (cmd->args && cmd->args[i])
-	{
-		new_arg[i + 1] = ft_strdup(cmd->args[i]);
-		++i;
-	}
-	new_arg[i + 1] = NULL;
-	free_split(cmd->args);
-	cmd->args = new_arg;
-	return (new_arg);
+	while (line[j] && !ft_char_in(line[j], " $\'\"\n{}"))
+		j++;
+	key = (char *)malloc(sizeof(char) * (j - *i));
+	if (NULL == key)
+		return (NULL);
+	k = 0;
+	(*i)++;
+	while (*i < j && line[*i])
+		key[k++] = line[(*i)++];
+	key[k] = '\0';
+	return (key);
 }
 
-
-void	exec_simple_cmd(t_command *cmd) {
+void	exec_simple_cmd(t_command *cmd)
+{
 	t_redirection	*tmp;
 	char			*cwd;
+	char			*tmp_cmd;
 
 	tmp = cmd->redirection;
 	while (tmp)
@@ -333,18 +148,16 @@ void	exec_simple_cmd(t_command *cmd) {
 		close(tmp->fd);
 		tmp = tmp->next;
 	}
-
 	if (built_in(cmd->command))
 		execute_built_in(cmd);
 	else
 	{
-		char *tmp = cmd->command;
+		tmp_cmd = cmd->command;
 		cwd = getcwd(NULL, 0);
 		cmd->command = get_correct_path(cmd->command, cwd);
 		free(cwd);
-		free(tmp);
+		free(tmp_cmd);
 		fix_cmd_arg(cmd);
 		external_command(cmd);
 	}
 }
-

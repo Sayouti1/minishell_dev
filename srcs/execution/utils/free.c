@@ -6,13 +6,13 @@
 /*   By: aes-sayo <aes-sayo@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 09:29:53 by aes-sayo          #+#    #+#             */
-/*   Updated: 2024/06/28 09:29:55 by aes-sayo         ###   ########.fr       */
+/*   Updated: 2024/08/04 13:04:06 by aes-sayo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/include.h"
 
-void	free_env()
+void	free_env(void)
 {
 	t_env	*tmp;
 
@@ -46,4 +46,19 @@ void	free_split(char **arr)
 	while (arr[i])
 		free(arr[i++]);
 	free(arr);
+}
+
+void	free_cmds(t_command *cmd)
+{
+	t_command	*tmp;
+
+	tmp = NULL;
+	while (cmd)
+	{
+		tmp = cmd->next;
+		free(cmd->command);
+		free_split(cmd->args);
+		free(cmd);
+		cmd = tmp;
+	}
 }

@@ -6,13 +6,10 @@
 /*   By: aes-sayo <aes-sayo@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 09:31:00 by aes-sayo          #+#    #+#             */
-/*   Updated: 2024/06/28 09:31:04 by aes-sayo         ###   ########.fr       */
+/*   Updated: 2024/08/04 13:19:53 by aes-sayo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//
-// Created by abdelaziz on 6/3/24.
-//
 #include "../../../include/include.h"
 
 int	ft_isspace(char c)
@@ -31,16 +28,6 @@ int	str_isdigit(char *str)
 		if (!ft_isdigit(str[i++]))
 			return (2);
 	return (1);
-}
-
-int	split_len(char **split)
-{
-	int	i;
-
-	i = 0;
-	while (split && split[i])
-		i++;
-	return (i);
 }
 
 int	ft_strcmp(char *s1, char *s2)

@@ -19,7 +19,7 @@ int	cd_home(char *home)
 		return (printf("cd: HOME not set\n"), set_exit_status(1));
 	if (chdir(home))
 		return (printf("%s : No such file or directory\n", home),
-			set_exit_status(1));
+				set_exit_status(1));
 	return (set_exit_status(0));
 }
 
@@ -41,7 +41,7 @@ int	cd(char **split)
 	{
 		if (chdir(split[0]))
 			return (printf("cd: %s: No such file or directory\n", split[0]),
-				set_exit_status(1));
+					set_exit_status(1));
 		return (set_exit_status(0));
 	}
 	home = getcwd(NULL, 0);
@@ -50,7 +50,7 @@ int	cd(char **split)
 		return (set_exit_status(1));
 	if (chdir(full_path))
 		return (printf("cd: %s: No such file or directory\n", split[0]),
-			free(full_path),
-			set_exit_status(1));
+				free(full_path),
+				set_exit_status(1));
 	return (free(full_path), set_exit_status(0));
 }

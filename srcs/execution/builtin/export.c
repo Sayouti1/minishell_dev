@@ -32,7 +32,7 @@ int	ft_export(char **var)
 		if (NULL == key_value || NULL == key_value[1])
 			return (set_exit_status(0), 1);
 		printf("split[%d] => [%s], [%s=>%s]\n", i - 1, split[i - 1],
-			key_value[0], key_value[1]);
+				key_value[0], key_value[1]);
 		if (!ft_env_replace(key_value[0], key_value[1]))
 			add_to_env(ft_strdup(key_value[0]), ft_strdup(key_value[1]));
 		free_split(key_value);

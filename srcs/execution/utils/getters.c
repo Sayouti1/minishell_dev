@@ -6,13 +6,9 @@
 /*   By: aes-sayo <aes-sayo@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 09:30:00 by aes-sayo          #+#    #+#             */
-/*   Updated: 2024/06/28 09:30:05 by aes-sayo         ###   ########.fr       */
+/*   Updated: 2024/08/04 13:04:06 by aes-sayo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-//
-// Created by abdelaziz on 6/27/24.
-//
 
 #include "../../../include/include.h"
 
@@ -56,6 +52,7 @@ char	*get_var_dollar(char *line)
 	}
 	return (tmp);
 }
+
 /*
  * ✅
  */
@@ -75,6 +72,7 @@ char	*get_correct_path(char *split, char *curr_dir)
 		return (NULL);
 	return (full_path);
 }
+
 /*
  * ✅
  */
