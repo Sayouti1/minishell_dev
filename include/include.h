@@ -75,6 +75,11 @@ typedef struct s_command {
 	struct s_command	*prev;
 }	t_command;
 
+void			exec_echo(t_command *cmd);
+void			exec_export(t_command *cmd);
+void			exec_env(t_command *cmd);
+void			exec_unset(t_command *cmd);
+
 int	            cd_home(char *home);
 int	            cd(char **split);
 
@@ -111,7 +116,7 @@ int			    built_in(char *str);
 
 
 char		    *ft_strjoin_prefixed(char *s1, char c, char *s2);
-int		        execute_command(char **split);
+// int		        execute_command(char **split);
 void	        execute_built_in(t_command *cmd);
 void	        external_command(t_command *cmd);
 char	        *ft_strjoin_gnl(char *old_line, char *buff);
@@ -128,8 +133,8 @@ void	        free_split(char **arr);
 void			free_cmds(t_command *cmd);
 
 
-char	        *get_dollar_key(char *line, int *i);
-char	        *get_var_dollar(char *line);
+// char	        *get_dollar_key(char *line, int *i);
+// char	        *get_var_dollar(char *line);
 char	        *get_correct_path(char *split, char *curr_dir);
 char	        **get_exec_arg(char *fullpath, char *split);
 
@@ -137,7 +142,7 @@ char	        **get_exec_arg(char *fullpath, char *split);
 char	        *trim_and_free(char *line);
 char	        *char_concat(char *line, char c);
 char	        *string_concat(char *line, char *str);
-char	        *parse_command_vars(char *line);
+// char	        *parse_command_vars(char *line);
 
 
 void	        close_and_dup(int to_dup, int fd, int to_close);

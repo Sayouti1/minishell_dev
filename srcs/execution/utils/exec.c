@@ -15,83 +15,46 @@
 /*
  * ✅ ❌Norminette
  */
-int	execute_command(char **split)
-{
-	char	*fullpath;
-	char	*curr_dir;
-	pid_t	pid;
-	char	**exec_arg;
-
-	curr_dir = getcwd(NULL, 0);
-	if (NULL == curr_dir && (split[0] && split[0][0] != '/'))
-		return (printf("getcwd error!\n"), set_exit_status(1));
-	fullpath = get_correct_path(split[0], curr_dir);
-	free(curr_dir);
-	if (NULL == fullpath)
-		return (printf("COMMAND NOT FOUND : %s\n", split[0]),
-			set_exit_status(127));
-	if (access(fullpath, F_OK))
-		return (printf("NO SUCH FILE OR DIRECTORY !!\n"), free(fullpath),
-			set_exit_status(1));
-	if (access(fullpath, X_OK))
-		return (printf("PERMISSION DENIED : !!\n"), free(fullpath),
-			set_exit_status(126));
-	pid = fork();
-	if (pid == 0)
-	{
-		exec_arg = get_exec_arg(fullpath, split[1]);
-		if (NULL == exec_arg)
-			return (1);
-		if (execve(fullpath, exec_arg, g_vars.envp) == -1)
-		{
-			printf("CANNOT EXECUTE COMMAND : %s, [%s]\n", split[0], fullpath);
-			free_split(exec_arg);
-			set_exit_status(1);
-			exit(1);
-		}
-	}
-	else
-		wait(&g_vars.exit_status);
-	free(fullpath);
-	return (set_exit_status(g_vars.exit_status));
-}
-
-void	execute_built_in(t_command *cmd)
-{
-	if (!ft_strcmp(cmd->command, "echo"))
-	{
-		if (cmd->args)
-			ft_echo(cmd->args);
-		else
-			printf("\n");
-		set_exit_status(0);
-	}
-	else if (!ft_strcmp(cmd->command, "cd"))
-		cd(cmd->args);
-	else if (!ft_strcmp(cmd->command, "pwd"))
-		pwd();
-	else if (!ft_strcmp(cmd->command, "export"))
-	{
-		if (cmd->args)
-			ft_export(cmd->args);
-		else
-			ft_print_export();
-	}
-	else if (!ft_strcmp(cmd->command, "unset"))
-	{
-		if (cmd->args)
-			ft_unset(cmd->args);
-	}
-	else if (!ft_strcmp(cmd->command, "env"))
-	{
-		if (NULL == cmd->args)
-			ft_env();
-		else
-			set_exit_status(127);
-	}
-	else if (!ft_strcmp(cmd->command, "exit"))
-		ft_exit(cmd->args);
-}
+// int	execute_command(char **split)
+// {
+// 	char	*fullpath;
+// 	char	*curr_dir;
+// 	pid_t	pid;
+// 	char	**exec_arg;
+//
+// 	curr_dir = getcwd(NULL, 0);
+// 	if (NULL == curr_dir && (split[0] && split[0][0] != '/'))
+// 		return (printf("getcwd error!\n"), set_exit_status(1));
+// 	fullpath = get_correct_path(split[0], curr_dir);
+// 	free(curr_dir);
+// 	if (NULL == fullpath)
+// 		return (printf("COMMAND NOT FOUND : %s\n", split[0]),
+// 			set_exit_status(127));
+// 	if (access(fullpath, F_OK))
+// 		return (printf("NO SUCH FILE OR DIRECTORY !!\n"), free(fullpath),
+// 			set_exit_status(1));
+// 	if (access(fullpath, X_OK))
+// 		return (printf("PERMISSION DENIED : !!\n"), free(fullpath),
+// 			set_exit_status(126));
+// 	pid = fork();
+// 	if (pid == 0)
+// 	{
+// 		exec_arg = get_exec_arg(fullpath, split[1]);
+// 		if (NULL == exec_arg)
+// 			return (1);
+// 		if (execve(fullpath, exec_arg, g_vars.envp) == -1)
+// 		{
+// 			printf("CANNOT EXECUTE COMMAND : %s, [%s]\n", split[0], fullpath);
+// 			free_split(exec_arg);
+// 			set_exit_status(1);
+// 			exit(1);
+// 		}
+// 	}
+// 	else
+// 		wait(&g_vars.exit_status);
+// 	free(fullpath);
+// 	return (set_exit_status(g_vars.exit_status));
+// }
 
 void	external_command(t_command *cmd)
 {

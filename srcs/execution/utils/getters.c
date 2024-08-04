@@ -12,46 +12,46 @@
 
 #include "../../../include/include.h"
 
-char	*get_dollar_key(char *line, int *i)
-{
-	int		j;
-	int		k;
-	char	*key;
+// char	*get_dollar_key(char *line, int *i)
+// {
+// 	int		j;
+// 	int		k;
+// 	char	*key;
+//
+// 	j = *i + 1;
+// 	while (line[j] && line[j] != ' ' && line[j] != '$' && line[j] != '\''
+// 		&& line[j] != '"')
+// 		j++;
+// 	key = (char *)malloc(sizeof(char) * (j - *i));
+// 	if (NULL == key)
+// 		return (NULL);
+// 	k = 0;
+// 	(*i)++;
+// 	while (*i < j && line[*i])
+// 		key[k++] = line[(*i)++];
+// 	key[k] = '\0';
+// 	return (key);
+// }
 
-	j = *i + 1;
-	while (line[j] && line[j] != ' ' && line[j] != '$' && line[j] != '\''
-		&& line[j] != '"')
-		j++;
-	key = (char *)malloc(sizeof(char) * (j - *i));
-	if (NULL == key)
-		return (NULL);
-	k = 0;
-	(*i)++;
-	while (*i < j && line[*i])
-		key[k++] = line[(*i)++];
-	key[k] = '\0';
-	return (key);
-}
-
-char	*get_var_dollar(char *line)
-{
-	char	*tmp;
-	int		i;
-
-	i = 0;
-	while (line[i] && line[i] != 32)
-		i++;
-	tmp = (char *)malloc(sizeof(char) * (i + 1));
-	if (NULL == tmp)
-		return (NULL);
-	tmp[i--] = 0;
-	while (i >= 0)
-	{
-		tmp[i] = line[i];
-		--i;
-	}
-	return (tmp);
-}
+// char	*get_var_dollar(char *line)
+// {
+// 	char	*tmp;
+// 	int		i;
+//
+// 	i = 0;
+// 	while (line[i] && line[i] != 32)
+// 		i++;
+// 	tmp = (char *)malloc(sizeof(char) * (i + 1));
+// 	if (NULL == tmp)
+// 		return (NULL);
+// 	tmp[i--] = 0;
+// 	while (i >= 0)
+// 	{
+// 		tmp[i] = line[i];
+// 		--i;
+// 	}
+// 	return (tmp);
+// }
 
 /*
  * ✅
