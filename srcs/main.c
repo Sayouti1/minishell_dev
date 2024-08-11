@@ -26,6 +26,8 @@ void		process_command(t_command *command)
 	t_command	*tmp_cmd;
 	int			i;
 
+
+	signal(SIGQUIT, sig_handler);
 	if (list_len(command) == 1)
 		exec_simple_cmd(command);
 	else
@@ -47,13 +49,12 @@ int	main(int ac, char **av, char **envp)
 	init_g_vars(envp);
 	init_env();
 	signal(SIGINT, sig_handler);
-	signal(SIGQUIT, sig_handler);
-
 	// ✅ CREATE FAKE COMMANDS TO TEST EXECUTION ⬇
 	//fake_commands(&command);
 
 	while (1)
 	{
+		signal(SIGQUIT, SIG_IGN);
 		read_line = readline("Minishell=> ");
 		if (NULL == read_line)
 			break ;
