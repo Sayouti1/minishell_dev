@@ -76,6 +76,7 @@ int	open_heredoc(t_redirection *redirection)
 	del = char_concat(redirection->file_name, '\n');
 	//free(cmd->redirection->file_name)
 	redirection->file_name = NULL;
+	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
 		byte_read = read(0, buff, 1000);
