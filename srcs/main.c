@@ -56,6 +56,11 @@ int	main(int ac, char **av, char **envp)
 	{
 		signal(SIGQUIT, SIG_IGN);
 		read_line = readline("Minishell=> ");
+		if (read_line && !read_line[0])
+		{
+			free(read_line);
+			continue ;
+		}
 		if (NULL == read_line)
 			break ;
 		add_history(read_line);
