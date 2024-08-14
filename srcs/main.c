@@ -61,7 +61,7 @@ void ft_printToken(t_token *tokens)
 {
 	t_token *tmp;
 	tmp = tokens;
-	while (tmp->next)
+	while (tmp)
 	{
 		printf("value --> %s | type ---> %d \n\n", tmp->value, tmp->type);
 		tmp = tmp->next;
@@ -89,7 +89,8 @@ void main_loop(void)
 		if (tokens)
 		{
 			ft_printToken(tokens);
-			// tokens like |>>>  |"ls"| --next---> |"-al"| --> "|" ---> |"cat"| --> "-e" --> ">" --> "file"
+			// ls -al | cat -e > file
+			// tokens like |>>>  |"ls"|---next---> |"-al"| --> "|" ---> |"cat"| --> "-e" --> ">" --> "file"
 			//save_cmd(&tokens);
 		}
 		printf("End\n");

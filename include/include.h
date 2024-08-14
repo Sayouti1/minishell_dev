@@ -35,11 +35,16 @@ typedef enum s_token_type
 	TOKEN_REDIR_APPEND, // using for >>
 	TOKEN_REDIR_HEREDOC, // using for <<
 } t_token_type;
+// tok 
+// | >
+			// ls -al | cat -e > file
+			// tokens like |>>>  |"ls"|---next---> |"-al"| --> "|" ---> |"cat"| --> "-e" --> ">" --> "file"
 
+// ("/bin/ls" , {"/bin/ls", }, )
 typedef struct s_token
 {
-	t_token_type  type; // TOKEN_REDIR_HEREDOC
-	char *value;	 // "<<"
+	t_token_type  type; // TOKEN
+	char *value;	 // "ls" 
 	struct s_token *next; 
 }	t_token;
 
@@ -75,18 +80,10 @@ typedef struct s_redirection {
 }	t_redirection;
 
 typedef struct s_command {
-	char *command;
-	char **args;
+	char *command; // TOKEN_WORD 0 
+	char **args; // white TYPE == TOKEN_WORND 0
 
 	t_redirection	    *redirection;
-
-	int				    input_fd;
-	int				    output_fd;
-	int				    error_fd;
-
-	int				    is_piped;
-	int				    pipe_read;
-	int				    pipe_write;
 
 	struct s_command	*next;
 	struct s_command	*prev;
