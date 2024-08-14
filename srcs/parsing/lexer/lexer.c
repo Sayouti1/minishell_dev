@@ -6,21 +6,18 @@ t_token *token_line(char *line)
     tokens = NULL;
     while (*line)
     {
-        printf("--------------\n");
         while (*line && ft_strchr(" \t\n", *line))
             line++;
         if (ft_strchr("><|", *line))
         {
-            printf("in befor speacil char %s\n", line);
             do_speacil_chars(&line, &tokens);
-            printf("in after speacil char %s\n", line);
 
         }
         else
         {
-            printf(" in befor in word %s\n", line);
+            //printf(" in befor in word %s\n", line);
             do_words(&line, &tokens);
-            printf("in after in word %s\n", line);
+            //printf("in after in word %s\n", line);
         }
     }
     return (tokens);

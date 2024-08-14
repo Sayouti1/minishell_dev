@@ -6,7 +6,7 @@
 /*   By: aes-sayo <aes-sayo@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 09:33:50 by aes-sayo          #+#    #+#             */
-/*   Updated: 2024/06/28 09:34:00 by aes-sayo         ###   ########.fr       */
+/*   Updated: 2024/08/14 20:34:53 by aez-zoui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,13 @@ typedef enum s_token_type
 	TOKEN_REDIR_OUT, //using like >
 	TOKEN_REDIR_APPEND, // using for >>
 	TOKEN_REDIR_HEREDOC, // using for <<
-	//TOKEN_ENV_VAR, // for environment variable
 } t_token_type;
 
 typedef struct s_token
 {
-	t_token_type  type;
-	char *value;
-	struct s_token *next;
+	t_token_type  type; // TOKEN_REDIR_HEREDOC
+	char *value;	 // "<<"
+	struct s_token *next; 
 }	t_token;
 
 typedef struct s_env
@@ -74,16 +73,6 @@ typedef struct s_redirection {
 	struct s_redirection	*next;
 
 }	t_redirection;
-
-
-// typedef struct s_ast_node
-// {
-// 	t_token_type		type;
-// 	int					file_type;
-// 	char				**args;
-// 	struct s_ast_node	*left;
-// 	struct s_ast_node	*right;
-// }	t_ast_node;
 
 typedef struct s_command {
 	char *command;

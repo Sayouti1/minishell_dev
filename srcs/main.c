@@ -43,11 +43,11 @@ t_token *check_and_token(char *line)
 
 	tokens = NULL;
 	line_trim = line;
-	//line_trim = ft_strtrim(line, " \t\n\v\r");
-	//free(line);
+	line_trim = ft_strtrim(line, " \t\n\v\r");
+	free(line);
 	if (!line_trim)
 		return (NULL);
-	if (is_syntaxe_cmd(line))
+	if (is_syntaxe_cmd(line_trim))
 	{
 		free(line_trim);
 		return (NULL);
@@ -83,7 +83,8 @@ void main_loop(void)
 		tokens = check_and_token(line);
 		if (!tokens)
 			ft_putstr_fd("Error in the return of the token\n", 2);
-		ft_printToken(tokens);
+		if (tokens)
+			ft_printToken(tokens);
 		printf("final\n");
 	}
 }
