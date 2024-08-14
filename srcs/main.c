@@ -80,12 +80,19 @@ void main_loop(void)
 		if(check_line(&line))
 			continue;
 		add_history(line);
+		// check all errors in line like |--> start with the pipe (|) or Error in the Quotes all error 
+		//	and lexer token is nothing woring this func { check_and_token }
+
 		tokens = check_and_token(line);
 		if (!tokens)
 			ft_putstr_fd("Error in the return of the token\n", 2);
 		if (tokens)
+		{
 			ft_printToken(tokens);
-		printf("final\n");
+			// tokens like |>>>  |"ls"| --next---> |"-al"| --> "|" ---> |"cat"| --> "-e" --> ">" --> "file"
+			//save_cmd(&tokens);
+		}
+		printf("End\n");
 	}
 }
 
