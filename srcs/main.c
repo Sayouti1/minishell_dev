@@ -38,10 +38,73 @@ void		process_command(t_command *command)
 	}
 }
 
+t_token *check_and_token(char *line)
+{
+	char *line_trim ;
+	t_token *tokens;
+
+	tokens = NULL;
+	line_trim = line;
+	line_trim = ft_strtrim(line, " \t\n\v\r");
+	free(line);
+	if (!line_trim)
+		return (NULL);
+	if (is_syntaxe_cmd(line_trim))
+	{
+		free(line_trim);
+		return (NULL);
+	}
+	printf("%s\n", line_trim);
+	tokens = token_line(line_trim);
+	free(line_trim);
+	return (tokens);
+}
+void ft_printToken(t_token *tokens)
+{
+	t_token *tmp;
+	tmp = tokens;
+	while (tmp)
+	{
+		printf("value --> %s | type ---> %d \n\n", tmp->value, tmp->type);
+		tmp = tmp->next;
+	}
+}
+void main_loop(void)
+{
+	char *line;
+	t_token *tokens;
+
+	while (1)
+	{
+		line = readline("miniSHELL--> ");
+		if (!line)
+			break;
+		if(check_line(&line))
+			continue;
+		add_history(line);
+		// check all errors in line like |--> start with the pipe (|) or Error in the Quotes all error 
+		//	and lexer token is nothing woring this func { check_and_token }
+
+		tokens = check_and_token(line);
+		if (!tokens)
+			ft_putstr_fd("Error in the return of the token\n", 2);
+		if (tokens)
+		{
+			ft_printToken(tokens);
+			// ls -al | cat -e > file
+			// tokens like |>>>  |"ls"|---next---> |"-al"| --> "|" ---> |"cat"| --> "-e" --> ">" --> "file"
+			//save_cmd(&tokens);
+		}
+		printf("End\n");
+	}
+}
+
+
+
 int	main(int ac, char **av, char **envp)
 {
 	t_command	*command;
-	char		*read_line;
+	//char		*read_line;
 
 	(void)ac;
 	(void)av;

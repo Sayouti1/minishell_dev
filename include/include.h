@@ -6,7 +6,7 @@
 /*   By: aes-sayo <aes-sayo@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 09:33:50 by aes-sayo          #+#    #+#             */
-/*   Updated: 2024/06/28 09:34:00 by aes-sayo         ###   ########.fr       */
+/*   Updated: 2024/08/14 20:34:53 by aez-zoui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,28 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+
+typedef enum s_token_type
+{
+	TOKEN_WORD, // using for the cmd argm
+	TOKEN_PIPE, // using for the pipe cmd
+	TOKEN_REDIR_IN, // using like <
+	TOKEN_REDIR_OUT, //using like >
+	TOKEN_REDIR_APPEND, // using for >>
+	TOKEN_REDIR_HEREDOC, // using for <<
+} t_token_type;
+// tok 
+// | >
+			// ls -al | cat -e > file
+			// tokens like |>>>  |"ls"|---next---> |"-al"| --> "|" ---> |"cat"| --> "-e" --> ">" --> "file"
+
+// ("/bin/ls" , {"/bin/ls", }, )
+typedef struct s_token
+{
+	t_token_type  type; // TOKEN
+	char *value;	 // "ls" 
+	struct s_token *next; 
+}	t_token;
 
 typedef struct s_env
 {
@@ -58,22 +80,44 @@ typedef struct s_redirection {
 }	t_redirection;
 
 typedef struct s_command {
-	char *command;
-	char **args;
+	char *command; // TOKEN_WORD 0 
+	char **args; // white TYPE == TOKEN_WORND 0
 
 	t_redirection	    *redirection;
-
-	int				    input_fd;
-	int				    output_fd;
-	int				    error_fd;
-
-	int				    is_piped;
-	int				    pipe_read;
-	int				    pipe_write;
 
 	struct s_command	*next;
 	struct s_command	*prev;
 }	t_command;
+
+// ---------------------------- PARSING -----------------
+char **split_by_pipe(const char *str, int *num_tokens, char c);
+int closed_quotes(char *str);
+void	update_quote_counts(char c, int *s_q_count, int *d_q_count);
+char *skip_spaces(char *input);
+int is_space(char *line);
+int check_line(char **line);
+int is_invalid_op( char **input);
+int is_syntaxe_cmd(char *line);
+int is_closed_qoute(char *line);
+int is_invalid_redirection(char *line);
+int is_error_misplaced(char *line);
+int is_error_logic(char *line);
+// -----------------------------LEXER----------------------
+void update_quote_status(char c, int *is_quote, char *qoute_char);
+t_token *new_token(t_token_type type, char *value);
+void    add_token_to_list(t_token **tokens, t_token *new_token);
+void free_token(t_token *tokens);
+void word_to_token(char **start, char **line, t_token **tokens);
+t_token *token_line(char *line);
+void    do_words(char **line, t_token **tokens);
+void    do_speacil_chars(char **line, t_token **tokens);
+char	*ft_strndup(char *src, size_t n);
+int	_strcmp(char *s_1, char *s_2, char *s_3);
+int	sizeof_str(char *str, char end);
+size_t	ft_strnlen(const char *s, size_t maxlen);
+void word_to_token(char **start, char **line, t_token **tokens);
+
+// ------------------------------------------------------
 
 void			exec_echo(t_command *cmd);
 void			exec_export(t_command *cmd);
