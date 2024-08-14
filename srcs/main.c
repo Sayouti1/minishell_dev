@@ -76,6 +76,7 @@ void main_loop(void)
 
 	while (1)
 	{
+		signal(SIGQUIT, SIG_IGN);
 		line = readline("miniSHELL--> ");
 		if (!line)
 			break;
@@ -104,7 +105,7 @@ void main_loop(void)
 int	main(int ac, char **av, char **envp)
 {
 	t_command	*command;
-	//char		*read_line;
+	// char		*read_line;
 
 	(void)ac;
 	(void)av;
@@ -112,27 +113,27 @@ int	main(int ac, char **av, char **envp)
 	init_g_vars(envp);
 	init_env();
 	signal(SIGINT, sig_handler);
+	main_loop();
 	// ✅ CREATE FAKE COMMANDS TO TEST EXECUTION ⬇
 	//fake_commands(&command);
 
-	while (1)
-	{
-		signal(SIGQUIT, SIG_IGN);
-		read_line = readline("Minishell=> ");
-		if (read_line && !read_line[0])
-		{
-			free(read_line);
-			continue ;
-		}
-		if (NULL == read_line)
-			break ;
-		add_history(read_line);
-		treat_commands(read_line, &command);
-		free(read_line);
-		process_command(command);
-		free_cmds(command);
-		command = NULL;
-	}
+	// while (1)
+	// {
+	// 	read_line = readline("Minishell=> ");
+	// 	if (read_line && !read_line[0])
+	// 	{
+	// 		free(read_line);
+	// 		continue ;
+	// 	}
+	// 	if (NULL == read_line)
+	// 		break ;
+	// 	add_history(read_line);
+	// 	treat_commands(read_line, &command);
+	// 	free(read_line);
+	// 	process_command(command);
+	// 	free_cmds(command);
+	// 	command = NULL;
+	// }
 	rl_clear_history();
 	free_cmds(command);
 	free_env();

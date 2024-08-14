@@ -1,8 +1,17 @@
-#include "../include/include.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redirection.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aes-sayo <aes-sayo@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/28 09:33:50 by aes-sayo          #+#    #+#             */
+/*   Updated: 2024/08/14 20:34:53 by aez-zoui         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-//
-// Created by aes-sayo on 8/4/24.
-//
+#include "../../../include/include.h"
+
 
 t_redirection	*new_redirection(int type, char	*file_name, int	fd)
 {
@@ -27,6 +36,7 @@ t_redirection	*new_redirection(int type, char	*file_name, int	fd)
 	return (redirection);
 }
 
+
 t_command *new_command(char *command, char **args, t_redirection *redirection)
 {
 	t_command	*cmd;
@@ -42,7 +52,8 @@ t_command *new_command(char *command, char **args, t_redirection *redirection)
 	return (cmd);
 }
 
-void	add_to_cmds(t_command **head, t_command *cmd) {
+void	add_to_cmds(t_command **head, t_command *cmd)
+{
 	t_command *tmp;
 
     if (*head == NULL)
@@ -56,49 +67,6 @@ void	add_to_cmds(t_command **head, t_command *cmd) {
     if (cmd)
 	    cmd->prev = tmp;
 	tmp->next = cmd;
-}
-
-int	fake_commands(t_command **command)
-{
-	/*t_redirection	*red;
-
-	red = new_redirection(HEREDOC, "end", 0);
-	red->next = new_redirection(OUTPUT, "hhhh", 0);
-*/
-	 *command = new_command("echo", ft_split("Hello WOrld", ' '), NULL);
-    /*
-     *command = new_command("/usr/bin/cat", ft_split("/usr/bin/cat infile.txt", ' '), NULL, 1, 0, 1);
-	add_to_cmds(command, new_command("/usr/bin/grep", ft_split("/usr/bin/grep test --color=auto", ' '),
-		new_redirection(OUTPUT, "outfile.txt", 0), 1, 0, 1));
-	add_to_cmds(command, new_command("echo", ft_split("Another test", '|'),
-		new_redirection(APPEND, "outfile.txt", 0), 1, 0, 1));
-	 add_to_cmds(command, new_command("/usr/bin/bash", ft_split("/usr/bin/bash b", ' '),
-                                      NULL, 0, 0, 1));*/
-	return (1);
-}
-
-void	treat_commands(char *read_line, t_command **command)
-{
-	char	**split;
-	int		i;
-	char	**cmd;
-
-	split = ft_split(read_line, '|');
-	if (NULL == split)
-		return;
-	i = -1;
-	while (split[++i])
-		split[i] = trim_and_free(split[i]);
-
-	i = 0;
-	while (split[i])
-	{
-		cmd = split_on_two(split[i], " \t");
-		add_to_cmds(command, new_command(ft_strdup(cmd[0]), ft_split_del(cmd[1], " \t"), NULL));
-		free_split(cmd);
-		++i;
-	}
-	free_split(split);
 }
 
 
