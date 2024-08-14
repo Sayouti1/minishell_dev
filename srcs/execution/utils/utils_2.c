@@ -1,31 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
+/*   utils_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aes-sayo <aes-sayo@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/11 06:29:04 by aes-sayo          #+#    #+#             */
-/*   Updated: 2024/06/28 09:30:17 by aes-sayo         ###   ########.fr       */
+/*   Created: 2024/06/28 09:31:00 by aes-sayo          #+#    #+#             */
+/*   Updated: 2024/08/04 13:19:53 by aes-sayo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/include.h"
 
-int	ft_exit(char **arg)
+int	ft_isspace(char c)
 {
-	if (NULL == arg)
-	{
-		set_exit_status(0);
-		exit(0);
-	}
-	if (split_len(arg) > 1)
-		return (printf("exit: too many arguments\n"), set_exit_status(1));
-	if (str_isdigit(arg[0]) == 2)
-	{
-		set_exit_status(2);
-		exit(2);
-	}
-	set_exit_status(ft_atoi(arg[0]));
-	exit(ft_atoi(arg[0]));
+	return ((c >= 7 && c <= 13) || c == 32);
+}
+
+int	str_isdigit(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (NULL == str)
+		return (0);
+	while (str[i])
+		if (!ft_isdigit(str[i++]))
+			return (2);
+	return (1);
 }

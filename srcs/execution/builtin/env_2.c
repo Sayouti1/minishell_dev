@@ -1,31 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
+/*   env_2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aes-sayo <aes-sayo@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/11 06:29:04 by aes-sayo          #+#    #+#             */
-/*   Updated: 2024/06/28 09:30:17 by aes-sayo         ###   ########.fr       */
+/*   Created: 2024/06/28 09:28:59 by aes-sayo          #+#    #+#             */
+/*   Updated: 2024/06/28 09:29:07 by aes-sayo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/include.h"
 
-int	ft_exit(char **arg)
+/*
+ * ✅
+ */
+t_env	*new_node(char *key, char *value)
 {
-	if (NULL == arg)
-	{
-		set_exit_status(0);
-		exit(0);
-	}
-	if (split_len(arg) > 1)
-		return (printf("exit: too many arguments\n"), set_exit_status(1));
-	if (str_isdigit(arg[0]) == 2)
-	{
-		set_exit_status(2);
-		exit(2);
-	}
-	set_exit_status(ft_atoi(arg[0]));
-	exit(ft_atoi(arg[0]));
+	t_env	*node;
+
+	node = (t_env *)malloc(sizeof(t_env));
+	if (NULL == node)
+		return (NULL);
+	node->key = key;
+	node->value = value;
+	node->next = NULL;
+	return (node);
 }

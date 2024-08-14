@@ -10,9 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-//
-// Created by abdelaziz on 6/3/24.
-//
 #include "../../../include/include.h"
 
 /*
@@ -75,22 +72,6 @@ char	*get_env_v1(char *key)
 		tmp = tmp->next;
 	}
 	return (NULL);
-}
-
-/*
- * ✅
- */
-t_env	*new_node(char *key, char *value)
-{
-	t_env	*node;
-
-	node = (t_env *)malloc(sizeof(t_env));
-	if (NULL == node)
-		return (NULL);
-	node->key = key;
-	node->value = value;
-	node->next = NULL;
-	return (node);
 }
 
 /*

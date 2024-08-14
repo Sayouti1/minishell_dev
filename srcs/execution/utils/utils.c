@@ -12,24 +12,6 @@
 
 #include "../../../include/include.h"
 
-int	ft_isspace(char c)
-{
-	return ((c >= 7 && c <= 13) || c == 32);
-}
-
-int	str_isdigit(char *str)
-{
-	int	i;
-
-	i = 0;
-	if (NULL == str)
-		return (0);
-	while (str[i])
-		if (!ft_isdigit(str[i++]))
-			return (2);
-	return (1);
-}
-
 int	ft_strcmp(char *s1, char *s2)
 {
 	int	i;

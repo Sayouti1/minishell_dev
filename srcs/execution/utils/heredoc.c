@@ -18,11 +18,9 @@ char	*substitute_var(char *str)
 	char	*concat;
 	char	*key;
 
-	if (NULL == str)
-		return (NULL);
 	concat = NULL;
 	i = 0;
-	while (str[i])
+	while (str && str[i])
 	{
 		while (str[i] && str[i] != '$')
 			concat = char_concat(concat, str[i++]);
@@ -66,10 +64,21 @@ int	check_curly_braces(char *str)
 	return (0);
 }
 
+int	read_and_join(char *buff, char *del, t_redirection *redirection)
+{
+	size_t	byte_read;
+
+	byte_read = read(0, buff, 1000);
+	buff[byte_read] = '\0';
+	if (byte_read <= 0 || !ft_strncmp(buff, del, ft_strlen(del)))
+		return (1);
+	redirection->file_name = ft_strjoin_gnl(redirection->file_name, buff);
+	return (0);
+}
+
 int	open_heredoc(t_redirection *redirection)
 {
 	char	buff[1000];
-	size_t	byte_read;
 	char	*del;
 	int		fds[2];
 
@@ -78,21 +87,13 @@ int	open_heredoc(t_redirection *redirection)
 	redirection->file_name = NULL;
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
-	{
-		byte_read = read(0, buff, 1000);
-		buff[byte_read] = '\0';
-		if (byte_read <= 0 || !ft_strncmp(buff, del, ft_strlen(del)))
+		if (read_and_join(buff, del, redirection))
 			break ;
-		redirection->file_name = ft_strjoin_gnl(redirection->file_name, buff);
-	}
 	pipe(fds);
 	if (!ft_char_in('\'', del) && !ft_char_in('"', del))
 	{
 		if (check_curly_braces(redirection->file_name))
-		{
-			set_exit_status(1);
-			return (printf(" : bad substitution\n"), 1);
-		}
+			return (set_exit_status(1), printf(" : bad substitution\n"), 1);
 		redirection->file_name = substitute_var(redirection->file_name);
 	}
 	write(fds[1], redirection->file_name, ft_strlen(redirection->file_name));
