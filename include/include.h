@@ -216,5 +216,5 @@ char						**fix_cmd_arg(t_command *cmd);
 void						init_g_vars(char **envp);
 int							list_len(t_command *head);
 void						process_command(t_command *command);
-
+int							token_to_command_convert(t_token *token, t_command **cmd);
 #endif

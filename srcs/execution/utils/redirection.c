@@ -12,7 +12,6 @@
 
 #include "../../../include/include.h"
 
-
 t_redirection	*new_redirection(int type, char	*file_name, int	fd)
 {
 	t_redirection *redirection;

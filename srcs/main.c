@@ -65,7 +65,7 @@ void ft_printToken(t_token *tokens)
 	tmp = tokens;
 	while (tmp)
 	{
-		printf("value --> %s | type ---> %d \n\n", tmp->value, tmp->type);
+		printf("value --> %s | type ---> %d\n", tmp->value, tmp->type);
 		tmp = tmp->next;
 	}
 }
@@ -73,7 +73,9 @@ void main_loop(void)
 {
 	char *line;
 	t_token *tokens;
+	// t_command	*command;
 
+	// command = NULL;
 	while (1)
 	{
 		signal(SIGQUIT, SIG_IGN);
@@ -89,13 +91,14 @@ void main_loop(void)
 		tokens = check_and_token(line);
 		if (!tokens)
 			ft_putstr_fd("Error in the return of the token\n", 2);
-		if (tokens)
-		{
+		// token_to_command_convert(tokens, &command);
+		// if (tokens)
+		// {
 			ft_printToken(tokens);
-			// ls -al | cat -e > file
-			// tokens like |>>>  |"ls"|---next---> |"-al"| --> "|" ---> |"cat"| --> "-e" --> ">" --> "file"
-			//save_cmd(&tokens);
-		}
+		// 	// ls -al | cat -e > file
+		// 	// tokens like |>>>  |"ls"|---next---> |"-al"| --> "|" ---> |"cat"| --> "-e" --> ">" --> "file"
+		// 	//save_cmd(&tokens);
+		// }
 		printf("End\n");
 	}
 }
