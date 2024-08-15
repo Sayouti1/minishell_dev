@@ -54,7 +54,6 @@ t_token *check_and_token(char *line)
 		free(line_trim);
 		return (NULL);
 	}
-	printf("%s\n", line_trim);
 	tokens = token_line(line_trim);
 	free(line_trim);
 	return (tokens);
@@ -65,17 +64,52 @@ void ft_printToken(t_token *tokens)
 	tmp = tokens;
 	while (tmp)
 	{
-		printf("value --> %s | type ---> %d\n", tmp->value, tmp->type);
+		printf("value --> [%s] | type ---> %d\n", tmp->value, tmp->type);
 		tmp = tmp->next;
 	}
 }
+
+void	print_commands(t_command *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd)
+	{
+		printf("{\n\tcommand[%d] = [%s],\n", ++i, cmd->command);
+		if (cmd->args)
+		{
+			printf("\targs = {\n");
+			int	j = 0;
+			while (cmd->args && cmd->args[j])
+			{
+				printf("\t\t[%d] = [%s],\n", j + 1, cmd->args[j]);
+				++j;
+			}
+			printf("\t}\n");
+		}
+		if (cmd->redirection)
+		{
+			printf("\tredirection = {\n");
+			while (cmd->redirection)
+			{
+				printf("\t\ttype = %d, file_name = [%s]\n", cmd->redirection->type, cmd->redirection->file_name);
+				cmd->redirection = cmd->redirection->next;
+			}
+			printf("\t}\n");
+		}
+		printf("}\n");
+		cmd = cmd->next;
+	}
+}
+
 void main_loop(void)
 {
 	char *line;
 	t_token *tokens;
-	// t_command	*command;
+	t_command	*command;
 
-	// command = NULL;
+	command = NULL;
 	while (1)
 	{
 		signal(SIGQUIT, SIG_IGN);
@@ -89,17 +123,27 @@ void main_loop(void)
 		//	and lexer token is nothing woring this func { check_and_token }
 
 		tokens = check_and_token(line);
+		command = NULL;
 		if (!tokens)
+		{
 			ft_putstr_fd("Error in the return of the token\n", 2);
+			continue ;
+		}
+		token_to_command_convert(tokens, &command);
+		print_commands(command);
+		// process_command(command);
+		free_cmds(command);
+		free_token(tokens);
+
 		// token_to_command_convert(tokens, &command);
 		// if (tokens)
 		// {
-			ft_printToken(tokens);
+			// ft_printToken(tokens);
 		// 	// ls -al | cat -e > file
 		// 	// tokens like |>>>  |"ls"|---next---> |"-al"| --> "|" ---> |"cat"| --> "-e" --> ">" --> "file"
 		// 	//save_cmd(&tokens);
 		// }
-		printf("End\n");
+		// printf("End\n");
 	}
 }
 
