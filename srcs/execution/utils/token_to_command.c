@@ -101,6 +101,47 @@ void    copy_cmd_args(t_token **token, t_command **cmd)
     (*cmd)->redirection = red;   
 }
 
+void    trim_cmd(t_command *cmd)
+{
+    char    *tmp;
+
+    tmp = NULL;
+    if (cmd->command && cmd->command[0] == '"')
+            tmp = ft_strtrim(cmd->command, "\"");
+    else
+        tmp = ft_strtrim(cmd->command, "'");
+    free(cmd->command);
+    cmd->command = tmp;
+}
+
+void    trim_args(t_command *cmd, int i)
+{
+    char    *tmp;
+
+    tmp = NULL;
+     if (cmd->args[i][0] == '\'')
+        tmp = ft_strtrim(cmd->args[i], "'");
+    else
+        tmp = ft_strtrim(cmd->args[i], "\"");
+    free(cmd->args[i]);
+    cmd->args[i] = tmp;
+}
+
+//WORKING ON THIS :red_circle:
+void    remove_double_quotes(t_command *cmd)
+{
+    int     i;
+
+    if (cmd->command && (cmd->command[0] == '\'' || cmd->command[0] == '"'))
+        trim_cmd(cmd);
+    i = -1;
+    while (cmd->args && cmd->args[++i])
+    {
+        if (cmd->args[i][0] == '\'' || cmd->args[i][0] == '"')
+            trim_args(cmd, i);
+    }
+}
+
 int token_to_command_convert(t_token *token, t_command **cmd)
 {
     t_token     *tmp_token;
@@ -111,6 +152,7 @@ int token_to_command_convert(t_token *token, t_command **cmd)
     {
         tmp_cmd = new_command(NULL, NULL, NULL);
         copy_cmd_args(&tmp_token, &tmp_cmd);
+        remove_double_quotes(tmp_cmd);
         add_to_cmds(cmd, tmp_cmd);
         if (tmp_token)
             tmp_token = tmp_token->next;
