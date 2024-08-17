@@ -137,9 +137,8 @@ void    remove_double_quotes(t_command *cmd)
     i = -1;
     while (cmd->args && cmd->args[++i])
     {
-        if (cmd->args[i][0] == '\'' || cmd->args[i][0] == '"' || 
-            cmd->args[i][ft_strlen(cmd->args[i]) - 1] == '\'' ||
-            cmd->args[i][ft_strlen(cmd->args[i]) - 1] == '"')
+        if ((cmd->args[i][0] == '\'' &&  cmd->args[i][ft_strlen(cmd->args[i]) - 1] == '\'') ||
+            (cmd->args[i][0] == '"' && cmd->args[i][ft_strlen(cmd->args[i]) - 1] == '"'))
             trim_args(cmd, i);
     }
 }
