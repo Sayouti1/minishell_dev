@@ -50,15 +50,29 @@ void	free_split(char **arr)
 
 void	free_cmds(t_command *cmd)
 {
-	t_command	*tmp;
+	t_command		*tmp;
+	t_redirection	*red;
+	t_redirection	*tmp_red;
 
 	tmp = NULL;
 	while (cmd)
 	{
 		tmp = cmd->next;
+		red = cmd->redirection;
+		while (red)
+		{
+			if (red->fd > 2)
+				close(red->fd);
+			tmp_red = red->next;
+			free(red->file_name);
+			free(red);
+			red = tmp_red;
+		}
 		free(cmd->command);
 		free_split(cmd->args);
 		free(cmd);
 		cmd = tmp;
 	}
+	dup2(g_vars.std_out, 1);
+	dup2(g_vars.std_in, 0);
 }

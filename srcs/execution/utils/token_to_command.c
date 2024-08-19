@@ -12,151 +12,91 @@
 
 #include "../../../include/include.h"
 
-char **add_to_list(char **list, char *str)
+char	**add_to_list(char **list, char *str)
 {
-    int     i;
-    char    **new_list;
+	int		i;
+	char	**new_list;
 
-    i = split_len(list);
-    new_list = (char **)malloc(sizeof(char *) * (i + 2));
-    if (NULL == new_list)
-        return (printf("ERROR allocating new_list\n"), NULL);
-    i = 0;
-    while (list && list[i])
-    {
-        new_list[i] = ft_strdup(list[i]);
-        if (new_list[i] == NULL)
-            return (printf("ERROR allocating new_list[i]\n"), free_split(new_list), NULL);
-        ++i;
-    }
-    new_list[i++] = ft_strdup(str);
-    new_list[i] = NULL;
-    free_split(list);
-    return (new_list);
-}
-
-int token_type_to_cmd_type(t_token_type type)
-{
-    if (TOKEN_REDIR_IN == type)
-    {
-        return (INPUT);
+	i = split_len(list);
+	new_list = (char **)malloc(sizeof(char *) * (i + 2));
+	if (NULL == new_list)
+		return (printf("ERROR allocating new_list\n"), NULL);
+	i = 0;
+	while (list && list[i])
+	{
+		new_list[i] = ft_strdup(list[i]);
+		if (new_list[i] == NULL)
+			return (printf("ERROR allocating new_list[i]\n"),
+				free_split(new_list),
+				NULL);
+		++i;
 	}
-    if (TOKEN_REDIR_OUT == type)
-    {
-        return (OUTPUT);
+	new_list[i++] = ft_strdup(str);
+	new_list[i] = NULL;
+	free_split(list);
+	return (new_list);
+}
+
+t_redirection	*get_last_red(t_redirection *red)
+{
+	while (red && red->next)
+		red = red->next;
+	return (red);
+}
+
+t_redirection	*add_redirection(t_redirection *red, t_token **token)
+{
+	int	red_type;
+
+	red_type = token_type_to_cmd_type((*token)->type);
+	(*token) = (*token)->next;
+	if (NULL == red)
+		red = new_redirection(red_type, ft_strdup((*token)->value), -1);
+	else
+		get_last_red(red)->next = new_redirection(red_type,
+			ft_strdup((*token)->value),
+			-1);
+	return (red);
+}
+
+void	copy_cmd_args(t_token **token, t_command **cmd)
+{
+	char			**args;
+	t_redirection	*red;
+
+	args = NULL;
+	red = NULL;
+	if (*token && (*token)->type == TOKEN_WORD)
+	{
+		(*cmd)->command = ft_strdup((*token)->value);
+		*token = (*token)->next;
 	}
-    if (TOKEN_REDIR_APPEND == type)
-     
-    {   return (APPEND);
+	while (*token && (*token)->type != TOKEN_PIPE)
+	{
+		if ((*token)->type == TOKEN_WORD)
+			args = add_to_list(args, (*token)->value);
+		else if ((*token)->type != TOKEN_PIPE && (*token)->type != TOKEN_WORD)
+			red = add_redirection(red, token);
+		*token = (*token)->next;
 	}
-    if (TOKEN_REDIR_HEREDOC == type)
-    {
-        return (HEREDOC);
-    }
-    else
-        return (printf("error token_type to cmd_type\n"), 99);
+	(*cmd)->args = args;
+	(*cmd)->redirection = red;
 }
 
-t_redirection   *get_last_red(t_redirection *red)
+int	token_to_command_convert(t_token *token, t_command **cmd)
 {
-    while (red && red->next)
-        red = red->next;
-    return (red);
-}
+	t_token		*tmp_token;
+	t_command	*tmp_cmd;
 
-t_redirection   *add_redirection(t_redirection *red, t_token **token)
-{
-    int red_type;
-
-    red_type = token_type_to_cmd_type((*token)->type);
-    (*token) = (*token)->next;
-    if (NULL == red)
-        red = new_redirection(red_type, ft_strdup((*token)->value), -1);
-    else
-        get_last_red(red)->next = new_redirection(red_type, ft_strdup((*token)->value), -1);
-    return (red);
-}
-
-void    copy_cmd_args(t_token **token, t_command **cmd)
-{
-    char            **args;
-    t_redirection   *red;
-
-    args = NULL;
-    red = NULL;
-    if (*token && (*token)->type == TOKEN_WORD)
-    {
-        (*cmd)->command = ft_strdup((*token)->value);
-        *token = (*token)->next;
-    }
-    while (*token && (*token)->type != TOKEN_PIPE)
-    {
-        if ((*token)->type == TOKEN_WORD)
-            args = add_to_list(args, (*token)->value);
-        else if ((*token)->type != TOKEN_PIPE && (*token)->type != TOKEN_WORD)
-            red = add_redirection(red, token);
-        *token = (*token)->next;
-    }
-    (*cmd)->args = args;
-    (*cmd)->redirection = red;   
-}
-
-void    trim_cmd(t_command *cmd)
-{
-    char    *tmp;
-
-    tmp = NULL;
-    if (cmd->command && cmd->command[0] == '"')
-            tmp = ft_strtrim(cmd->command, "\"");
-    else
-        tmp = ft_strtrim(cmd->command, "'");
-    free(cmd->command);
-    cmd->command = tmp;
-}
-
-void    trim_args(t_command *cmd, int i)
-{
-    char    *tmp;
-
-    tmp = NULL;
-     if (cmd->args[i][0] == '\'')
-        tmp = ft_strtrim(cmd->args[i], "'");
-    else
-        tmp = ft_strtrim(cmd->args[i], "\"");
-    free(cmd->args[i]);
-    cmd->args[i] = tmp;
-}
-
-//WORKING ON THIS :red_circle:
-void    remove_double_quotes(t_command *cmd)
-{
-    int     i;
-
-    if (cmd->command && (cmd->command[0] == '\'' || cmd->command[0] == '"'))
-        trim_cmd(cmd);
-    i = -1;
-    while (cmd->args && cmd->args[++i])
-    {
-        if ((cmd->args[i][0] == '\'' &&  cmd->args[i][ft_strlen(cmd->args[i]) - 1] == '\'') ||
-            (cmd->args[i][0] == '"' && cmd->args[i][ft_strlen(cmd->args[i]) - 1] == '"'))
-            trim_args(cmd, i);
-    }
-}
-
-int token_to_command_convert(t_token *token, t_command **cmd)
-{
-    t_token     *tmp_token;
-    t_command   *tmp_cmd;
-
-    tmp_token = token;
-    while (tmp_token)
-    {
-        tmp_cmd = new_command(NULL, NULL, NULL);
-        copy_cmd_args(&tmp_token, &tmp_cmd);
-        remove_double_quotes(tmp_cmd);
-        add_to_cmds(cmd, tmp_cmd);
-        if (tmp_token)
-            tmp_token = tmp_token->next;
-    }
-    return (0);
+	tmp_token = token;
+	while (tmp_token)
+	{
+		tmp_cmd = new_command(NULL, NULL, NULL);
+		copy_cmd_args(&tmp_token, &tmp_cmd);
+		remove_double_quotes(tmp_cmd);
+		add_to_cmds(cmd, tmp_cmd);
+		if (tmp_token)
+			tmp_token = tmp_token->next;
+	}
+	return (0);
 }

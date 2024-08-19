@@ -19,6 +19,8 @@ void	init_g_vars(char **envp)
 	g_vars.env = NULL;
 	g_vars.envp = envp;
 	g_vars.exit_status = 0;
+	g_vars.std_in = dup(0);
+	g_vars.std_out = dup(1);
 }
 
 void		process_command(t_command *command)
@@ -123,27 +125,17 @@ void main_loop(void)
 		//	and lexer token is nothing woring this func { check_and_token }
 
 		tokens = check_and_token(line);
-		command = NULL;
 		if (!tokens)
 		{
 			ft_putstr_fd("Error in the return of the token\n", 2);
 			continue ;
 		}
+		command = NULL;
 		token_to_command_convert(tokens, &command);
-		print_commands(command);
-		// process_command(command);
+		// print_commands(command);
+		process_command(command);
 		free_cmds(command);
 		free_token(tokens);
-
-		// token_to_command_convert(tokens, &command);
-		// if (tokens)
-		// {
-			// ft_printToken(tokens);
-		// 	// ls -al | cat -e > file
-		// 	// tokens like |>>>  |"ls"|---next---> |"-al"| --> "|" ---> |"cat"| --> "-e" --> ">" --> "file"
-		// 	//save_cmd(&tokens);
-		// }
-		// printf("End\n");
 	}
 }
 
@@ -152,7 +144,6 @@ void main_loop(void)
 int	main(int ac, char **av, char **envp)
 {
 	t_command	*command;
-	// char		*read_line;
 
 	(void)ac;
 	(void)av;
@@ -161,26 +152,6 @@ int	main(int ac, char **av, char **envp)
 	init_env();
 	signal(SIGINT, sig_handler);
 	main_loop();
-	// ✅ CREATE FAKE COMMANDS TO TEST EXECUTION ⬇
-	//fake_commands(&command);
-
-	// while (1)
-	// {
-	// 	read_line = readline("Minishell=> ");
-	// 	if (read_line && !read_line[0])
-	// 	{
-	// 		free(read_line);
-	// 		continue ;
-	// 	}
-	// 	if (NULL == read_line)
-	// 		break ;
-	// 	add_history(read_line);
-	// 	treat_commands(read_line, &command);
-	// 	free(read_line);
-	// 	process_command(command);
-	// 	free_cmds(command);
-	// 	command = NULL;
-	// }
 	rl_clear_history();
 	free_cmds(command);
 	free_env();

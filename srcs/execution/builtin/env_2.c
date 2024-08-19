@@ -15,7 +15,7 @@
 /*
  * ✅
  */
-t_env	*new_node(char *key, char *value)
+t_env	*new_node(char *key, char *value, int to_export)
 {
 	t_env	*node;
 
@@ -24,6 +24,7 @@ t_env	*new_node(char *key, char *value)
 		return (NULL);
 	node->key = key;
 	node->value = value;
+	node->to_export = to_export;
 	node->next = NULL;
 	return (node);
 }

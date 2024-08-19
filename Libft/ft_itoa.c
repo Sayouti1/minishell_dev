@@ -34,7 +34,7 @@ static char	*ft_str(int n, int sign)
 	char	*str;
 
 	len = ft_len(n) + sign;
-	str = (char *) malloc(sizeof(char) * (len + 1));
+	str = (char *)malloc(sizeof(char) * (len + 1));
 	if (!str)
 		return (NULL);
 	str[len] = '\0';

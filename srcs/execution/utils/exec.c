@@ -64,7 +64,6 @@ void	external_command(t_command *cmd)
 	if (0 == pid)
 	{
 		execve(cmd->command, cmd->args, g_vars.envp);
-		printf("ERROR IN EXECVE EXTERNAL CMD\n");
 		exit(1);
 	}
 	wait(&g_vars.exit_status);
@@ -96,8 +95,6 @@ char	*get_dollar_key_v1(char *line, int *i)
 void	exec_simple_cmd(t_command *cmd)
 {
 	t_redirection	*tmp;
-	char			*cwd;
-	char			*tmp_cmd;
 
 	tmp = cmd->redirection;
 	while (tmp)
@@ -115,12 +112,27 @@ void	exec_simple_cmd(t_command *cmd)
 		execute_built_in(cmd);
 	else
 	{
-		tmp_cmd = cmd->command;
-		cwd = getcwd(NULL, 0);
-		cmd->command = get_correct_path(cmd->command, cwd);
-		free(cwd);
-		free(tmp_cmd);
-		fix_cmd_arg(cmd);
-		external_command(cmd);
+		if (fix_command_path(cmd))
+			set_exit_status(127);
+		else
+			external_command(cmd);
 	}
+}
+
+int	fix_command_path(t_command *cmd)
+{
+	char	*cwd;
+	char	*tmp_cmd;
+	int		ret;
+
+	ret = 0;
+	tmp_cmd = cmd->command;
+	cwd = getcwd(NULL, 0);
+	cmd->command = get_correct_path(cmd->command, cwd);
+	if (NULL == cmd->command && ++ret)
+		printf("%s: command not found\n", tmp_cmd);
+	free(cwd);
+	free(tmp_cmd);
+	fix_cmd_arg(cmd);
+	return (ret);
 }

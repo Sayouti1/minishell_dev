@@ -12,7 +12,6 @@
 
 #include "libft.h"
 
-
 static int	first_set(const char *s1, const char *set)
 {
 	int	i;
