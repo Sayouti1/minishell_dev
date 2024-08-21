@@ -23,7 +23,7 @@ int	ft_concat_env_var(char *var)
 		++i;
 	if (i < 2 || !var[i] || var[i - 1] != '+')
 		return (0);
-	if (var[i] == '=' && (!ft_isalnum(var[i - 1]) && var[i - 1] != '+'))
+	if (var[i] == '=' && (!ft_isalnum(var[i - 1]) && var[i - 1] != '+') && reset_fd())
 		return (printf("export: `%s': not a valid identifier\n", var),
 			set_exit_status(1), 1);
 	key_value = split_on_two(var, "+");

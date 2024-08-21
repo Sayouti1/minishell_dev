@@ -16,8 +16,10 @@ void	trim_cmd(t_command *cmd)
 {
 	char	*tmp;
 
+	if (NULL == cmd || NULL == cmd->command)
+		return ;
 	tmp = NULL;
-	if (cmd->command && cmd->command[0] == '"')
+	if (cmd->command[0] == '"')
 		tmp = ft_strtrim(cmd->command, "\"");
 	else
 		tmp = ft_strtrim(cmd->command, "'");

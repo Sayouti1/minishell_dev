@@ -53,7 +53,7 @@ void	ft_echo(char **str)
 	while (str[i])
 	{
 		printf("%s", str[i++]);
-		if (str[i])
+		if (str[i] && str[i][0])
 			printf(" ");
 	}
 	if (n_flag == 0)

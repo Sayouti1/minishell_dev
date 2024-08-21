@@ -48,31 +48,35 @@ void	free_split(char **arr)
 	free(arr);
 }
 
+int	reset_fd()
+{
+	dup2(g_vars.std_out, 1);
+	dup2(g_vars.std_in, 0);
+	return (1);
+}
+
 void	free_cmds(t_command *cmd)
 {
 	t_command		*tmp;
-	t_redirection	*red;
 	t_redirection	*tmp_red;
 
 	tmp = NULL;
 	while (cmd)
 	{
 		tmp = cmd->next;
-		red = cmd->redirection;
-		while (red)
+		while (cmd->redirection)
 		{
-			if (red->fd > 2)
-				close(red->fd);
-			tmp_red = red->next;
-			free(red->file_name);
-			free(red);
-			red = tmp_red;
+			tmp_red = cmd->redirection->next;
+			if (cmd->redirection->fd > 2)
+				close(cmd->redirection->fd);
+			free(cmd->redirection);
+			cmd->redirection = NULL;
+			cmd->redirection = tmp_red;
 		}
 		free(cmd->command);
 		free_split(cmd->args);
 		free(cmd);
 		cmd = tmp;
 	}
-	dup2(g_vars.std_out, 1);
-	dup2(g_vars.std_in, 0);
+	reset_fd();
 }

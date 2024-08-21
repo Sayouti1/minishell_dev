@@ -14,18 +14,17 @@
 
 int	ft_exit(char **arg)
 {
+	int	exit_status;
+
 	if (NULL == arg)
-	{
-		set_exit_status(0);
-		exit(0);
-	}
-	if (split_len(arg) > 1)
-		return (printf("exit: too many arguments\n"), set_exit_status(1));
-	if (str_isdigit(arg[0]) == 2)
-	{
-		set_exit_status(2);
-		exit(2);
-	}
-	set_exit_status(ft_atoi(arg[0]));
-	exit(ft_atoi(arg[0]));
+		exit_status = 0;
+	else if (split_len(arg) > 1 && reset_fd())
+		return (printf("exit\nexit: too many arguments\n"), set_exit_status(1));
+	else if (str_isdigit(arg[0]) == 2)
+		exit_status = 2;
+	else
+		exit_status = ft_atoi(arg[0]);
+	free_split(arg);
+	set_exit_status(exit_status);
+	exit(exit_status);
 }

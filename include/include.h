@@ -56,13 +56,21 @@ typedef struct s_env
 	struct s_env			*next;
 }							t_env;
 
+typedef	struct	s_garbage_collector
+{
+	void 						*str;
+	struct s_garbage_collector 	*next;
+}								t_garbage_collector;
+
 typedef struct s_global_vars
 {
 	t_env					*env;
+
 	char					**envp;
 	int						exit_status;
 	int						std_in;
 	int						std_out;
+	t_garbage_collector		*garbage_coll;
 }							t_global_vars;
 
 extern t_global_vars		g_vars;
@@ -228,5 +236,10 @@ void						trim_cmd(t_command *cmd);
 void						trim_args(t_command *cmd, int i);
 void						remove_double_quotes(t_command *cmd);
 int							token_type_to_cmd_type(t_token_type type);
-
+int 						collect_garbage(void *to_add);
+void    					free_garbage();
+int							remove_edge_quotes(t_command *cmd);
+void						remove_double_quotes_middle(t_command *cmd);
+void						*ft_realloc(void *ptr, size_t size);
+int							reset_fd();
 #endif

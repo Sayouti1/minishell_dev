@@ -20,7 +20,7 @@ int	pwd(void)
 	char	*curr_dir;
 
 	curr_dir = getcwd(NULL, 0);
-	if (NULL == curr_dir)
+	if (NULL == curr_dir && reset_fd())
 		return (printf("pwd: error retrieving current directory: getcwd:"
 				"cannot access parent directories:"
 				" No such file or directory\n"),
@@ -42,12 +42,10 @@ char	**get_path_dirs(void)
 
 	path = get_env_v1("PATH");
 	if (NULL == path)
-		return (printf("PATH variable not found!\n"), set_exit_status(127),
-			NULL);
+		return (set_exit_status(127), NULL);
 	dirs = ft_split(path, ':');
 	if (NULL == dirs)
-		return (printf("Error in PATH variable!\n"), set_exit_status(127),
-			NULL);
+		return (set_exit_status(127), NULL);
 	return (dirs);
 }
 

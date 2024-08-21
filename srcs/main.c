@@ -21,6 +21,7 @@ void	init_g_vars(char **envp)
 	g_vars.exit_status = 0;
 	g_vars.std_in = dup(0);
 	g_vars.std_out = dup(1);
+	g_vars.garbage_coll = NULL;
 }
 
 void		process_command(t_command *command)
@@ -71,11 +72,14 @@ void ft_printToken(t_token *tokens)
 	}
 }
 
-void	print_commands(t_command *cmd)
+void	print_commands(t_command *command)
 {
-	int	i;
+	int				i;
+	t_redirection	*red;
+	t_command		*cmd;
 
 	i = 0;
+	cmd = command;
 	while (cmd)
 	{
 		printf("{\n\tcommand[%d] = [%s],\n", ++i, cmd->command);
@@ -90,13 +94,14 @@ void	print_commands(t_command *cmd)
 			}
 			printf("\t}\n");
 		}
-		if (cmd->redirection)
+		red = cmd->redirection;
+		if (red)
 		{
 			printf("\tredirection = {\n");
-			while (cmd->redirection)
+			while (red)
 			{
-				printf("\t\ttype = %d, file_name = [%s]\n", cmd->redirection->type, cmd->redirection->file_name);
-				cmd->redirection = cmd->redirection->next;
+				printf("\t\ttype = %d, file_name = [%s]\n", red->type, red->file_name);
+				red = red->next;
 			}
 			printf("\t}\n");
 		}
@@ -115,7 +120,7 @@ void main_loop(void)
 	while (1)
 	{
 		signal(SIGQUIT, SIG_IGN);
-		line = readline("miniSHELL--> ");
+		line = readline("\033[1;32mminishell :)=> \033[0m");
 		if (!line)
 			break;
 		if(check_line(&line))
