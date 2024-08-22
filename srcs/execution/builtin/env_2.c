@@ -1,25 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstiter_bonus.c                                 :+:      :+:    :+:   */
+/*   env_2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aes-sayo <aes-sayo@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/10 16:25:56 by aes-sayo          #+#    #+#             */
-/*   Updated: 2023/11/10 16:28:25 by aes-sayo         ###   ########.fr       */
+/*   Created: 2024/06/28 09:28:59 by aes-sayo          #+#    #+#             */
+/*   Updated: 2024/06/28 09:29:07 by aes-sayo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../../include/include.h"
 
-void	ft_lstiter(t_list *lst, void (*f)(void *))
+/*
+ * ✅
+ */
+t_env	*new_node(char *key, char *value, int to_export)
 {
-	t_list	*tmp;
+	t_env	*node;
 
-	tmp = lst;
-	while (tmp != NULL)
-	{
-		f(tmp->content);
-		tmp = tmp->next;
-	}
+	node = (t_env *)malloc(sizeof(t_env));
+	if (NULL == node)
+		return (NULL);
+	node->key = key;
+	node->value = value;
+	node->to_export = to_export;
+	node->next = NULL;
+	return (node);
 }

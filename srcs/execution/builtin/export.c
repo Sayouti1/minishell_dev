@@ -10,43 +10,72 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-//
-// Created by abdelaziz on 6/8/24.
-//
-
 #include "../../../include/include.h"
+
+int	ft_concat_env_var(char *var)
+{
+	int		i;
+	char	**key_value;
+	int		x;
+
+	i = 0;
+	while (var && var[i] && var[i] != '=')
+		++i;
+	if (i < 2 || !var[i] || var[i - 1] != '+')
+		return (0);
+	if (var[i] == '=' && (!ft_isalnum(var[i - 1]) && var[i - 1] != '+') && reset_fd())
+		return (printf("export: `%s': not a valid identifier\n", var),
+			set_exit_status(1), 1);
+	key_value = split_on_two(var, "+");
+	if (NULL == key_value)
+		return (set_exit_status(1), 1);
+	x = 0;
+	if (key_value[1])
+		x = 2;
+	key_value[1] = string_concat(ft_strdup(get_env_v1(key_value[0])),
+			ft_strdup(key_value[1] + x));
+	if (!ft_env_replace(key_value[0], key_value[1]))
+		add_to_env(ft_strdup(key_value[0]), ft_strdup(key_value[1]), 1);
+	free_split(key_value);
+	return (1);
+}
 
 int	ft_export(char **var)
 {
 	char	**key_value;
-	char	**split;
 	int		i;
+	int		x;
 
-	split = ft_split_del(var[0], " \t");
-	if (NULL == split)
-		return (set_exit_status(1), 1);
 	i = 0;
-	while (split[i])
+	while (var && var[i])
 	{
-		key_value = split_on_two(split[i++], "=");
-		if (NULL == key_value || NULL == key_value[1])
-			return (set_exit_status(0), 1);
-		printf("split[%d] => [%s], [%s=>%s]\n", i - 1, split[i - 1],
-				key_value[0], key_value[1]);
-		if (!ft_env_replace(key_value[0], key_value[1]))
-			add_to_env(ft_strdup(key_value[0]), ft_strdup(key_value[1]));
+		if (ft_concat_env_var(var[i]) && ++i)
+			continue ;
+		key_value = split_on_two(var[i++], "=");
+		if (NULL == key_value)
+			return (set_exit_status(1), 1);
+		x = 0;
+		if (key_value[1])
+			x = 1;
+		if (!ft_env_replace(key_value[0], key_value[1] + x))
+			add_to_env(ft_strdup(key_value[0]), ft_strdup(key_value[1] + x),
+				ft_char_in('=', var[i - 1]));
 		free_split(key_value);
 	}
-	free_split(split);
 	return (set_exit_status(0), 0);
 }
 
 void	ft_print_export(void)
 {
-	while (g_vars.env)
+	t_env	*tmp;
+
+	tmp = g_vars.env;
+	while (tmp)
 	{
-		printf("export %s=%s\n", g_vars.env->key, g_vars.env->value);
-		g_vars.env = g_vars.env->next;
+		printf("export %s", tmp->key);
+		if (tmp->value)
+			printf("=\"%s\"\n", tmp->value);
+		tmp = tmp->next;
 	}
 	set_exit_status(0);
 }

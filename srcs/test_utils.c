@@ -27,8 +27,7 @@ t_redirection	*new_redirection(int type, char	*file_name, int	fd)
 	return (redirection);
 }
 
-t_command *new_command(char *command, char **args, t_redirection *redirection,
-	int is_piped, int pipe_read, int pipe_write)
+t_command *new_command(char *command, char **args, t_redirection *redirection)
 {
 	t_command	*cmd;
 
@@ -38,9 +37,6 @@ t_command *new_command(char *command, char **args, t_redirection *redirection,
 	cmd->command = command;
 	cmd->args = args;
 	cmd->redirection = redirection;
-	cmd->is_piped = is_piped;
-	cmd->pipe_read = pipe_read;
-	cmd->pipe_write = pipe_write;
 	cmd->next = NULL;
 	cmd->prev = NULL;
 	return (cmd);
@@ -69,8 +65,7 @@ int	fake_commands(t_command **command)
 	red = new_redirection(HEREDOC, "end", 0);
 	red->next = new_redirection(OUTPUT, "hhhh", 0);
 */
-	 *command = new_command("echo", ft_split(" ", ' '),
-		NULL, 1, 0, 1);
+	 *command = new_command("echo", ft_split("Hello WOrld", ' '), NULL);
     /*
      *command = new_command("/usr/bin/cat", ft_split("/usr/bin/cat infile.txt", ' '), NULL, 1, 0, 1);
 	add_to_cmds(command, new_command("/usr/bin/grep", ft_split("/usr/bin/grep test --color=auto", ' '),
@@ -99,7 +94,7 @@ void	treat_commands(char *read_line, t_command **command)
 	while (split[i])
 	{
 		cmd = split_on_two(split[i], " \t");
-		add_to_cmds(command, new_command(ft_strdup(cmd[0]), ft_split_del(cmd[1], " \t"), NULL, 1, 1, 1));
+		add_to_cmds(command, new_command(ft_strdup(cmd[0]), ft_split_del(cmd[1], " \t"), NULL));
 		free_split(cmd);
 		++i;
 	}

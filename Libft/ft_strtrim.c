@@ -12,53 +12,76 @@
 
 #include "libft.h"
 
-static int	ft_check(char c, char const *set)
+static int	first_set(const char *s1, const char *set)
 {
 	int	i;
+	int	c;
+	int	j;
 
 	i = 0;
-	while (set[i])
+	while (s1[i] != '\0')
 	{
-		if (set[i] == c)
-			return (1);
+		c = 0;
+		j = 0;
+		while (set[j] != '\0')
+		{
+			if (set[j] == s1[i])
+				c++;
+			j++;
+		}
+		if (c == 0)
+			return (i);
 		i++;
 	}
-	return (0);
+	return (i);
 }
 
-static int	ft_len(char const *s)
+static int	last_set(const char *s1, const char *set)
 {
-	int	i;
+	int	c;
+	int	j;
+	int	len;
 
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
+	len = ft_strlen(s1);
+	while (len--)
+	{
+		c = 0;
+		j = 0;
+		while (set[j] != '\0')
+		{
+			if (set[j] == s1[len])
+				c++;
+			j++;
+		}
+		if (c == 0)
+			return (len);
+	}
+	return (len);
 }
 
 char	*ft_strtrim(char const *s1, char const *set)
 {
-	char	*str;
+	char	*ptr;
 	int		i;
-	int		start;
-	int		end;
+	int		first;
+	int		last;
 
-	if (!set || !s1)
-		return (NULL);
-	start = 0;
-	while (s1[start] && ft_check(s1[start], set))
-		start++;
-	end = ft_len(s1) - 1;
-	while (s1[end] && ft_check(s1[end], set))
-		end--;
-	if (start > end)
-		return (ft_strdup(""));
-	str = (char *) malloc(((end - start) + 2) * sizeof(char));
-	if (!str)
-		return (NULL);
 	i = 0;
-	while (start <= end)
-		str[i++] = s1[start++];
-	str[i] = '\0';
-	return (str);
+	if (!s1)
+		return (NULL);
+	first = first_set(s1, set);
+	last = last_set(s1, set);
+	if (first > last)
+		return (ft_strdup(""));
+	ptr = (char *)malloc(sizeof(char) * ((last - first) + 2));
+	if (ptr == NULL)
+		return (NULL);
+	while (first <= last)
+	{
+		ptr[i] = s1[first];
+		first++;
+		i++;
+	}
+	ptr[i] = '\0';
+	return (ptr);
 }

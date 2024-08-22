@@ -69,16 +69,19 @@ char	*char_concat(char *line, char c)
 	int		j;
 
 	i = ft_strlen(line);
+	// concat = ft_realloc(line, (i + 2) * sizeof(char));
+
 	concat = (char *)malloc(sizeof(char) * (i + 2));
 	if (NULL == concat)
 		return (NULL);
+	concat[i] = c;
 	j = 0;
 	i = 0;
 	while (line && line[i])
 		concat[j++] = line[i++];
 	concat[j++] = c;
 	concat[j] = '\0';
-	//free(line);
+	// free(line);
 	return (concat);
 }
 

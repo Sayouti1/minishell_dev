@@ -1,30 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memchr.c                                        :+:      :+:    :+:   */
+/*   utils_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aes-sayo <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aes-sayo <aes-sayo@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/02 10:50:19 by aes-sayo          #+#    #+#             */
-/*   Updated: 2023/11/12 16:31:45 by aes-sayo         ###   ########.fr       */
+/*   Created: 2024/06/28 09:31:00 by aes-sayo          #+#    #+#             */
+/*   Updated: 2024/08/04 13:19:53 by aes-sayo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../../include/include.h"
 
-void	*ft_memchr(const void *s, int c, size_t n)
+int	ft_isspace(char c)
 {
-	size_t			i;
-	unsigned char	*ptr;
+	return ((c >= 7 && c <= 13) || c == 32);
+}
+
+int	str_isdigit(char *str)
+{
+	int	i;
 
 	i = 0;
-	ptr = (unsigned char *)s;
-	while (i < n)
-	{
-		if (*ptr == (unsigned char)c)
-			return ((void *)ptr);
-		ptr++;
-		i++;
-	}
-	return (NULL);
+	if (NULL == str)
+		return (0);
+	while (str[i])
+		if (!ft_isdigit(str[i++]))
+			return (2);
+	return (1);
 }

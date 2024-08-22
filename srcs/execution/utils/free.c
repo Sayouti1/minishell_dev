@@ -48,17 +48,35 @@ void	free_split(char **arr)
 	free(arr);
 }
 
+int	reset_fd()
+{
+	dup2(g_vars.std_out, 1);
+	dup2(g_vars.std_in, 0);
+	return (1);
+}
+
 void	free_cmds(t_command *cmd)
 {
-	t_command	*tmp;
+	t_command		*tmp;
+	t_redirection	*tmp_red;
 
 	tmp = NULL;
 	while (cmd)
 	{
 		tmp = cmd->next;
+		while (cmd->redirection)
+		{
+			tmp_red = cmd->redirection->next;
+			if (cmd->redirection->fd > 2)
+				close(cmd->redirection->fd);
+			free(cmd->redirection);
+			cmd->redirection = NULL;
+			cmd->redirection = tmp_red;
+		}
 		free(cmd->command);
 		free_split(cmd->args);
 		free(cmd);
 		cmd = tmp;
 	}
+	reset_fd();
 }

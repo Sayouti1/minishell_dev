@@ -10,22 +10,19 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-//
-// Created by abdelaziz on 6/3/24.
-//
 #include "../../../include/include.h"
 
 /*
  * APPENDING ENV[KEY=>VLAUE] TO THE LINKED LIST ENV ✅
  */
-int	add_to_env(char *key, char *value)
+int	add_to_env(char *key, char *value, int to_export)
 {
 	t_env	*tmp;
 	t_env	*new;
 
-	if (key == NULL || value == NULL)
-		return (free(key), free(value), 1);
-	new = new_node(key, value);
+	if (key == NULL)
+		return (free(key), 1);
+	new = new_node(key, value, to_export);
 	if (g_vars.env == NULL)
 		g_vars.env = new;
 	else
@@ -53,7 +50,7 @@ void	init_env(void)
 		split = split_on_two(g_vars.envp[i], "=");
 		if (NULL == split)
 			return ;
-		add_to_env(ft_strdup(split[0]), ft_strdup(split[1] + 1));
+		add_to_env(ft_strdup(split[0]), ft_strdup(split[1] + 1), 1);
 		free_split(split);
 		i++;
 	}
@@ -78,22 +75,6 @@ char	*get_env_v1(char *key)
 }
 
 /*
- * ✅
- */
-t_env	*new_node(char *key, char *value)
-{
-	t_env	*node;
-
-	node = (t_env *)malloc(sizeof(t_env));
-	if (NULL == node)
-		return (NULL);
-	node->key = key;
-	node->value = value;
-	node->next = NULL;
-	return (node);
-}
-
-/*
  * PRINT ENVIRONMENT VARIABLES ✅
  */
 void	ft_env(void)
@@ -103,7 +84,8 @@ void	ft_env(void)
 	tmp = g_vars.env;
 	while (tmp)
 	{
-		printf("%s=%s\n", tmp->key, tmp->value);
+		if (tmp->value && tmp->to_export)
+			printf("%s=%s\n", tmp->key, tmp->value);
 		tmp = tmp->next;
 	}
 	set_exit_status(0);
