@@ -139,8 +139,6 @@ int	token_to_command_convert(t_token *token, t_command **cmd)
 		copy_cmd_args(&tmp_token, &tmp_cmd);
 		remove_edge_quotes(tmp_cmd);
 		remove_double_quotes(tmp_cmd);
-		remove_double_quotes_middle(tmp_cmd);
-		// expand_vars(tmp_cmd);
 		add_to_cmds(cmd, tmp_cmd);
 		if (tmp_token)
 			tmp_token = tmp_token->next;

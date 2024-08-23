@@ -205,6 +205,7 @@ int							execute_pipes(int len, int i, t_command *tmp_cmd);
 int							set_exit_status(int n);
 
 void						sig_handler(int sig);
+void						ignore_sig(int sig);
 
 int							ft_char_in(char c, char *str);
 char						**ft_split_del(char const *s, char *del);
@@ -234,12 +235,13 @@ void						print_commands(t_command *cmd);
 int							fix_command_path(t_command *cmd);
 void						trim_cmd(t_command *cmd);
 void						trim_args(t_command *cmd, int i);
-void						remove_double_quotes(t_command *cmd);
 int							token_type_to_cmd_type(t_token_type type);
 int 						collect_garbage(void *to_add);
 void    					free_garbage();
+char						*remove_double_quotes_middle(char *str);
+void						remove_double_quotes(t_command *cmd);
 int							remove_edge_quotes(t_command *cmd);
-void						remove_double_quotes_middle(t_command *cmd);
+char						*remove_all_quotes(char *str);
 void						*ft_realloc(void *ptr, size_t size);
 int							reset_fd();
 #endif

@@ -119,7 +119,7 @@ void main_loop(void)
 	command = NULL;
 	while (1)
 	{
-		signal(SIGQUIT, SIG_IGN);
+		signal(SIGQUIT, ignore_sig);
 		line = readline("\033[1;32mminishell :)=> \033[0m");
 		if (!line)
 			break;
@@ -137,7 +137,7 @@ void main_loop(void)
 		}
 		command = NULL;
 		token_to_command_convert(tokens, &command);
-		// print_commands(command);
+		print_commands(command);
 		process_command(command);
 		free_cmds(command);
 		free_token(tokens);

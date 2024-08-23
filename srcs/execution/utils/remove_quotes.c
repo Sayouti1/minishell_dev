@@ -49,7 +49,10 @@ char *trim_and_reallocate_str(char *str, int start, int end)
 	tmp[i] = '\0';
 	return (tmp);
 }
-
+/*
+ * remove_edge_quotes : // Removes any pairs of single ('') or double quotes (""")
+ * from the beginning and end of command and its args.
+*/
 int	remove_edge_quotes(t_command *cmd)
 {
 	char		*tmp;
@@ -59,7 +62,7 @@ int	remove_edge_quotes(t_command *cmd)
 
 	tmp = cmd->command;
 	get_start_end(cmd->command, &start, &end);
-	if (start > end)
+	if (start > end || NULL == cmd->command)
 		return (1);
 	cmd->command = malloc((end - start + 2) * sizeof(char));
 	if (NULL == cmd->command)
@@ -79,25 +82,49 @@ int	remove_edge_quotes(t_command *cmd)
 	return (0);
 }
 
-void	remove_double_quotes_middle(t_command *cmd)
+char	*remove_double_quotes_middle(char *str)
 {
-	char 	*new_cmd;
-	char 	*tmp_cmd;
+	char 	*new_str;
+	char 	*tmp;
 	int		i;
 
-	if (NULL == cmd || NULL == cmd->command)
-		return ;
+	if (NULL == str)
+		return (NULL);
 	i = 0;
-	new_cmd = NULL;
-	while (cmd->command && cmd->command[i])
+	new_str = NULL;
+	while (str[i])
 	{
-		if (cmd->command[i] == '"' && cmd->command[i + 1] == cmd->command[i])
+		if (str[i] == '"' && str[i + 1] == str[i])
 			i += 2;
-		tmp_cmd = new_cmd;
-		new_cmd = char_concat(new_cmd, cmd->command[i]);
-		free(tmp_cmd);
+		tmp = new_str;
+		new_str = char_concat(new_str, str[i]);
+		free(tmp);
 		i++;
 	}
-	free(cmd->command);
-	cmd->command = new_cmd;
+	free(str);
+	return (new_str);
+}
+
+char	*remove_all_quotes(char *str)
+{
+	char 	*trimmed;
+	int		i;
+	int		j;
+
+	if (NULL == str)
+		return (NULL);
+	i = -1;
+	j = 0;
+	while (str[++i])
+		if (str[i] != '\'' && str[i] != '"')
+			++j;
+	trimmed = malloc(sizeof(char) * (j + 1));
+	i = -1;
+	j = 0;
+	while (str[++i])
+		if (str[i] != '\'' && str[i] != '"')
+			trimmed[j++] = str[i];
+	trimmed[j] = '\0';
+	// free(str);
+	return (trimmed);
 }

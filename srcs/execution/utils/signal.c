@@ -24,3 +24,11 @@ void	sig_handler(int sig)
 	if (sig == SIGQUIT)
 		printf("Quit (core dumped)\n");
 }
+
+void	ignore_sig(int sig)
+{
+	(void) sig;
+	write(0, "", 0);
+	rl_replace_line("", 0);
+	rl_redisplay();
+}
