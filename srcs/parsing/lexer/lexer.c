@@ -9,16 +9,10 @@ t_token *token_line(char *line)
         while (*line && ft_strchr(" \t\n", *line))
             line++;
         if (ft_strchr("><|", *line))
-        {
             do_speacil_chars(&line, &tokens);
 
-        }
         else
-        {
-            //printf(" in befor in word %s\n", line);
             do_words(&line, &tokens);
-            //printf("in after in word %s\n", line);
-        }
     }
     return (tokens);
 }
@@ -30,7 +24,7 @@ void    do_words(char **line, t_token **tokens)
 
     start = *line;
     in_qoute = 0;
-    quote_char = '\0';
+    quote_char = '\0'; // "fjsdf""fdgj"
     while (**line)
     {
         update_quote_status(**line ,&in_qoute, &quote_char);

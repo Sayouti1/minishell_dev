@@ -68,7 +68,9 @@ void	exec_simple_cmd(t_command *cmd)
 		execute_built_in(cmd);
 	else
 	{
-		if (NULL == get_env_v1("PATH") && reset_fd())
+		if (NULL == cmd->command)
+			set_exit_status(1);
+		else if (NULL == get_env_v1("PATH") && reset_fd())
 			printf("%s: No such file or directory\n", cmd->command);
 		else if (fix_command_path(cmd))
 			set_exit_status(127);
