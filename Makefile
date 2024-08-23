@@ -1,6 +1,6 @@
 NAME = minishell
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g3
+CFLAGS = -Wall -Wextra -Werror #-fsanitize=address -g3
 
 SRCS= srcs/main.c \
 	srcs/execution/builtin/cd.c srcs/execution/builtin/env.c srcs/execution/builtin/pwd.c srcs/execution/builtin/export.c \
@@ -10,8 +10,8 @@ SRCS= srcs/main.c \
 	srcs/execution/utils/remove_quotes.c srcs/execution/utils/getters.c srcs/execution/utils/setters.c srcs/execution/utils/split.c \
 	srcs/execution/utils/utils.c srcs/execution/utils/pipe_exec.c srcs/execution/utils/signal.c srcs/execution/utils/heredoc.c \
 	srcs/execution/utils/length.c srcs/execution/utils/str_utils.c srcs/execution/builtin/env_2.c srcs/execution/utils/utils_2.c \
-	srcs/parsing/check_input/check_error_utils.c srcs/parsing/check_input/error_input.c \
-	srcs/parsing/lexer/lexer_utils.c srcs/parsing/lexer/lexer.c \
+	srcs/parsing/check_input/check_error_utils.c srcs/parsing/check_input/error_input.c srcs/parsing/expand/expand_utils.c \
+	srcs/parsing/expand/expand.c srcs/parsing/lexer/lexer_utils.c srcs/parsing/lexer/lexer.c \
 	# srcs/test_utils.c
 
 OBJS=$(SRCS:.c=.o)
@@ -21,7 +21,7 @@ all : $(NAME)
 $(NAME) : $(OBJS)
 	@$(MAKE) -C Libft
 	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -lreadline -o $(NAME)
-	clear
+# clear
 
 test : re
 	./minishell

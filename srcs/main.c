@@ -126,16 +126,19 @@ void main_loop(void)
 		if(check_line(&line))
 			continue;
 		add_history(line);
-		// check all errors in line like |--> start with the pipe (|) or Error in the Quotes all error 
-		//	and lexer token is nothing woring this func { check_and_token }
-
 		tokens = check_and_token(line);
 		if (!tokens)
-		{
-			ft_putstr_fd("Error in the return of the token\n", 2);
 			continue ;
-		}
 		command = NULL;
+		if (ft_ambiguous_err(tokens))
+		{
+			ft_putstr_fd("minishell: ambiguous redirect\n", 2);
+			exit(1);
+			//continue;
+			//free_token(tokens);
+		}
+		
+		expand_var(&tokens);
 		token_to_command_convert(tokens, &command);
 		print_commands(command);
 		process_command(command);

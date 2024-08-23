@@ -40,6 +40,8 @@ char *trim_and_reallocate_str(char *str, int start, int end)
 	char	*tmp;
 	int		i;
 
+	if (start >= end)
+		return (NULL);
 	tmp = malloc((end - start + 2) * sizeof(char));
 	if (NULL == tmp)
 		return (NULL);

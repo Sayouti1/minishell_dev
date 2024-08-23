@@ -136,7 +136,9 @@ int							sizeof_str(char *str, char end);
 size_t						ft_strnlen(const char *s, size_t maxlen);
 void						word_to_token(char **start, char **line,
 								t_token **tokens);
-
+char 						*substitute_var1(char *str);
+void 						expand_var(t_token **tokens);
+int 						ft_ambiguous_err(t_token *tokens);
 // ------------------------------------------------------
 
 void						exec_echo(t_command *cmd);
