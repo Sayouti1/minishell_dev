@@ -12,47 +12,47 @@
 
 #include "../../../include/include.h"
 
-char	*trim_str(char *str)
+char *trim_str(char *str)
 {
-	char	*tmp;
+	char 	*tmp;
+	int		i;
 
-	if (NULL == str)
-		return (NULL);
-	tmp = NULL;
-	if (str[0] == '\'')
-		tmp = ft_strtrim(str, "'");
-	else
-		tmp = ft_strtrim(str, "\"");
+	i = -1;
+	tmp = ft_strdup("");
+	while (str[++i])
+	{
+		if (str[i] == '\'')
+		{
+			++i;
+			while (str[i] && str[i] != '\'')
+				tmp = char_concat(tmp, str[i++]);
+		}
+		else if (str[i] == '"')
+		{
+			++i;
+			while (str[i] && str[i] != '"')
+				tmp = char_concat(tmp, str[i++]);
+		}
+		else
+			tmp = char_concat(tmp, str[i]);
+		collect_garbage(tmp);
+	}
 	free(str);
 	return (tmp);
 }
 
-/* remove_double_quotes :  if the command or the args ! starts and end ! by a (') or (")
- * we trim the command and args by either ('') or ("") from both start and the end 
- *
-*/
-void	remove_double_quotes(t_command *cmd)
+void	remove_quotes(t_command *cmd)
 {
 	int	i;
 
 	if (NULL == cmd)
 		return ;
-	if (cmd->command && (cmd->command[0] == '\'' || cmd->command[0] == '"'))
+	cmd->command = trim_str(ft_strdup(cmd->command));
+	i = 0;
+	while (cmd->args && cmd->args[i])
 	{
-		cmd->command = trim_str(cmd->command);
-		if (cmd->command && cmd->command[0] != '\'')
-			cmd->command = remove_double_quotes_middle(cmd->command);
-	}
-	i = -1;
-	while (cmd->args && cmd->args[++i])
-	{
-		if ((cmd->args[i][0] == '\'' && cmd->args[i][ft_strlen(cmd->args[i])
-			- 1] == '\'') ||
-			(cmd->args[i][0] == '"' && cmd->args[i][ft_strlen(cmd->args[i])
-			- 1] == '"'))
-			cmd->args[i] = trim_str(cmd->args[i]);
-		if (cmd->args && cmd->args[i][0] != '\'')
-			cmd->args[i] = remove_double_quotes_middle(cmd->args[i]);
+		cmd->args[i] = trim_str(ft_strdup(cmd->args[i]));
+		++i;
 	}
 }
 

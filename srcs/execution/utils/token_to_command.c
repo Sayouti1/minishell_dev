@@ -35,23 +35,10 @@ char	**add_to_list(char **old_list, char *to_add)
 
 	i = split_len(old_list);
 	new_list = ft_realloc(old_list, (i + 2) * sizeof(char *));
-	// new_list = (char **)malloc(sizeof(char *) * (i + 2));
 	if (NULL == new_list)
 		return (printf("ERROR allocating new_list\n"), NULL);
-	// i = 0;
-	// // collect_garbage(new_list);
-	// while (old_list && old_list[i])
-	// {
-	// 	new_list[i] = ft_strdup(old_list[i]);
-	// 	if (new_list[i] == NULL)
-	// 		return (printf("ERROR allocating new_list[i]\n"),
-	// 			NULL);
-	// 			// free_split(new_list),
-	// 	// collect_garbage(new_list[i]);
-	// 	++i;
-	// }
 	new_list[i] = to_add;
-	// // collect_garbage(to_add);
+	// collect_garbage(to_add);
 	new_list[++i] = NULL;
 	// free_split(old_list);
 	return (new_list);
@@ -83,14 +70,14 @@ t_redirection	*add_redirection(t_redirection *red, t_token **token)
 void	copy_cmd_args(t_token **token, t_command **cmd)
 {
 	char			**args;
-	// t_redirection	*red;
+	t_redirection	*red;
 
 	args = NULL;
-	// red = NULL;
+	red = NULL;
 	free_split((*cmd)->args);
 	if (*token && (*token)->type == TOKEN_WORD)
 	{
-		(*cmd)->command = ft_strdup((*token)->value);
+		(*cmd)->command = (*token)->value;
 		*token = (*token)->next;
 	}
 	while (*token && (*token)->type != TOKEN_PIPE)
@@ -102,7 +89,7 @@ void	copy_cmd_args(t_token **token, t_command **cmd)
 		*token = (*token)->next;
 	}
 	(*cmd)->args = args;
-	// (*cmd)->redirection = red;
+	(*cmd)->redirection = red;
 }
 
 int			expand_vars(t_command *tmp_cmd)
@@ -137,8 +124,7 @@ int	token_to_command_convert(t_token *token, t_command **cmd)
 	{
 		tmp_cmd = new_command(NULL, NULL, NULL);
 		copy_cmd_args(&tmp_token, &tmp_cmd);
-		remove_edge_quotes(tmp_cmd);
-		remove_double_quotes(tmp_cmd);
+		remove_quotes(tmp_cmd);
 		add_to_cmds(cmd, tmp_cmd);
 		if (tmp_token)
 			tmp_token = tmp_token->next;

@@ -81,7 +81,7 @@ char	*char_concat(char *line, char c)
 		concat[j++] = line[i++];
 	concat[j++] = c;
 	concat[j] = '\0';
-	// free(line);
+	free(line);
 	return (concat);
 }
 

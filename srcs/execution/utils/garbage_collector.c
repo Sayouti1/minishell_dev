@@ -31,6 +31,7 @@ void    free_garbage()
     {
         tmp = g_vars.garbage_coll->next;
         free(g_vars.garbage_coll->str);
+        g_vars.garbage_coll->str = NULL;
         free(g_vars.garbage_coll);
         g_vars.garbage_coll = tmp;
     }
