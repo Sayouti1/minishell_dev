@@ -137,7 +137,7 @@ void main_loop(void)
 			//continue;
 			//free_token(tokens);
 		}
-		
+
 		expand_var(&tokens);
 		token_to_command_convert(tokens, &command);
 		print_commands(command);
