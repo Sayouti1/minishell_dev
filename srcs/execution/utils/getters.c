@@ -15,18 +15,18 @@
 /*
  * ✅
  */
-char	*get_correct_path(char *split, char *curr_dir)
+char	*get_correct_path(char *cmd, char *curr_dir)
 {
 	char	*full_path;
 
-	if (NULL == split)
+	if (NULL == cmd || cmd[0] == '\0')
 		return (NULL);
-	if (split[0] == '.')
-		full_path = ft_strjoin_prefixed(curr_dir, '/', split);
-	else if (split[0] == '/')
-		full_path = ft_strdup(split);
+	if (cmd[0] == '.')
+		full_path = ft_strjoin_prefixed(curr_dir, '/', cmd);
+	else if (cmd[0] == '/')
+		full_path = ft_strdup(cmd);
 	else
-		full_path = bin_in_path(split);
+		full_path = bin_in_path(cmd);
 	if (NULL == full_path)
 		return (NULL);
 	return (full_path);
