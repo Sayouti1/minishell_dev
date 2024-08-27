@@ -44,6 +44,8 @@ t_command	*new_command(char *command, char **args, t_redirection *redirection)
 	cmd->command = command;
 	cmd->args = args;
 	cmd->redirection = redirection;
+	cmd->fd_in = 0;
+	cmd->fd_out = 1;
 	cmd->next = NULL;
 	cmd->prev = NULL;
 	return (cmd);

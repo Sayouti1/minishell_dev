@@ -19,6 +19,10 @@ void	external_command(t_command *cmd)
 	pid = fork();
 	if (0 == pid)
 	{
+		if (cmd->fd_in != 0)
+			dup2(cmd->fd_in, 0);
+		if (cmd->fd_out != 1)
+			dup2(cmd->fd_out, 1);
 		execve(cmd->command, cmd->args, g_vars.envp);
 		exit(1);
 	}
@@ -48,7 +52,7 @@ char	*get_dollar_key_v1(char *line, int *i)
 	return (key);
 }
 
-void	exec_simple_cmd(t_command *cmd)
+void	redirection_exec(t_command *cmd)
 {
 	t_redirection	*tmp;
 
@@ -56,24 +60,26 @@ void	exec_simple_cmd(t_command *cmd)
 	while (tmp)
 	{
 		if (tmp->type == OUTPUT || tmp->type == APPEND)
-			dup2(tmp->fd, 1);
+			cmd->fd_out = tmp->fd;
 		else if (tmp->type == INPUT)
-			dup2(tmp->fd, 0);
-		else if (tmp->type == HEREDOC)
-			open_heredoc(tmp);
-		close(tmp->fd);
+			cmd->fd_in = tmp->fd;
+		else if (tmp->type == HEREDOC && 0 == open_heredoc(tmp))
+			cmd->fd_in = tmp->fd;
 		tmp = tmp->next;
 	}
+}
+
+void	exec_simple_cmd(t_command *cmd)
+{
+	redirection_exec(cmd);
 	if (built_in(cmd->command))
 		execute_built_in(cmd);
 	else
 	{
 		if (NULL == cmd->command)
 			set_exit_status(1);
-		else if (NULL == get_env_v1("PATH") && reset_fd())
+		else if (NULL == get_env_v1("PATH"))
 			printf("%s: No such file or directory\n", cmd->command);
-		else if (NULL == cmd->command)
-			set_exit_status(0);
 		else if (fix_command_path(cmd))
 			set_exit_status(127);
 		else
@@ -91,7 +97,7 @@ int	fix_command_path(t_command *cmd)
 	tmp_cmd = cmd->command;
 	cwd = getcwd(NULL, 0);
 	cmd->command = get_correct_path(cmd->command, cwd);
-	if (NULL == cmd->command && ++ret && reset_fd())
+	if (NULL == cmd->command && ++ret)
 		printf("=> %s: command not found\n", tmp_cmd);
 	free(cwd);
 	free(tmp_cmd);

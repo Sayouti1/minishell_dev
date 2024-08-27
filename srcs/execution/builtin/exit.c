@@ -18,7 +18,7 @@ int	ft_exit(char **arg)
 
 	if (NULL == arg)
 		exit_status = 0;
-	else if (split_len(arg) > 1 && reset_fd())
+	else if (split_len(arg) > 1)
 		return (printf("exit\nexit: too many arguments\n"), set_exit_status(1));
 	else if (str_isdigit(arg[0]) == 2)
 		exit_status = 2;

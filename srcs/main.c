@@ -19,6 +19,8 @@ void	init_g_vars(char **envp)
 	g_vars.env = NULL;
 	g_vars.envp = envp;
 	g_vars.exit_status = 0;
+	g_vars.sig_c = 0;
+	g_vars.tmp_file = 0;
 	g_vars.std_in = dup(0);
 	g_vars.std_out = dup(1);
 	g_vars.garbage_coll = NULL;
@@ -119,7 +121,8 @@ void main_loop(void)
 	command = NULL;
 	while (1)
 	{
-		signal(SIGQUIT, ignore_sig);
+		signal(SIGQUIT, SIG_IGN);
+		g_vars.sig_c = 0;
 		line = readline("\033[1;32mminishell :)=> \033[0m");
 		if (!line)
 			break;

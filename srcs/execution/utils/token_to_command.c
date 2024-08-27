@@ -43,7 +43,7 @@ char	**add_to_list(char **old_list, char *to_add)
 	// free_split(old_list);
 	return (new_list);
 }
-char **list;
+
 t_redirection	*get_last_red(t_redirection *red)
 {
 	while (red && red->next)
@@ -69,11 +69,9 @@ t_redirection	*add_redirection(t_redirection *red, t_token **token)
 
 void	copy_cmd_args(t_token **token, t_command **cmd)
 {
-	char			**args;
-	t_redirection	*red;
+	char	**args;
 
 	args = NULL;
-	red = NULL;
 	free_split((*cmd)->args);
 	if (*token && (*token)->type == TOKEN_WORD)
 	{
@@ -89,12 +87,11 @@ void	copy_cmd_args(t_token **token, t_command **cmd)
 		*token = (*token)->next;
 	}
 	(*cmd)->args = args;
-	(*cmd)->redirection = red;
 }
 
-int			expand_vars(t_command *tmp_cmd)
+int	expand_vars(t_command *tmp_cmd)
 {
-	char 	*tmp;
+	char	*tmp;
 	int		i;
 
 	if (ft_char_in('$', tmp_cmd->command))
@@ -112,7 +109,6 @@ int			expand_vars(t_command *tmp_cmd)
 	}
 	return (0);
 }
-
 
 int	token_to_command_convert(t_token *token, t_command **cmd)
 {

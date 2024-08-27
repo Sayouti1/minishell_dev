@@ -70,7 +70,6 @@ char	*char_concat(char *line, char c)
 
 	i = ft_strlen(line);
 	// concat = ft_realloc(line, (i + 2) * sizeof(char));
-
 	concat = (char *)malloc(sizeof(char) * (i + 2));
 	if (NULL == concat)
 		return (NULL);

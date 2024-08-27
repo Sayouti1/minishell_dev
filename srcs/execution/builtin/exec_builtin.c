@@ -45,6 +45,10 @@ void	exec_unset(t_command *cmd)
 
 void	execute_built_in(t_command *cmd)
 {
+	if (cmd->fd_in != 0)
+		dup2(cmd->fd_in, 0);
+	if (cmd->fd_out != 1)
+		dup2(cmd->fd_out, 1);
 	if (!ft_strcmp(cmd->command, "echo"))
 		exec_echo(cmd);
 	else if (!ft_strcmp(cmd->command, "export"))

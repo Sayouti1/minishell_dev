@@ -20,7 +20,7 @@ int	pwd(void)
 	char	*curr_dir;
 
 	curr_dir = getcwd(NULL, 0);
-	if (NULL == curr_dir && reset_fd())
+	if (NULL == curr_dir)
 		return (printf("pwd: error retrieving current directory: getcwd:"
 				"cannot access parent directories:"
 				" No such file or directory\n"),

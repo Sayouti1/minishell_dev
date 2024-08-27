@@ -48,7 +48,7 @@ void	free_split(char **arr)
 	free(arr);
 }
 
-int	reset_fd()
+int	reset_fd(void)
 {
 	dup2(g_vars.std_out, 1);
 	dup2(g_vars.std_in, 0);
@@ -70,9 +70,12 @@ void	free_cmds(t_command *cmd)
 			if (cmd->redirection->fd > 2)
 				close(cmd->redirection->fd);
 			free(cmd->redirection);
-			cmd->redirection = NULL;
 			cmd->redirection = tmp_red;
 		}
+		if (cmd->fd_in != 0)
+			close(cmd->fd_in);
+		if (cmd->fd_out != 1)
+			close(cmd->fd_in);
 		free(cmd->command);
 		free_split(cmd->args);
 		free(cmd);

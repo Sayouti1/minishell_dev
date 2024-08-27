@@ -25,10 +25,11 @@ void	sig_handler(int sig)
 		printf("Quit (core dumped)\n");
 }
 
-void	ignore_sig(int sig)
+void	heredoc_sig(int sig)
 {
-	(void) sig;
-	write(0, "", 0);
-	rl_replace_line("", 0);
-	rl_redisplay();
+	if (sig == SIGINT)
+	{
+		g_vars.sig_c = 1;
+		close(STDIN_FILENO);
+	}
 }

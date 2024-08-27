@@ -12,138 +12,137 @@
 
 #include "../../../include/include.h"
 
-char	*substitute_var(char *str)
+char	*expand_heredoc(char *line, int *bad_sub)
 {
-	int		i;
-	char	*concat;
-	char	*key;
+	char	*expanded;
 
-	concat = NULL;
-	i = 0;
-	while (str && str[i])
+	if (check_curly_braces(line))
 	{
-		while (str[i] && str[i] != '$')
-			concat = char_concat(concat, str[i++]);
-		if (str[i] == '$' && str[i + 1] == '?' && ++i && ++i)
-			concat = string_concat(concat, ft_itoa(g_vars.exit_status));
-		if (str[i] == '$')
-		{
-			if (str[i + 1] == '{')
-				++i;
-			key = get_dollar_key_v1(str, &i);
-			while (str[i] && ft_char_in(str[i], " \t}"))
-				++i;
-			concat = string_concat(concat, ft_strdup(get_env_v1(key)));
-			free(key);
-		}
+		*bad_sub = 1;
+		set_exit_status(1);
+		return (line);
 	}
-	return (concat);
+	expanded = substitute_var(line);
+	free(line);
+	return (expanded);
 }
 
-int	check_curly_braces(char *str)
+int	read_heredoc(char *del, char **line)
 {
-	int	i;
-
-	if (NULL == str)
-		return (0);
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '$' && (!str[i + 1] || ft_isspace(str[i + 1])) && ++i)
-			continue ;
-		if (str[i] == '$' && str[i + 1] == '{')
-		{
-			i += 2;
-			while (str[i] && !ft_char_in(str[i], " \n{}"))
-				++i;
-			if (str[i] != '}')
-				return (1);
-		}
-		++i;
-	}
-	return (0);
-}
-
-int	read_and_join(char *buff, char *del, t_redirection *redirection)
-{
-	size_t	byte_read;
-
-	byte_read = read(0, buff, 1000);
-	buff[byte_read] = '\0';
-	if (byte_read <= 0 || !ft_strncmp(buff, del, ft_strlen(del)))
+	*line = readline(">");
+	if (g_vars.sig_c == 1)
 		return (1);
-	redirection->file_name = ft_strjoin_gnl(redirection->file_name, buff);
+	if (NULL == *line)
+		return (1);
+	if (!ft_strcmp(*line, del))
+	{
+		free(*line);
+		return (1);
+	}
 	return (0);
 }
 
-int	open_heredoc(t_redirection *redirection)
+int	treat_heredoc(char *del, int fd, int sub_var)
 {
-	char	buff[1000];
-	char	*del;
-	int		fds[2];
+	char	*line;
+	int		bad_sub;
 
-	del = char_concat(redirection->file_name, '\n');
-	redirection->file_name = NULL;
-	signal(SIGQUIT, ignore_sig);
+	bad_sub = 0;
+	signal(SIGINT, heredoc_sig);
+	signal(SIGQUIT, SIG_IGN);
 	while (1)
-		if (read_and_join(buff, del, redirection))
-			break ;
-	pipe(fds);
-	if (!ft_char_in('\'', del) && !ft_char_in('"', del))
 	{
-		if (check_curly_braces(redirection->file_name))
-			return (set_exit_status(1), printf(" : bad substitution\n"), 1);
-		redirection->file_name = substitute_var(redirection->file_name);
+		if (read_heredoc(del, &line))
+			break ;
+		if (sub_var == 0)
+			line = expand_heredoc(line, &bad_sub);
+		ft_putstr_fd(line, fd);
+		ft_putchar_fd('\n', fd);
+		free(line);
 	}
-	write(fds[1], redirection->file_name, ft_strlen(redirection->file_name));
-	close(fds[1]);
-	redirection->fd = fds[0];
-	return (dup2(redirection->fd, 0), 0);
+	signal(SIGINT, sig_handler);
+	free(del);
+	if (bad_sub)
+		return (printf(" : bad substitution\n"), 1);
+	return (0);
 }
 
-// int	open_heredoc(t_redirection *redirection)
+char	*create_tmp_file(int *fd)
+{
+	char	*file;
+
+	file = string_concat(ft_strdup("/tmp/minishell_"),
+			ft_itoa(g_vars.tmp_file++));
+	if (NULL == file)
+		return (printf("ERROR: creating tmp_file\n"), NULL);
+	*fd = open(file, O_CREAT | O_TRUNC | O_WRONLY, 0666);
+	if (-1 == *fd)
+		return (printf("ERROR: cannot open tmp_file\n"), NULL);
+	return (file);
+}
+
+int	open_heredoc(t_redirection *red)
+{
+	char	*tmp_file;
+	int		fd;
+	char	*del;
+	int		sub_var;
+
+	tmp_file = create_tmp_file(&fd);
+	if (NULL == tmp_file)
+		return (1);
+	collect_garbage(tmp_file);
+	sub_var = ft_char_in('\'', red->file_name) + ft_char_in('"',
+			red->file_name);
+	del = trim_str(ft_strdup(red->file_name));
+	if (treat_heredoc(del, fd, sub_var))
+		return (1);
+	close(fd);
+	fd = open(tmp_file, O_RDONLY);
+	red->fd = fd;
+	return (0);
+}
+
+// int	treat_heredoc(char *del, int *fds, int sub_var)
 // {
 // 	char	*line;
-// 	char	*del;
-// 	int		fds[2];
-// 	char	*text;
-// 	// int		sub_var;
+// 	int		bad_sub;
 
-// 	// sub_var = 0;
-// 	// if (!ft_char_in('\'', redirection->file_name)
-// 		// && !ft_char_in('"', redirection->file_name))
-// 		// sub_var = 1;
-// 	del = remove_all_quotes(redirection->file_name);
-// 	redirection->file_name = NULL;
-// 	signal(SIGQUIT, ignore_sig);
-// 	pipe(fds);
-// 	text = NULL;
+// 	bad_sub = 0;
+// 	signal(SIGINT, heredoc_sig);
 // 	while (1)
 // 	{
-// 		line = readline(">");
-// 		if (NULL == line)
+// 		if (read_heredoc(del, &line))
 // 			break ;
-// 		if (!ft_strcmp(line, del))
-// 		{
-// 			free(line);
-// 			break;
-// 		}
-// 		text = ft_strjoin_gnl(text,);
-// 		// if (check_curly_braces(line))
-// 		// 	return (set_exit_status(1), printf(" : bad substitution\n"), 1);
+// 		if (sub_var == 0)
+// 			line = expand_heredoc(line, &bad_sub);
 // 		ft_putstr_fd(line, fds[1]);
 // 		ft_putchar_fd('\n', fds[1]);
 // 		free(line);
 // 	}
+// 	signal(SIGINT, sig_handler);
 // 	free(del);
-// 	// if (!ft_char_in('\'', del) && !ft_char_in('"', del))
-// 	// {
-// 	// 	if (check_curly_braces(redirection->file_name))
-// 	// 		return (set_exit_status(1), printf(" : bad substitution\n"), 1);
-// 	// 	redirection->file_name = substitute_var(redirection->file_name);
-// 	// }
-// 	// write(fds[1], redirection->file_name, ft_strlen(redirection->file_name));
+// 	if (bad_sub)
+// 		return (printf(" : bad substitution\n"), 1);
+// 	return (0);
+// }
+
+// int	open_heredoc(t_redirection *redirection)
+// {
+// 	char	*del;
+// 	int		fds[2];
+// 	int		sub_var;
+
+// 	sub_var = ft_char_in('\'', redirection->file_name)
+// 		+ ft_char_in('"', redirection->file_name);
+// 	del = trim_str(ft_strdup(redirection->file_name));
+// 	if (pipe(fds) == -1) {
+// 		perror("pipe");
+// 		exit(1);
+// 	}
+// 	if (treat_heredoc(del, fds[1], sub_var) && printf("TREAT_HEREDOC\n"))
+// 		return (close(fds[1]), close(fds[0]), 1);
 // 	close(fds[1]);
 // 	redirection->fd = fds[0];
-// 	return (dup2(redirection->fd, 0), 0);
+// 	return (0);
 // }

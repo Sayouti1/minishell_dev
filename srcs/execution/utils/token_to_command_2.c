@@ -12,9 +12,9 @@
 
 #include "../../../include/include.h"
 
-char *trim_str(char *str)
+char	*trim_str(char *str)
 {
-	char 	*tmp;
+	char	*tmp;
 	int		i;
 
 	i = -1;
@@ -47,7 +47,8 @@ void	remove_quotes(t_command *cmd)
 
 	if (NULL == cmd)
 		return ;
-	cmd->command = trim_str(ft_strdup(cmd->command));
+	if (cmd->command)
+		cmd->command = trim_str(ft_strdup(cmd->command));
 	i = 0;
 	while (cmd->args && cmd->args[i])
 	{
