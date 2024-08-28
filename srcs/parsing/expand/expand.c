@@ -45,6 +45,7 @@ void expand_var(t_token **tokens)
 {
     t_token *token; 
 	token = *tokens;
+    char **words;
 
     while (token) {
         if (token->type == TOKEN_WORD) {
@@ -55,6 +56,13 @@ void expand_var(t_token **tokens)
                 //free(token->value);
  				//printf("expand word from expanded %s\n\n",expanded);
                 token->value = expanded;
+                words = ft_split(token->value, ' ');
+                int i = 0;
+                while (words[i])
+                {
+                    printf("%s\n",words[i]);
+                    i++;
+                }
             }
  		//printf("expand word %s\n\n",token->value);
         }
