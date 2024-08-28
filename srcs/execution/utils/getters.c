@@ -58,3 +58,10 @@ char	**get_exec_arg(char *fullpath, char *split)
 	exec_arg[i + 1] = NULL;
 	return (exec_arg);
 }
+
+t_redirection	*get_last_red(t_redirection *red)
+{
+	while (red && red->next)
+		red = red->next;
+	return (red);
+}

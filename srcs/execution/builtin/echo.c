@@ -25,19 +25,15 @@ int	n_option(int *i, char **str)
 	int	n_flag;
 
 	n_flag = 0;
-	while (str[*i] && str[*i][0] == '-')
+	while (str[*i] && str[*i][0] == '-' && str[*i][1])
 	{
 		j = 1;
 		while (str[*i][j] && ft_char_in(str[*i][j], "en"))
-			j++;
-		if (str[*i][j])
-		{
-			if (*i > 0)
-				--(*i);
-			break ;
-		}
-		if (ft_char_in('n', str[*i]))
+			++j;
+		if (str[*i][j] == '\0' && ft_char_in('n', str[*i]))
 			n_flag = 1;
+		else if (str[*i][j])
+			break ;
 		++(*i);
 	}
 	return (n_flag);

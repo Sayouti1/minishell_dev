@@ -36,32 +36,6 @@ char	*ft_strjoin_prefixed(char *s1, char c, char *s2)
 	return (join);
 }
 
-char	*ft_strjoin_gnl(char *old_line, char *buff)
-{
-	int		i;
-	int		j;
-	char	*new_line;
-
-	j = ft_strlen(buff) + ft_strlen(old_line);
-	new_line = (char *)malloc(sizeof(char) * (j + 1));
-	if (NULL == new_line)
-	{
-		free(old_line);
-		return (NULL);
-	}
-	i = 0;
-	j = 0;
-	while (old_line && old_line[i])
-		new_line[j++] = old_line[i++];
-	i = 0;
-	while (buff[i])
-		new_line[j++] = buff[i++];
-	new_line[j] = '\0';
-	//    if (old_line)
-	//        free(old_line);
-	return (new_line);
-}
-
 char	*char_concat(char *line, char c)
 {
 	char	*concat;
@@ -69,7 +43,6 @@ char	*char_concat(char *line, char c)
 	int		j;
 
 	i = ft_strlen(line);
-	// concat = ft_realloc(line, (i + 2) * sizeof(char));
 	concat = (char *)malloc(sizeof(char) * (i + 2));
 	if (NULL == concat)
 		return (NULL);

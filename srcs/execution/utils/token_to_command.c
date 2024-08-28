@@ -38,17 +38,8 @@ char	**add_to_list(char **old_list, char *to_add)
 	if (NULL == new_list)
 		return (printf("ERROR allocating new_list\n"), NULL);
 	new_list[i] = to_add;
-	// collect_garbage(to_add);
 	new_list[++i] = NULL;
-	// free_split(old_list);
 	return (new_list);
-}
-
-t_redirection	*get_last_red(t_redirection *red)
-{
-	while (red && red->next)
-		red = red->next;
-	return (red);
 }
 
 t_redirection	*add_redirection(t_redirection *red, t_token **token)
@@ -59,7 +50,6 @@ t_redirection	*add_redirection(t_redirection *red, t_token **token)
 	red_type = token_type_to_cmd_type((*token)->type);
 	(*token) = (*token)->next;
 	new_red = new_redirection(red_type, (*token)->value, -1);
-	// collect_garbage(new_red);
 	if (NULL == red)
 		red = new_red;
 	else
@@ -87,27 +77,6 @@ void	copy_cmd_args(t_token **token, t_command **cmd)
 		*token = (*token)->next;
 	}
 	(*cmd)->args = args;
-}
-
-int	expand_vars(t_command *tmp_cmd)
-{
-	char	*tmp;
-	int		i;
-
-	if (ft_char_in('$', tmp_cmd->command))
-		return (0);
-	tmp = tmp_cmd->command;
-	tmp_cmd->command = substitute_var(tmp_cmd->command);
-	free(tmp);
-	i = 0;
-	while (tmp_cmd && tmp_cmd->args && tmp_cmd->args[i])
-	{
-		tmp = tmp_cmd->args[i];
-		tmp_cmd->args[i] = substitute_var(tmp_cmd->args[i]);
-		free(tmp);
-		++i;
-	}
-	return (0);
 }
 
 int	token_to_command_convert(t_token *token, t_command **cmd)

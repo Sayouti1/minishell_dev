@@ -31,21 +31,22 @@ typedef enum s_token_type
 	TOKEN_WORD,				// using for the cmd argm
 	TOKEN_PIPE,				// using for the pipe cmd
 	TOKEN_REDIR_IN,			// using like <
-	TOKEN_REDIR_OUT,		//using like >
+	TOKEN_REDIR_OUT,		// using like >
 	TOKEN_REDIR_APPEND,		// using for >>
 	TOKEN_REDIR_HEREDOC,	// using for <<
 }								t_token_type;
 // tok
 // | >
 // ls -al | cat -e > file
-// tokens like |>>>  |"ls"|---next---> |"-al"| --> "|" ---> |"cat"| --> "-e" --> ">" --> "file"
+// tokens like |>>>  |"ls"|---next---> |"-al"| --> "|" --
+// --> |"cat"| --> "-e" --> ">" --> "file"
 
 // ("/bin/ls" , {"/bin/ls", }, )
 typedef struct s_token
 {
-	t_token_type				type;		// TOKEN
-	char						*value;		// "ls"
-	struct s_token				*next;
+	t_token_type			type;	// TOKEN
+	char					*value;	// "ls"
+	struct s_token			*next;
 }								t_token;
 
 typedef struct s_env
@@ -87,7 +88,7 @@ enum							e_redirection
 
 typedef struct s_redirection
 {
-	int							type; // output | append | input | her_doc
+	int							type;	// output | append | input | her_doc
 	char						*file_name;
 	int							fd;
 	struct s_redirection		*next;
@@ -182,7 +183,6 @@ char							*ft_strjoin_prefixed(char *s1, char c,
 // int					execute_command(char **split);
 void							execute_built_in(t_command *cmd);
 void							external_command(t_command *cmd);
-char							*ft_strjoin_gnl(char *old_line, char *buff);
 char							*get_dollar_key_v1(char *line, int *i);
 char							*substitute_var(char *str);
 int								check_curly_braces(char *str);
@@ -250,5 +250,6 @@ void							remove_quotes(t_command *cmd);
 void							*ft_realloc(void *ptr, size_t size);
 int								reset_fd(void);
 char							*trim_str(char *str);
+t_redirection					*get_last_red(t_redirection *red);
 
 #endif
