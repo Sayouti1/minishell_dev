@@ -141,9 +141,9 @@ void main_loop(void)
 			//free_token(tokens);
 		}
 
-		ft_printToken(tokens);
+		// ft_printToken(tokens);
 		expand_var(&tokens);
-		ft_printToken(tokens);
+		// ft_printToken(tokens);
 		token_to_command_convert(tokens, &command);
 		print_commands(command);
 		process_command(command);

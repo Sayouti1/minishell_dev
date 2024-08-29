@@ -25,10 +25,8 @@ char    *substitute_var1(char *str)
         }
         if (str[i] == '$' && str[i + 1] == '?' && ++i && ++i)
             concat = string_concat(concat, ft_itoa(g_vars.exit_status));
-        else if (str[i] == '$' && ft_isalnum(str[i + 1]) && (in_quotes || (str[i + 1] != '\'' && str[i + 1] != ' ')))
+        else if (str[i] == '$' && ft_isalnum(str[i + 1]) &&(in_quotes || (str[i + 1] != '\'' && str[i + 1] != ' ')))
         {
-            if (ft_isdigit(str[i + 1]) && ++i && ++i)
-                continue ;
             if (str[i + 1] == '{')
                 ++i;
             key = get_dollar_key_v1(str, &i);
@@ -47,7 +45,7 @@ void expand_var(t_token **tokens)
 {
     t_token *token; 
 	token = *tokens;
-    // char **words;
+    char **words;
 
     while (token) {
         if (token->type == TOKEN_WORD) {

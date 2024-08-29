@@ -29,6 +29,8 @@ int	external_command(t_command *cmd)
 				return (printf("=> : Permission denied\n"), exit(126), 1);
 			if (errno == ENOENT)
         		return (printf("=> : No such file or directory\n"), exit(127), 1);
+			if (errno == EISDIR)
+				return (printf("=> : Cannot execute a directory\n"), exit(126), 1);
     	}
 		exit(1);
 	}
