@@ -78,9 +78,27 @@ void	redirection_exec(t_command *cmd)
 	}
 }
 
+int	check_redirection(t_command *cmd)
+{
+	t_redirection	*red;
+
+	if (NULL == cmd)
+		return (0);
+	red = cmd->redirection;
+	while (red)
+	{
+		if (NULL == red->file_name)
+			return (1);
+		red = red->next;
+	}
+	return (0);
+}
+
 void	exec_simple_cmd(t_command *cmd)
 {
 	redirection_exec(cmd);
+	if (check_redirection(cmd) && set_exit_status(1))
+		return ;
 	if (built_in(cmd->command))
 		execute_built_in(cmd);
 	else

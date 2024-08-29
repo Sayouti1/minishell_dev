@@ -227,7 +227,7 @@ int								ft_strcmp(char *s1, char *s2);
 char							**split_on_two(char *line, char *del);
 
 t_redirection					*new_redirection(int type, char *file_name,
-									int fd);
+									int fd, int creat_file);
 t_command						*new_command(char *command, char **args,
 									t_redirection *redirection);
 void							add_to_cmds(t_command **head, t_command *cmd);

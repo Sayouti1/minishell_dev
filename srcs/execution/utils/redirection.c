@@ -12,7 +12,7 @@
 
 #include "../../../include/include.h"
 
-t_redirection	*new_redirection(int type, char *file_name, int fd)
+t_redirection	*new_redirection(int type, char *file_name, int fd, int creat_file)
 {
 	t_redirection	*redirection;
 
@@ -21,11 +21,13 @@ t_redirection	*new_redirection(int type, char *file_name, int fd)
 		return (NULL);
 	redirection->type = type;
 	redirection->file_name = file_name;
-	if (type == OUTPUT)
+	if (type != HEREDOC && NULL == file_name)
+		fd = -1337;
+	else if (type == OUTPUT && creat_file)
 		fd = open(file_name, O_CREAT | O_TRUNC | O_WRONLY, 0666);
-	else if (type == APPEND)
+	else if (type == APPEND && creat_file)
 		fd = open(file_name, O_CREAT | O_APPEND | O_RDWR, 0666);
-	else if (type == INPUT)
+	else if (type == INPUT && NULL != file_name)
 		fd = open(file_name, O_RDONLY);
 	else if (type == HEREDOC)
 		redirection->file_name = file_name;

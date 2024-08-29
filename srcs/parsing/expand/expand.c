@@ -57,7 +57,7 @@ t_token  *expand_var(t_token *tokens)
             expand = substitute_var1(token->value);
             words = ft_split(expand, ' ');
             int i = 0;
-            while(words[i])
+            while(words && words[i])
                 add_token_to_list(&ntoken, new_token(TOKEN_WORD, words[i++]));
         }
         else

@@ -42,14 +42,38 @@ char	**add_to_list(char **old_list, char *to_add)
 	return (new_list);
 }
 
+int	has_null(t_redirection *red)
+{
+	t_redirection	*tmp;
+
+	tmp = red;
+	while (tmp)
+	{
+		if (tmp->type != HEREDOC && NULL == tmp->file_name)
+			return (1);
+		tmp = tmp->next;
+	}
+	return (0);
+}
+
 t_redirection	*add_redirection(t_redirection *red, t_token **token)
 {
 	int				red_type;
 	t_redirection	*new_red;
+	t_token			*tmp;
 
 	red_type = token_type_to_cmd_type((*token)->type);
+	tmp = *token;
 	(*token) = (*token)->next;
-	new_red = new_redirection(red_type, (*token)->value, -1);
+	if (NULL == *token)
+		return (red);
+	if ((*token)->type != TOKEN_WORD)
+	{
+		new_red = new_redirection(red_type, NULL, -1, !has_null(red));
+		(*token) = tmp;
+	}
+	else
+		new_red = new_redirection(red_type, (*token)->value, -1, !has_null(red));
 	if (NULL == red)
 		red = new_red;
 	else
@@ -70,11 +94,18 @@ void	copy_cmd_args(t_token **token, t_command **cmd)
 	}
 	while (*token && (*token)->type != TOKEN_PIPE)
 	{
-		if ((*token)->type == TOKEN_WORD)
+		while ((*token) && (*token)->type == TOKEN_WORD)
+		{
 			args = add_to_list(args, (*token)->value);
-		else if ((*token)->type != TOKEN_PIPE && (*token)->type != TOKEN_WORD)
+			(*token) = (*token)->next;
+		}
+		while ((*token) && (*token)->type != TOKEN_PIPE && (*token)->type != TOKEN_WORD)
+		{
 			(*cmd)->redirection = add_redirection((*cmd)->redirection, token);
-		*token = (*token)->next;
+			(*token) = (*token)->next;
+		}
+		// if (*token)
+		// 	*token = (*token)->next;
 	}
 	(*cmd)->args = args;
 }
