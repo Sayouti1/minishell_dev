@@ -21,7 +21,7 @@ char	*get_correct_path(char *cmd, char *curr_dir)
 
 	if (NULL == cmd || cmd[0] == '\0')
 		return (NULL);
-	if (cmd[0] == '.')
+	if (cmd[0] == '.' && cmd[1] == '/')
 		full_path = ft_strjoin_prefixed(curr_dir, '/', cmd);
 	else if (cmd[0] == '/')
 		full_path = ft_strdup(cmd);

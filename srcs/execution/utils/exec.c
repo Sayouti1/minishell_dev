@@ -12,7 +12,7 @@
 
 #include "../../../include/include.h"
 
-void	external_command(t_command *cmd)
+int	external_command(t_command *cmd)
 {
 	int	pid;
 
@@ -23,11 +23,18 @@ void	external_command(t_command *cmd)
 			dup2(cmd->fd_in, 0);
 		if (cmd->fd_out != 1)
 			dup2(cmd->fd_out, 1);
-		execve(cmd->command, cmd->args, g_vars.envp);
+		if (execve(cmd->command, cmd->args, g_vars.envp) == -1)
+		{
+			if (errno == EACCES)
+				return (printf("=> : Permission denied\n"), exit(126), 1);
+			if (errno == ENOENT)
+        		return (printf("=> : No such file or directory\n"), exit(127), 1);
+    	}
 		exit(1);
 	}
 	wait(&g_vars.exit_status);
 	set_exit_status(g_vars.exit_status);
+	return (0);
 }
 
 char	*get_dollar_key_v1(char *line, int *i)
@@ -39,7 +46,7 @@ char	*get_dollar_key_v1(char *line, int *i)
 	j = *i + 1;
 	if (NULL == line)
 		return (NULL);
-	while (line[j] && !ft_char_in(line[j], " $\'\"\n{}"))
+	while (line[j] && !ft_char_in(line[j], " $\'\"\n{}><") && ft_isalnum(line[j]))
 		j++;
 	key = (char *)malloc(sizeof(char) * (j - *i));
 	if (NULL == key)

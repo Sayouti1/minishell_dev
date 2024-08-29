@@ -25,6 +25,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <errno.h>
 
 typedef enum s_token_type
 {
@@ -182,7 +183,7 @@ char							*ft_strjoin_prefixed(char *s1, char c,
 									char *s2);
 // int					execute_command(char **split);
 void							execute_built_in(t_command *cmd);
-void							external_command(t_command *cmd);
+int								external_command(t_command *cmd);
 char							*get_dollar_key_v1(char *line, int *i);
 char							*substitute_var(char *str);
 int								check_curly_braces(char *str);
