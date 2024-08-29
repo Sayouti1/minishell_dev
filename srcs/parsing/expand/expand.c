@@ -41,31 +41,28 @@ char    *substitute_var1(char *str)
     return (concat);
 }
 
-void expand_var(t_token **tokens) 
+t_token  *expand_var(t_token *tokens) 
 {
-    t_token *token; 
-	token = *tokens;
+    t_token *token;
+    char    *expand;
+    t_token *ntoken;
     char **words;
 
-    while (token) {
-        if (token->type == TOKEN_WORD) {
-            //char *expanded = parse_command_vars(token->value);
-            char *expanded = substitute_var1(token->value);
-            
-            if (expanded != NULL) {
-                //free(token->value);
- 				//printf("expand word from expanded %s\n\n",expanded);
-                token->value = expanded;
-                words = ft_split(token->value, ' ');
-                int i = 0;
-                while (words[i])
-                {
-                    printf("%s\n",words[i]);
-                    i++;
-                }
-            }
- 		//printf("expand word %s\n\n",token->value);
+    ntoken = NULL;
+    token = tokens;
+    while (token)
+    {
+        if (token->type == TOKEN_WORD && ft_strchr(token->value, '$'))
+        {
+            expand = substitute_var1(token->value);
+            words = ft_split(expand, ' ');
+            int i = 0;
+            while(words[i])
+                add_token_to_list(&ntoken, new_token(TOKEN_WORD, words[i++]));
         }
+        else
+            add_token_to_list(&ntoken, new_token(token->type, token->value));
         token = token->next;
     }
+    return (ntoken);
 }

@@ -141,7 +141,7 @@ size_t							ft_strnlen(const char *s, size_t maxlen);
 void							word_to_token(char **start, char **line,
 									t_token **tokens);
 char							*substitute_var1(char *str);
-void							expand_var(t_token **tokens);
+t_token							*expand_var(t_token *tokens);
 int								ft_ambiguous_err(t_token *tokens);
 // ------------------------------------------------------
 
