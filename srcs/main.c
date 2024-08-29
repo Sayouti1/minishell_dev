@@ -111,11 +111,11 @@ void	print_commands(t_command *command)
 		cmd = cmd->next;
 	}
 }
-
 void main_loop(void)
 {
 	char *line;
 	t_token *tokens;
+	t_token *ntokens;
 	t_command	*command;
 
 	command = NULL;
@@ -136,19 +136,22 @@ void main_loop(void)
 		if (ft_ambiguous_err(tokens))
 		{
 			ft_putstr_fd("minishell: ambiguous redirect\n", 2);
-			exit(1);
+			//exit(1);
 			//continue;
 			//free_token(tokens);
 		}
 
-		ft_printToken(tokens);
-		expand_var(&tokens);
-		ft_printToken(tokens);
-		token_to_command_convert(tokens, &command);
+		//ft_printToken(tokens);
+		ntokens = expand_var(tokens);
+		free_token(tokens);
+		if (!ntokens)
+			printf("token is NULL go solve it \n");
+		ft_printToken(ntokens);
+		token_to_command_convert(ntokens, &command);
 		print_commands(command);
 		process_command(command);
 		free_cmds(command);
-		free_token(tokens);
+		free_token(ntokens);
 	}
 }
 
