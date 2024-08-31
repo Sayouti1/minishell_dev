@@ -16,15 +16,16 @@ int	ft_exit(char **arg)
 {
 	int	exit_status;
 
+	printf("exit\n");
 	if (NULL == arg)
 		exit_status = 0;
-	else if (split_len(arg) > 1)
-		return (printf("exit\nexit: too many arguments\n"), set_exit_status(1));
 	else if (str_isdigit(arg[0]) == 2)
 		exit_status = 2;
+	else if (split_len(arg) > 1)
+		return (printf("exit: too many arguments\n"), set_exit_status(1));
 	else
 		exit_status = ft_atoi(arg[0]);
 	free_split(arg);
 	set_exit_status(exit_status);
-	exit(exit_status);
+	exit(g_vars.exit_status);
 }

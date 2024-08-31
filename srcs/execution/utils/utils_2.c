@@ -20,12 +20,20 @@ int	ft_isspace(char c)
 int	str_isdigit(char *str)
 {
 	int	i;
+	int	j;
 
 	i = 0;
 	if (NULL == str)
 		return (0);
-	while (str[i])
+	while (ft_char_in(str[i], " \t"))
+		++i;
+	j = ft_strlen(str) - 1;
+	while (j >= 0 && ft_char_in(str[j], " \t"))
+		--j;
+	if (str[i] == '+' || str[i] == '-')
+		++i;
+	while (str[i] && i <= j)
 		if (!ft_isdigit(str[i++]))
-			return (2);
+			return (printf("exit: %s : numeric argument required\n", str), 2);
 	return (1);
 }

@@ -14,9 +14,6 @@
 
 int	set_exit_status(int n)
 {
-	if (WIFEXITED(n))
-		g_vars.exit_status = WEXITSTATUS(n);
-	else
-		g_vars.exit_status = n;
+	g_vars.exit_status = (unsigned char) n;
 	return (g_vars.exit_status);
 }
