@@ -102,7 +102,8 @@ void	copy_cmd_args(t_token **token, t_command **cmd)
 		while ((*token) && (*token)->type != TOKEN_PIPE && (*token)->type != TOKEN_WORD)
 		{
 			(*cmd)->redirection = add_redirection((*cmd)->redirection, token);
-			(*token) = (*token)->next;
+			if (*token)
+				(*token) = (*token)->next;
 		}
 		// if (*token)
 		// 	*token = (*token)->next;

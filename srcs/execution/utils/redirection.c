@@ -23,10 +23,15 @@ t_redirection	*new_redirection(int type, char *file_name, int fd, int creat_file
 	redirection->file_name = file_name;
 	if (type != HEREDOC && NULL == file_name)
 		fd = -1337;
+	//must check file permissions
 	else if (type == OUTPUT && creat_file)
+	{
 		fd = open(file_name, O_CREAT | O_TRUNC | O_WRONLY, 0666);
+		printf("fd == [%d]\n", fd);
+	}
 	else if (type == APPEND && creat_file)
 		fd = open(file_name, O_CREAT | O_APPEND | O_RDWR, 0666);
+	//must check the file exists
 	else if (type == INPUT && NULL != file_name)
 		fd = open(file_name, O_RDONLY);
 	else if (type == HEREDOC)

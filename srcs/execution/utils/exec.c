@@ -26,11 +26,11 @@ int	external_command(t_command *cmd)
 		if (execve(cmd->command, cmd->args, g_vars.envp) == -1)
 		{
 			if (errno == EACCES)
-				return (printf("=> : Permission denied\n"), exit(126), 1);
+				return (printf("=> : Permission denied\n"), exit(set_exit_status(126)), 1);
 			if (errno == ENOENT)
-        		return (printf("=> : No such file or directory\n"), exit(127), 1);
+        		return (printf("=> : No such file or directory\n"), exit(set_exit_status(127)), 1);
 			if (errno == EISDIR)
-				return (printf("=> : Cannot execute a directory\n"), exit(126), 1);
+				return (printf("=> : Cannot execute a directory\n"), exit(set_exit_status(126)), 1);
     	}
 		exit(1);
 	}
