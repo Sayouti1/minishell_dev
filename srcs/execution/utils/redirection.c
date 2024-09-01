@@ -12,17 +12,19 @@
 
 #include "../../../include/include.h"
 
-char	*file_name_permissions(char *file_name, int type)
+char	*file_name_permissions(char *file_name, int type, int create_file)
 {
 	if (NULL == file_name)
 		return (NULL);
-	if (OUTPUT == type || APPEND == type) // write
+	if ('\0' == file_name[0] && HEREDOC != type)
+		return (free(file_name), NULL);
+	if ((OUTPUT == type || APPEND == type) && create_file) // write
 	{
 		if (access(file_name, W_OK) == 0)
 			return (file_name);
 		return (perror("minishell "), NULL);
 	}
-	else if (INPUT == type) // read
+	else if (INPUT == type && create_file) // read
 	{
 		if (access(file_name, R_OK) == 0)
 			return (file_name);
@@ -31,7 +33,7 @@ char	*file_name_permissions(char *file_name, int type)
 	return (file_name);
 }
 
-t_redirection	*new_redirection(int type, char *file_name, int fd, int creat_file)
+t_redirection	*new_redirection(int type, char *file_name, int fd, int create_file)
 {
 	t_redirection	*redirection;
 
@@ -42,15 +44,15 @@ t_redirection	*new_redirection(int type, char *file_name, int fd, int creat_file
 	redirection->type = type;
 	if (type != HEREDOC && NULL == file_name)
 		fd = -1337;
-	else if (type == OUTPUT && creat_file)
+	else if (type == OUTPUT && create_file)
 		fd = open(file_name, O_CREAT | O_TRUNC | O_WRONLY, 0666);
-	else if (type == APPEND && creat_file)
+	else if (type == APPEND && create_file)
 		fd = open(file_name, O_CREAT | O_APPEND | O_WRONLY, 0666);
 	//must check the file exists
 	else if (type == INPUT && NULL != file_name)
 		fd = open(file_name, O_RDONLY);
 	// else if (type == HEREDOC)
-	redirection->file_name = file_name_permissions(file_name, type);
+	redirection->file_name = file_name_permissions(file_name, type, create_file);
 	// file_name = file_name_permissions(file_name, type);
 	redirection->fd = fd;
 	redirection->next = NULL;

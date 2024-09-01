@@ -7,11 +7,10 @@ minishell :)=> ^C>>minishell :)=>
 
 3/ cat > a > /dev/stdout  | shoud write in a
 
-4/ ls > $a
+4/ ls > $a ✅ Probably Fixed ✅
 minishell: ambiguous redirect
 include  Libft	Makefile  minishell  srcs  to_handle.txt
-
-ls shoud not work
+ls shoud not work ✅
 
 5/ exit 11111111111111111111111111111111 | exit with 2
 
@@ -19,7 +18,7 @@ ls shoud not work
 
 7 /env should be in the current state
 
-8/ ls < $ada
+8/ ls < $ada 🔴🟥 ambiguous error needs to be displayed 🟥🔴
 include  Libft	Makefile  minishell  srcs  to_handle.txt
 
  ambiguous redirect

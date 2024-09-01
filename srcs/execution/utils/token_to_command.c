@@ -66,8 +66,11 @@ t_redirection	*add_redirection(t_redirection *red, t_token **token)
 	tmp = *token;
 	(*token) = (*token)->next;
 	if (NULL == *token)
-		return (red);
-	if ((*token)->type != TOKEN_WORD)
+		// return (red);
+	{
+		new_red = new_redirection(red_type, NULL, -1, 0);		
+	}
+	else if ((*token)->type != TOKEN_WORD)
 	{
 		new_red = new_redirection(red_type, NULL, -1, !has_null(red));
 		(*token) = tmp;

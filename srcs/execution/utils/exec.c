@@ -127,7 +127,7 @@ int	fix_command_path(t_command *cmd)
 	tmp_cmd = cmd->command;
 	cwd = getcwd(NULL, 0);
 	cmd->command = get_correct_path(cmd->command, cwd);
-	if (NULL == cmd->command && ++ret)
+	if (NULL == cmd->command && ++ret && set_exit_status(127))
 		printf("=> %s: command not found\n", tmp_cmd);
 	free(cwd);
 	free(tmp_cmd);
