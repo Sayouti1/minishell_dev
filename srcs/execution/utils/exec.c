@@ -25,12 +25,13 @@ int	external_command(t_command *cmd)
 			dup2(cmd->fd_out, 1);
 		if (execve(cmd->command, cmd->args, g_vars.envp) == -1)
 		{
+			perror("minishell ");
 			if (errno == EACCES)
-				return (printf("=> : Permission denied\n"), exit(set_exit_status(126)), 1);
+				return (exit(126), 1);
 			if (errno == ENOENT)
-        		return (printf("=> : No such file or directory\n"), exit(set_exit_status(127)), 1);
+        		return (exit(127), 1);
 			if (errno == EISDIR)
-				return (printf("=> : Cannot execute a directory\n"), exit(set_exit_status(126)), 1);
+				return (exit(126), 1);
     	}
 		exit(1);
 	}
@@ -97,6 +98,8 @@ int	check_redirection(t_command *cmd)
 void	exec_simple_cmd(t_command *cmd)
 {
 	redirection_exec(cmd);
+	if (g_vars.sig_c == 2)
+		return ;
 	if (check_redirection(cmd) && set_exit_status(1))
 		return ;
 	if (built_in(cmd->command))
@@ -105,10 +108,10 @@ void	exec_simple_cmd(t_command *cmd)
 	{
 		if (NULL == cmd->command)
 			set_exit_status(1);
-		else if (NULL == get_env_v1("PATH"))
-			printf("%s: No such file or directory\n", cmd->command);
 		else if (fix_command_path(cmd))
 			set_exit_status(127);
+		else if (NULL == get_env_v1("PATH") && NULL == cmd->command)
+			printf("%s: No such file or directory\n", cmd->command);
 		else
 			external_command(cmd);
 	}

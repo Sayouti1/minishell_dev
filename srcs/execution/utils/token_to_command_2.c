@@ -19,7 +19,7 @@ char	*trim_str(char *str)
 
 	i = -1;
 	tmp = ft_strdup("");
-	while (str[++i])
+	while (str && str[++i])
 	{
 		if (str[i] == '\'')
 		{

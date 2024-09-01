@@ -72,10 +72,10 @@ void	free_cmds(t_command *cmd)
 			free(cmd->redirection);
 			cmd->redirection = tmp_red;
 		}
-		if (cmd->fd_in != 0)
-			close(cmd->fd_in);
-		if (cmd->fd_out != 1)
-			close(cmd->fd_in);
+		// if (cmd->fd_in != 0)
+		// 	close(cmd->fd_in);
+		// if (cmd->fd_out != 1)
+		// 	close(cmd->fd_in);
 		free(cmd->command);
 		free_split(cmd->args);
 		free(cmd);

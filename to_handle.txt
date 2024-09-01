@@ -1,4 +1,4 @@
-1/ cat <a => file does not exist
+1/ cat <a => file does not exist ✅
 
 2/ cat <<A<<A<<A<<A<<A<<A | cat <<A<<A<<A<A<<A<<A<<A<<A | cat <<A<<A<<A
 >>2004h>
@@ -17,7 +17,7 @@ ls shoud not work
 
 6/ export $sdasf=$asdas 
 
-7 /env shoud be in the current state
+7 /env should be in the current state
 
 8/ ls < $ada
 include  Libft	Makefile  minishell  srcs  to_handle.txt
@@ -26,6 +26,6 @@ include  Libft	Makefile  minishell  srcs  to_handle.txt
 
 9/  cat << $asfasf | shoudn't expand
 
-10/ ls >> '"'
+10/ ls >> '"' ✅
 
 11/ <Libft/ft_memset.c cat  < Makefile | cat | cat | cat > a | problem in multi pipes

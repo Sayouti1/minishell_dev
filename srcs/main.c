@@ -41,6 +41,7 @@ void		process_command(t_command *command)
 		tmp_cmd = command;
 		execute_pipes(list_len(command), i, tmp_cmd);
 	}
+	g_vars.sig_c = 0;
 }
 
 t_token *check_and_token(char *line)
@@ -123,7 +124,7 @@ void main_loop(void)
 	{
 		signal(SIGQUIT, SIG_IGN);
 		g_vars.sig_c = 0;
-		line = readline("\033[1;32mminishell :)=> \033[0m");
+		line = readline("minishell :)=> ");
 		if (!line)
 			break;
 		if(check_line(&line))
@@ -146,7 +147,7 @@ void main_loop(void)
 		free_token(tokens);
 		if (!ntokens)
 			printf("token is NULL go solve it \n");
-		ft_printToken(ntokens);
+		// ft_printToken(ntokens);
 		token_to_command_convert(ntokens, &command);
 		print_commands(command);
 		process_command(command);

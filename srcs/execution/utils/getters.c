@@ -27,8 +27,6 @@ char	*get_correct_path(char *cmd, char *curr_dir)
 		full_path = ft_strdup(cmd);
 	else
 		full_path = bin_in_path(cmd);
-	if (NULL == full_path)
-		return (NULL);
 	return (full_path);
 }
 

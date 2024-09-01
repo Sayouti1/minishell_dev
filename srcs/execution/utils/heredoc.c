@@ -31,7 +31,7 @@ int	read_heredoc(char *del, char **line)
 {
 	*line = readline(">");
 	if (g_vars.sig_c == 1)
-		return (1);
+		return (g_vars.sig_c = 2, 1);
 	if (NULL == *line)
 		return (1);
 	if (!ft_strcmp(*line, del))
@@ -83,23 +83,27 @@ char	*create_tmp_file(int *fd)
 
 int	open_heredoc(t_redirection *red)
 {
-	char	*tmp_file;
-	int		fd;
 	char	*del;
 	int		sub_var;
+	int		fd[2];
 
-	tmp_file = create_tmp_file(&fd);
-	if (NULL == tmp_file)
+	if (g_vars.sig_c == 2)
 		return (1);
-	collect_garbage(tmp_file);
+	pipe(fd);
 	sub_var = ft_char_in('\'', red->file_name) + ft_char_in('"',
 			red->file_name);
 	del = trim_str(ft_strdup(red->file_name));
-	if (treat_heredoc(del, fd, sub_var))
+	if (treat_heredoc(del, fd[1], sub_var))
 		return (1);
-	close(fd);
-	fd = open(tmp_file, O_RDONLY);
-	red->fd = fd;
+	close(fd[1]);
+	if (g_vars.sig_c == 2)
+	{
+		close(fd[0]);
+		red->fd = 0;
+		return (1);
+	}
+	// fd = open(tmp_file, O_RDONLY);
+	red->fd = fd[0];
 	return (0);
 }
 
