@@ -205,9 +205,9 @@ char							*char_concat(char *line, char c);
 char							*string_concat(char *line, char *str);
 // char				*parse_command_vars(char *line);
 
-void							close_and_dup(int to_dup, int fd, int to_close);
+void							close_and_dup(int to_dup, int fd, int to_close, t_command *cmd);
 void							swap_pipes(int *curr_pipes, int *prev_pipes);
-void							not_first_cmd(int i, int *prev_pipes);
+void							not_first_cmd(int i, int *prev_pipes, t_command *cmd);
 int								execute_pipes(int len, int i,
 									t_command *tmp_cmd);
 
