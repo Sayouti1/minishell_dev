@@ -29,11 +29,11 @@
 
 typedef enum s_token_type
 {
-	TOKEN_WORD,				// using for the cmd argm
-	TOKEN_PIPE,				// using for the pipe cmd
-	TOKEN_REDIR_IN,			// using like <
-	TOKEN_REDIR_OUT,		// using like >
-	TOKEN_REDIR_APPEND,		// using for >>
+	TOKEN_WORD,				// using for the cmd argm 0
+	TOKEN_PIPE,				// using for the pipe cmd 1
+	TOKEN_REDIR_IN,			// using like < 2
+	TOKEN_REDIR_OUT,		// using like > 3
+	TOKEN_REDIR_APPEND,		// using for >> 4
 	TOKEN_REDIR_HEREDOC,	// using for <<
 }								t_token_type;
 // tok

@@ -18,12 +18,12 @@ ls shoud not work ✅
 
 7 /env should be in the current state
 
-8/ ls < $ada 🔴🟥 ambiguous error needs to be displayed 🟥🔴
+8/ ls < $ada 🔴🟥 ambiguous error needs to be displayed 🟥🔴 ✅ fixed ✅
 include  Libft	Makefile  minishell  srcs  to_handle.txt
 
  ambiguous redirect
 
-9/  cat << $asfasf | shoudn't expand
+9/  cat << $asfasf | shoudn't expand ✅ fixed ✅
 
 10/ ls >> '"' ✅ fixed ✅
 

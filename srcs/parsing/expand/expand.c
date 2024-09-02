@@ -52,7 +52,14 @@ t_token  *expand_var(t_token *tokens)
     token = tokens;
     while (token)
     {
-        if (token->type == TOKEN_WORD && ft_strchr(token->value, '$'))
+        if (token->type == TOKEN_REDIR_HEREDOC)
+        {
+            add_token_to_list(&ntoken, new_token(token->type, token->value));
+            token = token->next;
+            if (token && token->type == TOKEN_WORD)
+                add_token_to_list(&ntoken, new_token(token->type, token->value));
+        }
+        else if (token->type == TOKEN_WORD && ft_strchr(token->value, '$'))
         {
             expand = substitute_var1(token->value);
             words = ft_split(expand, ' ');

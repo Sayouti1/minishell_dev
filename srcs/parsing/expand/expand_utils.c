@@ -26,7 +26,7 @@ int ft_ambiguous_err(t_token *tokens)
     token = tokens;
     while (token)
     {
-        if (token->type == 3 && token->next->type == 0)
+        if ((token->type == 3 || token->type == 2 || token->type == 4) && token->next->type == 0)
         {
            value = substitute_var1(token->next->value);
            if (check_value(value))
