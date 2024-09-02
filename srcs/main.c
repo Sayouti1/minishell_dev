@@ -147,7 +147,7 @@ void main_loop(void)
 		free_token(tokens);
 		if (!ntokens)
 			printf("token is NULL go solve it \n");
-		// ft_printToken(ntokens);
+		ft_printToken(ntokens);
 		token_to_command_convert(ntokens, &command);
 		print_commands(command);
 		process_command(command);

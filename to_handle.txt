@@ -14,7 +14,7 @@ ls shoud not work ✅
 
 5/ exit 11111111111111111111111111111111 | exit with 2
 
-6/ export $sdasf=$asdas 
+6/ export $sdasf=$asdas ✅ fixed ✅
 
 7 /env should be in the current state
 
@@ -27,4 +27,4 @@ include  Libft	Makefile  minishell  srcs  to_handle.txt
 
 10/ ls >> '"' ✅ fixed ✅
 
-11/ <Libft/ft_memset.c cat  < Makefile | cat | cat | cat > a | problem in multi pipes
+11/ <Libft/ft_memset.c cat  < Makefile | cat | cat | cat > a  problem in multi pipes ✅fixed✅ 

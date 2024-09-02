@@ -40,6 +40,28 @@ int	ft_concat_env_var(char *var)
 	return (1);
 }
 
+int	is_not_valid(char *var)
+{
+	int	i;
+	int	j;
+
+	j = 0;
+	if (!ft_isalpha(var[0]) && var[0] != '_')
+		return (printf("export: `%s': not a valid identifier\n", var),
+			1);
+	while (var[j] && var[j] != '=')
+		++j;
+	i = 1;
+	while (i < j)
+	{
+		if (!ft_isalpha(var[i]) && var[i] != '_')
+			return (printf("export: `%s': not a valid identifier\n",
+				var), 1);
+		++i;
+	}
+	return (0);
+}
+
 int	ft_export(char **var)
 {
 	char	**key_value;
@@ -49,6 +71,8 @@ int	ft_export(char **var)
 	i = 0;
 	while (var && var[i])
 	{
+		if (is_not_valid(var[i]) && ++i)
+			continue ;
 		if (ft_concat_env_var(var[i]) && ++i)
 			continue ;
 		key_value = split_on_two(var[i++], "=");

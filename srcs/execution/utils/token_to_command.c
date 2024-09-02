@@ -99,7 +99,10 @@ void	copy_cmd_args(t_token **token, t_command **cmd)
 	{
 		while ((*token) && (*token)->type == TOKEN_WORD)
 		{
-			args = add_to_list(args, (*token)->value);
+			if (NULL == (*cmd)->command)
+				(*cmd)->command = (*token)->value;
+			else
+				args = add_to_list(args, (*token)->value);
 			(*token) = (*token)->next;
 		}
 		while ((*token) && (*token)->type != TOKEN_PIPE && (*token)->type != TOKEN_WORD)
