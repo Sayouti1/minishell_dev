@@ -28,3 +28,42 @@ t_env	*new_node(char *key, char *value, int to_export)
 	node->next = NULL;
 	return (node);
 }
+
+int	env_len(t_env *env)
+{
+	int i;
+	
+	i = 0;
+	while (env)
+	{
+		++i;
+		env = env->next;
+	}
+	return (i);
+}
+
+char	**get_env_array()
+{
+	char	**array;
+	char 	*key;
+	t_env	*env;
+	int 	i;
+
+	env = g_vars.env;
+	i = env_len(env);
+	array = malloc(sizeof(char *) * (i + 1));
+	if (array == NULL)
+		return (NULL);
+	array[i] = NULL;
+	i = 0;
+	while (env)
+	{
+		if (NULL == env->value)
+			key = ft_strjoin(env->key, "=");
+		else
+			key = ft_strjoin_prefixed(env->key, '=', env->value);
+		array[i++] = key;
+		env = env->next;
+	}
+	return (array);
+}

@@ -12,42 +12,18 @@
 
 #include "../../../include/include.h"
 
-void	close_and_dup(int to_dup, int fd, int to_close, t_command *cmd)
-{
-	close(to_close);
-	if (fd != -99)
-		// dup2(to_dup, fd);
-	{
-		if (1 == fd)
-			cmd->fd_out = to_dup;
-		else if (0 == fd)
-			cmd->fd_in = to_dup;		
-	}
-	// close(to_dup);
-}
-
 void	swap_pipes(int *curr_pipes, int *prev_pipes)
 {
 	prev_pipes[0] = curr_pipes[0];
 	prev_pipes[1] = curr_pipes[1];
 }
 
-void	not_first_cmd(int i, int *prev_pipes, t_command *cmd)
+int	init_commands_fds(t_command *cmd, int len, int *curr_pipes, int *prev_pipes)
 {
-	if (i != 0)
-		close_and_dup(prev_pipes[0], 0, prev_pipes[1], cmd);
-}
+	int i;
 
-int	execute_pipes(int len, int i, t_command *cmd)
-{
-	int 		curr_pipes[2];
-	int			prev_pipes[2];
-	t_command	*tmp;
-
-	tmp = cmd;
-	prev_pipes[1] = -1;
-	prev_pipes[0] = -1;
-	while (++i < len)
+	i = 0;
+	while (cmd)
 	{
 		if (i != 0)
 			swap_pipes(curr_pipes, prev_pipes);
@@ -57,13 +33,28 @@ int	execute_pipes(int len, int i, t_command *cmd)
 			cmd->fd_in = prev_pipes[0];
 		if (i != len -1)
 			cmd->fd_out = curr_pipes[1];
+		++i;
 		cmd = cmd->next;
 	}
+	return (0);
+}
+
+int	execute_pipes(int len, int i, t_command *cmd)
+{
+	t_command	*tmp;
+	int 		curr_pipes[2];
+	int			prev_pipes[2];
+
+	tmp = cmd;
+	prev_pipes[1] = -1;
+	prev_pipes[0] = -1;
+	if (init_commands_fds(cmd, len, curr_pipes, prev_pipes))
+		return (1);
 	while (tmp)
 	{
 		if (fork() == 0)
 		{
-			exec_simple_cmd(tmp);
+			execute_command(tmp);
 			exit(g_vars.exit_status);
 		}
 		if (tmp->fd_out != 1) close (tmp->fd_out);
@@ -76,34 +67,3 @@ int	execute_pipes(int len, int i, t_command *cmd)
 		wait(&g_vars.exit_status);
 	return (0);
 }
-
-// int	execute_pipes(int len, int i, t_command *tmp_cmd)
-// {
-// 	int	prev_pipes[2];
-// 	int	curr_pipes[2];
-
-// 	while (++i < len)
-// 	{
-// 		if (i != 0)
-// 			swap_pipes(curr_pipes, prev_pipes);
-// 		if (i != len - 1 && pipe(curr_pipes))
-// 			return (printf("ERROR IN pipe()\n"), 1);
-// 		// if (fork() == 0)
-// 		// {
-// 			not_first_cmd(i, prev_pipes, tmp_cmd);
-// 			if (i != len - 1)
-// 				close_and_dup(curr_pipes[1], 1, curr_pipes[0], tmp_cmd);
-// 			exec_simple_cmd(tmp_cmd);
-// 		// 	exit(0);
-// 		// }
-// 		if (i != 0)
-// 			close_and_dup(prev_pipes[0], -99, prev_pipes[1], NULL);
-// 		if (g_vars.sig_c == 2)
-// 			break ;
-// 		tmp_cmd = tmp_cmd->next;
-// 	}
-// 	close_and_dup(curr_pipes[0], -99, curr_pipes[1], NULL);
-// 	// while (i-- > 0)
-// 	// 	wait(&g_vars.exit_status);
-// 	return (set_exit_status(g_vars.exit_status));
-// }

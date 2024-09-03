@@ -12,7 +12,7 @@
 
 #include "../../../include/include.h"
 
-int	external_command(t_command *cmd)
+int	execute_bin(t_command *cmd)
 {
 	int	pid;
 
@@ -37,16 +37,6 @@ int	external_command(t_command *cmd)
     	}
 		exit(1);
 	}
-	// if (cmd->fd_in != 0)
-	// {
-	// 	printf("1[%s]closed %d\n", cmd->command, cmd->fd_in);
-	// 	close(cmd->fd_in);
-	// }
-	// if (cmd->fd_out != 1)
-	// {
-	// 	printf("2[%s]closed %d\n", cmd->command, cmd->fd_out);
-	// 	close(cmd->fd_out);
-	// }
 	wait(&g_vars.exit_status);
 	g_vars.parent = 1;
 	set_exit_status(g_vars.exit_status);
@@ -108,7 +98,7 @@ int	check_redirection(t_command *cmd)
 	return (0);
 }
 
-void	exec_simple_cmd(t_command *cmd)
+void	execute_command(t_command *cmd)
 {
 	redirection_exec(cmd);
 	if (g_vars.sig_c == 2)
@@ -120,13 +110,13 @@ void	exec_simple_cmd(t_command *cmd)
 	else
 	{
 		if (NULL == cmd->command)
-			set_exit_status(1);
+			set_exit_status(0);
 		else if (fix_command_path(cmd))
 			set_exit_status(127);
 		else if (NULL == get_env_v1("PATH") && NULL == cmd->command)
 			printf("%s: No such file or directory\n", cmd->command);
 		else
-			external_command(cmd);
+			execute_bin(cmd);
 	}
 }
 
