@@ -41,7 +41,8 @@ char    *substitute_var1(char *str)
     return (concat);
 }
 
-t_token  *expand_var(t_token *tokens) 
+
+t_token  *expand_var(t_token *tokens)
 {
     t_token *token;
     char    *expand;
@@ -62,6 +63,14 @@ t_token  *expand_var(t_token *tokens)
         else if (token->type == TOKEN_WORD && ft_strchr(token->value, '$'))
         {
             expand = substitute_var1(token->value);
+            if (expand[0] == '"')
+            {
+                add_token_to_list(&ntoken, new_token(token->type, expand));
+                printf("is not be split it\n\n\n");
+                token = token->next;
+                continue;
+            }
+            printf("\n\nthis is expand value :%s\n\n",expand);
             words = ft_split(expand, ' ');
             int i = 0;
             while(words && words[i])
