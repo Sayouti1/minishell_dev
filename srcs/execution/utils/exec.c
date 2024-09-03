@@ -16,7 +16,9 @@ int	external_command(t_command *cmd)
 {
 	int	pid;
 
+	g_vars.parent = 0;
 	pid = fork();
+	signal(SIGQUIT, sig_handler);
 	if (0 == pid)
 	{
 		if (cmd->fd_in != 0)
@@ -36,6 +38,7 @@ int	external_command(t_command *cmd)
 		exit(1);
 	}
 	wait(&g_vars.exit_status);
+	g_vars.parent = 1;
 	set_exit_status(g_vars.exit_status);
 	return (0);
 }

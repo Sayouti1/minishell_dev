@@ -59,6 +59,8 @@ int	execute_pipes(int len, int i, t_command *tmp_cmd)
 		}
 		if (i != 0)
 			close_and_dup(prev_pipes[0], -99, prev_pipes[1], NULL);
+		if (g_vars.sig_c == 2)
+			break ;
 		tmp_cmd = tmp_cmd->next;
 	}
 	close_and_dup(curr_pipes[0], -99, curr_pipes[1], NULL);

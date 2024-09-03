@@ -21,6 +21,7 @@ void	init_g_vars(char **envp)
 	g_vars.exit_status = 0;
 	g_vars.sig_c = 0;
 	g_vars.tmp_file = 0;
+	g_vars.parent = 1;
 	g_vars.std_in = dup(0);
 	g_vars.std_out = dup(1);
 	g_vars.garbage_coll = NULL;
@@ -32,7 +33,6 @@ void		process_command(t_command *command)
 	int			i;
 
 
-	signal(SIGQUIT, sig_handler);
 	if (list_len(command) == 1)
 		exec_simple_cmd(command);
 	else
@@ -41,7 +41,6 @@ void		process_command(t_command *command)
 		tmp_cmd = command;
 		execute_pipes(list_len(command), i, tmp_cmd);
 	}
-	g_vars.sig_c = 0;
 }
 
 t_token *check_and_token(char *line)
@@ -122,8 +121,7 @@ void main_loop(void)
 	command = NULL;
 	while (1)
 	{
-		signal(SIGQUIT, SIG_IGN);
-		g_vars.sig_c = 0;
+		sig_init();
 		line = readline("minishell :)=> ");
 		if (!line)
 			break;
@@ -167,7 +165,6 @@ int	main(int ac, char **av, char **envp)
 	command = NULL;
 	init_g_vars(envp);
 	init_env();
-	signal(SIGINT, sig_handler);
 	main_loop();
 	rl_clear_history();
 	free_cmds(command);

@@ -69,6 +69,7 @@ typedef struct s_global_vars
 	t_env						*env;
 
 	char						**envp;
+	int							parent;
 	int							exit_status;
 	int							sig_c;
 	int							tmp_file;
@@ -216,6 +217,7 @@ int								set_exit_status(int n);
 void							sig_handler(int sig);
 void							ignore_sig(int sig);
 void							heredoc_sig(int sig);
+void							sig_init();
 
 int								ft_char_in(char c, char *str);
 char							**ft_split_del(char const *s, char *del);

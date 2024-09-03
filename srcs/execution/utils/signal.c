@@ -18,7 +18,8 @@ void	sig_handler(int sig)
 	{
 		ft_putchar_fd('\n', 1);
 		rl_replace_line("", 0);
-		rl_on_new_line();
+		if (g_vars.parent)
+			rl_on_new_line();
 		rl_redisplay();
 	}
 	if (sig == SIGQUIT)
@@ -32,4 +33,11 @@ void	heredoc_sig(int sig)
 		g_vars.sig_c = 1;
 		close(STDIN_FILENO);
 	}
+}
+
+void	sig_init()
+{
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, sig_handler);
+	g_vars.sig_c = 0;
 }
