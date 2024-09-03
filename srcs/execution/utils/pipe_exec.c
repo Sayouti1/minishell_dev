@@ -46,8 +46,6 @@ int	execute_pipes(int len, int i, t_command *cmd)
 	int			prev_pipes[2];
 
 	tmp = cmd;
-	prev_pipes[1] = -1;
-	prev_pipes[0] = -1;
 	if (init_commands_fds(cmd, len, curr_pipes, prev_pipes))
 		return (1);
 	while (tmp)
@@ -57,8 +55,10 @@ int	execute_pipes(int len, int i, t_command *cmd)
 			execute_command(tmp);
 			exit(g_vars.exit_status);
 		}
-		if (tmp->fd_out != 1) close (tmp->fd_out);
-		if (tmp->fd_in != 0) close (tmp->fd_in);
+		if (tmp->fd_out != 1)
+			close (tmp->fd_out);
+		if (tmp->fd_in != 0)
+			close (tmp->fd_in);
 		tmp = tmp->next;
 	}
 	close(curr_pipes[1]);
@@ -66,4 +66,20 @@ int	execute_pipes(int len, int i, t_command *cmd)
 	while (i-- > 0)
 		wait(&g_vars.exit_status);
 	return (0);
+}
+
+void		process_command(t_command *command)
+{
+	t_command	*tmp_cmd;
+	int			i;
+
+
+	if (list_len(command) == 1)
+		execute_command(command);
+	else
+	{
+		i = -1;
+		tmp_cmd = command;
+		execute_pipes(list_len(command), i, tmp_cmd);
+	}
 }

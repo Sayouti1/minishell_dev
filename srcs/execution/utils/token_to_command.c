@@ -66,10 +66,7 @@ t_redirection	*add_redirection(t_redirection *red, t_token **token)
 	tmp = *token;
 	(*token) = (*token)->next;
 	if (NULL == *token)
-		// return (red);
-	{
-		new_red = new_redirection(red_type, NULL, -1, 0);		
-	}
+		new_red = new_redirection(red_type, NULL, -1, 0);
 	else if ((*token)->type != TOKEN_WORD)
 	{
 		new_red = new_redirection(red_type, NULL, -1, !has_null(red));
@@ -111,8 +108,6 @@ void	copy_cmd_args(t_token **token, t_command **cmd)
 			if (*token)
 				(*token) = (*token)->next;
 		}
-		// if (*token)
-		// 	*token = (*token)->next;
 	}
 	(*cmd)->args = args;
 }

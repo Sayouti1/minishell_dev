@@ -32,3 +32,19 @@ int	built_in(char *str)
 		return (1);
 	return (0);
 }
+
+int	check_redirection(t_command *cmd)
+{
+	t_redirection	*red;
+
+	if (NULL == cmd)
+		return (0);
+	red = cmd->redirection;
+	while (red)
+	{
+		if (NULL == red->file_name)
+			return (1);
+		red = red->next;
+	}
+	return (0);
+}

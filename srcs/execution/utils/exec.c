@@ -28,12 +28,10 @@ int	execute_bin(t_command *cmd)
 		if (execve(cmd->command, cmd->args, g_vars.envp) == -1)
 		{
 			perror("minishell ");
-			if (errno == EACCES)
+			if (errno == EACCES || errno == EISDIR)
 				return (exit(126), 1);
 			if (errno == ENOENT)
         		return (exit(127), 1);
-			if (errno == EISDIR)
-				return (exit(126), 1);
     	}
 		exit(1);
 	}
@@ -41,28 +39,6 @@ int	execute_bin(t_command *cmd)
 	g_vars.parent = 1;
 	set_exit_status(g_vars.exit_status);
 	return (0);
-}
-
-char	*get_dollar_key_v1(char *line, int *i)
-{
-	int		j;
-	int		k;
-	char	*key;
-
-	j = *i + 1;
-	if (NULL == line)
-		return (NULL);
-	while (line[j] && !ft_char_in(line[j], " $\'\"\n{}><") && ft_isalnum(line[j]))
-		j++;
-	key = (char *)malloc(sizeof(char) * (j - *i));
-	if (NULL == key)
-		return (NULL);
-	k = 0;
-	(*i)++;
-	while (*i < j && line[*i])
-		key[k++] = line[(*i)++];
-	key[k] = '\0';
-	return (key);
 }
 
 void	redirection_exec(t_command *cmd)
@@ -80,22 +56,6 @@ void	redirection_exec(t_command *cmd)
 			cmd->fd_in = tmp->fd;
 		tmp = tmp->next;
 	}
-}
-
-int	check_redirection(t_command *cmd)
-{
-	t_redirection	*red;
-
-	if (NULL == cmd)
-		return (0);
-	red = cmd->redirection;
-	while (red)
-	{
-		if (NULL == red->file_name)
-			return (1);
-		red = red->next;
-	}
-	return (0);
 }
 
 void	execute_command(t_command *cmd)
@@ -129,12 +89,12 @@ int	fix_command_path(t_command *cmd)
 	ret = 0;
 	tmp_cmd = cmd->command;
 	cwd = getcwd(NULL, 0);
-	cmd->command = get_correct_path(cmd->command, cwd);
+	cmd->command = get_full_path(cmd->command, cwd);
 	if (NULL == cmd->command && ++ret && set_exit_status(127))
 		printf("=> %s: command not found\n", tmp_cmd);
 	free(cwd);
 	free(tmp_cmd);
 	if (cmd->command)
-		fix_cmd_arg(cmd);
+		fix_command_arg(cmd);
 	return (ret);
 }

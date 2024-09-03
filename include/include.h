@@ -182,15 +182,13 @@ int								built_in(char *str);
 
 char							*ft_strjoin_prefixed(char *s1, char c,
 									char *s2);
-// int					execute_command(char **split);
 void							execute_built_in(t_command *cmd);
-int								external_command(t_command *cmd);
 char							*get_dollar_key_v1(char *line, int *i);
 char							*substitute_var(char *str);
 int								check_curly_braces(char *str);
 int								open_heredoc(t_redirection *redirection);
 void							execute_command(t_command *cmd);
-
+int								check_redirection(t_command *cmd);
 void							free_env(void);
 void							delete_env(t_env *env);
 void							free_split(char **arr);
@@ -198,7 +196,7 @@ void							free_cmds(t_command *cmd);
 
 // char				*get_dollar_key(char *line, int *i);
 // char				*get_var_dollar(char *line);
-char							*get_correct_path(char *split, char *curr_dir);
+char							*get_full_path(char *split, char *curr_dir);
 char							**get_exec_arg(char *fullpath, char *split);
 
 char							*trim_and_free(char *line);
@@ -206,16 +204,13 @@ char							*char_concat(char *line, char c);
 char							*string_concat(char *line, char *str);
 // char				*parse_command_vars(char *line);
 
-void							close_and_dup(int to_dup, int fd, int to_close, t_command *cmd);
 void							swap_pipes(int *curr_pipes, int *prev_pipes);
-void							not_first_cmd(int i, int *prev_pipes, t_command *cmd);
 int								execute_pipes(int len, int i,
 									t_command *tmp_cmd);
 
 int								set_exit_status(int n);
 
 void							sig_handler(int sig);
-void							ignore_sig(int sig);
 void							heredoc_sig(int sig);
 void							sig_init();
 
@@ -236,7 +231,7 @@ void							add_to_cmds(t_command **head, t_command *cmd);
 int								fake_commands(t_command **command);
 void							treat_commands(char *read_line,
 									t_command **command);
-char							**fix_cmd_arg(t_command *cmd);
+char							**fix_command_arg(t_command *cmd);
 
 void							init_g_vars(char **envp);
 int								list_len(t_command *head);

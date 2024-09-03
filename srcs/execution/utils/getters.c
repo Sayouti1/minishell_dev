@@ -15,7 +15,7 @@
 /*
  * ✅
  */
-char	*get_correct_path(char *cmd, char *curr_dir)
+char	*get_full_path(char *cmd, char *curr_dir)
 {
 	char	*full_path;
 
@@ -55,6 +55,28 @@ char	**get_exec_arg(char *fullpath, char *split)
 	}
 	exec_arg[i + 1] = NULL;
 	return (exec_arg);
+}
+
+char	*get_dollar_key_v1(char *line, int *i)
+{
+	int		j;
+	int		k;
+	char	*key;
+
+	j = *i + 1;
+	if (NULL == line)
+		return (NULL);
+	while (line[j] && !ft_char_in(line[j], " $\'\"\n{}><") && ft_isalnum(line[j]))
+		j++;
+	key = (char *)malloc(sizeof(char) * (j - *i));
+	if (NULL == key)
+		return (NULL);
+	k = 0;
+	(*i)++;
+	while (*i < j && line[*i])
+		key[k++] = line[(*i)++];
+	key[k] = '\0';
+	return (key);
 }
 
 t_redirection	*get_last_red(t_redirection *red)

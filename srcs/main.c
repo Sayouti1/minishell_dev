@@ -27,22 +27,6 @@ void	init_g_vars(char **envp)
 	g_vars.garbage_coll = NULL;
 }
 
-void		process_command(t_command *command)
-{
-	t_command	*tmp_cmd;
-	int			i;
-
-
-	if (list_len(command) == 1)
-		exec_simple_cmd(command);
-	else
-	{
-		i = -1;
-		tmp_cmd = command;
-		execute_pipes(list_len(command), i, tmp_cmd);
-	}
-}
-
 t_token *check_and_token(char *line)
 {
 	char *line_trim ;

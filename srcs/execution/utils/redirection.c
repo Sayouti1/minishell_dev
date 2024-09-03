@@ -18,13 +18,13 @@ char	*file_name_permissions(char *file_name, int type, int create_file)
 		return (NULL);
 	if ('\0' == file_name[0] && HEREDOC != type)
 		return (free(file_name), NULL);
-	if ((OUTPUT == type || APPEND == type) && create_file) // write
+	if ((OUTPUT == type || APPEND == type) && create_file)
 	{
 		if (access(file_name, W_OK) == 0)
 			return (file_name);
 		return (perror("minishell "), NULL);
 	}
-	else if (INPUT == type && create_file) // read
+	else if (INPUT == type && create_file)
 	{
 		if (access(file_name, R_OK) == 0)
 			return (file_name);
@@ -48,12 +48,9 @@ t_redirection	*new_redirection(int type, char *file_name, int fd, int create_fil
 		fd = open(file_name, O_CREAT | O_TRUNC | O_WRONLY, 0666);
 	else if (type == APPEND && create_file)
 		fd = open(file_name, O_CREAT | O_APPEND | O_WRONLY, 0666);
-	//must check the file exists
 	else if (type == INPUT && NULL != file_name)
 		fd = open(file_name, O_RDONLY);
-	// else if (type == HEREDOC)
 	redirection->file_name = file_name_permissions(file_name, type, create_file);
-	// file_name = file_name_permissions(file_name, type);
 	redirection->fd = fd;
 	redirection->next = NULL;
 	return (redirection);
@@ -93,7 +90,7 @@ void	add_to_cmds(t_command **head, t_command *cmd)
 	tmp->next = cmd;
 }
 
-char	**fix_cmd_arg(t_command *cmd)
+char	**fix_command_arg(t_command *cmd)
 {
 	char	**new_arg;
 	int		i;
