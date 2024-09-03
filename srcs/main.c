@@ -33,19 +33,14 @@ void		process_command(t_command *command)
 	int			i;
 
 
-	// if (list_len(command) == 1)
-	// 	exec_simple_cmd(command);
-	// else
-	// {
+	if (list_len(command) == 1)
+		exec_simple_cmd(command);
+	else
+	{
 		i = -1;
 		tmp_cmd = command;
 		execute_pipes(list_len(command), i, tmp_cmd);
-		while (command)
-		{
-			exec_simple_cmd(command);
-			command = command->next;
-		}
-	// }
+	}
 }
 
 t_token *check_and_token(char *line)

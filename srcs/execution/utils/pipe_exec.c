@@ -42,9 +42,11 @@ int	execute_pipes(int len, int i, t_command *cmd)
 {
 	int 		curr_pipes[2];
 	int			prev_pipes[2];
-	t_command	*tmp_cmd;
+	t_command	*tmp;
 
-	tmp_cmd = cmd;
+	tmp = cmd;
+	prev_pipes[1] = -1;
+	prev_pipes[0] = -1;
 	while (++i < len)
 	{
 		if (i != 0)
@@ -52,23 +54,26 @@ int	execute_pipes(int len, int i, t_command *cmd)
 		if (i < len - 1 && pipe(curr_pipes))
 			return (perror("minishell "), 1);
 		if (i != 0)
-		{
 			cmd->fd_in = prev_pipes[0];
-			close(prev_pipes[1]);
-		}
 		if (i != len -1)
-		{
 			cmd->fd_out = curr_pipes[1];
-			close(curr_pipes[0]);
-		}
 		cmd = cmd->next;
 	}
-	cmd = tmp_cmd;
-	while (cmd)
+	while (tmp)
 	{
-		printf("[%s] => [%d , %d]\n", cmd->command, cmd->fd_in, cmd->fd_out);
-		cmd = cmd->next;
+		if (fork() == 0)
+		{
+			exec_simple_cmd(tmp);
+			exit(g_vars.exit_status);
+		}
+		if (tmp->fd_out != 1) close (tmp->fd_out);
+		if (tmp->fd_in != 0) close (tmp->fd_in);
+		tmp = tmp->next;
 	}
+	close(curr_pipes[1]);
+	close(curr_pipes[0]);
+	while (i-- > 0)
+		wait(&g_vars.exit_status);
 	return (0);
 }
 
