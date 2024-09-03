@@ -37,6 +37,16 @@ int	external_command(t_command *cmd)
     	}
 		exit(1);
 	}
+	// if (cmd->fd_in != 0)
+	// {
+	// 	printf("1[%s]closed %d\n", cmd->command, cmd->fd_in);
+	// 	close(cmd->fd_in);
+	// }
+	// if (cmd->fd_out != 1)
+	// {
+	// 	printf("2[%s]closed %d\n", cmd->command, cmd->fd_out);
+	// 	close(cmd->fd_out);
+	// }
 	wait(&g_vars.exit_status);
 	g_vars.parent = 1;
 	set_exit_status(g_vars.exit_status);

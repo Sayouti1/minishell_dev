@@ -38,33 +38,67 @@ void	not_first_cmd(int i, int *prev_pipes, t_command *cmd)
 		close_and_dup(prev_pipes[0], 0, prev_pipes[1], cmd);
 }
 
-int	execute_pipes(int len, int i, t_command *tmp_cmd)
+int	execute_pipes(int len, int i, t_command *cmd)
 {
-	int	prev_pipes[2];
-	int	curr_pipes[2];
+	int 		curr_pipes[2];
+	int			prev_pipes[2];
+	t_command	*tmp_cmd;
 
+	tmp_cmd = cmd;
 	while (++i < len)
 	{
 		if (i != 0)
 			swap_pipes(curr_pipes, prev_pipes);
-		if (i != len - 1 && pipe(curr_pipes))
-			return (printf("ERROR IN pipe()\n"), 1);
-		if (fork() == 0)
-		{
-			not_first_cmd(i, prev_pipes, tmp_cmd);
-			if (i != len - 1)
-				close_and_dup(curr_pipes[1], 1, curr_pipes[0], tmp_cmd);
-			exec_simple_cmd(tmp_cmd);
-			exit(0);
-		}
+		if (i < len - 1 && pipe(curr_pipes))
+			return (perror("minishell "), 1);
 		if (i != 0)
-			close_and_dup(prev_pipes[0], -99, prev_pipes[1], NULL);
-		if (g_vars.sig_c == 2)
-			break ;
-		tmp_cmd = tmp_cmd->next;
+		{
+			cmd->fd_in = prev_pipes[0];
+			close(prev_pipes[1]);
+		}
+		if (i != len -1)
+		{
+			cmd->fd_out = curr_pipes[1];
+			close(curr_pipes[0]);
+		}
+		cmd = cmd->next;
 	}
-	close_and_dup(curr_pipes[0], -99, curr_pipes[1], NULL);
-	while (i-- > 0)
-		wait(&g_vars.exit_status);
-	return (set_exit_status(g_vars.exit_status));
+	cmd = tmp_cmd;
+	while (cmd)
+	{
+		printf("[%s] => [%d , %d]\n", cmd->command, cmd->fd_in, cmd->fd_out);
+		cmd = cmd->next;
+	}
+	return (0);
 }
+
+// int	execute_pipes(int len, int i, t_command *tmp_cmd)
+// {
+// 	int	prev_pipes[2];
+// 	int	curr_pipes[2];
+
+// 	while (++i < len)
+// 	{
+// 		if (i != 0)
+// 			swap_pipes(curr_pipes, prev_pipes);
+// 		if (i != len - 1 && pipe(curr_pipes))
+// 			return (printf("ERROR IN pipe()\n"), 1);
+// 		// if (fork() == 0)
+// 		// {
+// 			not_first_cmd(i, prev_pipes, tmp_cmd);
+// 			if (i != len - 1)
+// 				close_and_dup(curr_pipes[1], 1, curr_pipes[0], tmp_cmd);
+// 			exec_simple_cmd(tmp_cmd);
+// 		// 	exit(0);
+// 		// }
+// 		if (i != 0)
+// 			close_and_dup(prev_pipes[0], -99, prev_pipes[1], NULL);
+// 		if (g_vars.sig_c == 2)
+// 			break ;
+// 		tmp_cmd = tmp_cmd->next;
+// 	}
+// 	close_and_dup(curr_pipes[0], -99, curr_pipes[1], NULL);
+// 	// while (i-- > 0)
+// 	// 	wait(&g_vars.exit_status);
+// 	return (set_exit_status(g_vars.exit_status));
+// }
