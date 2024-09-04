@@ -27,5 +27,5 @@ int	ft_exit(char **arg)
 		exit_status = ft_atoi(arg[0]);
 	free_split(arg);
 	set_exit_status(exit_status);
-	exit(g_vars.exit_status);
+	exit(exit_status);
 }

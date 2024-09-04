@@ -75,7 +75,7 @@ void	free_cmds(t_command *cmd)
 		if (cmd->fd_in != 0)
 			close(cmd->fd_in);
 		if (cmd->fd_out != 1)
-			close(cmd->fd_in);
+			close(cmd->fd_out);
 		free(cmd->command);
 		free_split(cmd->args);
 		free(cmd);

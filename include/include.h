@@ -207,7 +207,7 @@ char							*string_concat(char *line, char *str);
 void							swap_pipes(int *curr_pipes, int *prev_pipes);
 int								execute_pipes(int len, int i,
 									t_command *tmp_cmd);
-
+int								execute_bin(t_command *cmd);
 int								set_exit_status(int n);
 
 void							sig_handler(int sig);
