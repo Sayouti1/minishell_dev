@@ -25,7 +25,7 @@ int	execute_bin(t_command *cmd)
 			dup2(cmd->fd_in, 0);
 		if (cmd->fd_out != 1)
 			dup2(cmd->fd_out, 1);
-		if (execve(cmd->command, cmd->args, g_vars.envp) == -1)
+		if (execve(cmd->command, cmd->args, get_env_array()) == -1)
 		{
 			perror("minishell ");
 			if (errno == EACCES || errno == EISDIR)

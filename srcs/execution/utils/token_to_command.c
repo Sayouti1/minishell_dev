@@ -90,7 +90,7 @@ int	token_to_command_convert(t_token *token, t_command **cmd)
 		tmp_cmd = new_command(NULL, NULL, NULL);
 		if (tmp_token->type == TOKEN_WORD)
 		{
-			(*cmd)->command = tmp_token->value;
+			tmp_cmd->command = tmp_token->value;
 			tmp_token = tmp_token->next;
 		}
 		copy_cmd_args(&tmp_token, &tmp_cmd);

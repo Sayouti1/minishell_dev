@@ -16,7 +16,7 @@ ls shoud not work ✅
 
 6/ export $sdasf=$asdas ✅ fixed ✅
 
-7 /env should be in the current state
+7 /env should be in the current state ✅ fixed ✅
 
 8/ ls < $ada 🔴🟥 ambiguous error needs to be displayed 🟥🔴 ✅ fixed ✅
 include  Libft	Makefile  minishell  srcs  to_handle.txt

@@ -249,5 +249,7 @@ void							*ft_realloc(void *ptr, size_t size);
 int								reset_fd(void);
 char							*trim_str(char *str);
 t_redirection					*get_last_red(t_redirection *red);
+int								has_null(t_redirection *red);
+char							**get_env_array(void);
 
 #endif
