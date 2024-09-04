@@ -35,7 +35,7 @@ void	heredoc_sig(int sig)
 	}
 }
 
-void	sig_init()
+void	sig_init(void)
 {
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, sig_handler);

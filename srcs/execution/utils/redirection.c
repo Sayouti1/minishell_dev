@@ -33,7 +33,8 @@ char	*file_name_permissions(char *file_name, int type, int create_file)
 	return (file_name);
 }
 
-t_redirection	*new_redirection(int type, char *file_name, int fd, int create_file)
+t_redirection	*new_redirection(int type, char *file_name, int fd,
+		int create_file)
 {
 	t_redirection	*redirection;
 
@@ -50,7 +51,8 @@ t_redirection	*new_redirection(int type, char *file_name, int fd, int create_fil
 		fd = open(file_name, O_CREAT | O_APPEND | O_WRONLY, 0666);
 	else if (type == INPUT && NULL != file_name)
 		fd = open(file_name, O_RDONLY);
-	redirection->file_name = file_name_permissions(file_name, type, create_file);
+	redirection->file_name = file_name_permissions(file_name, type,
+			create_file);
 	redirection->fd = fd;
 	redirection->next = NULL;
 	return (redirection);

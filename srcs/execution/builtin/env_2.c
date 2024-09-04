@@ -31,8 +31,8 @@ t_env	*new_node(char *key, char *value, int to_export)
 
 int	env_len(t_env *env)
 {
-	int i;
-	
+	int	i;
+
 	i = 0;
 	while (env)
 	{
@@ -42,12 +42,12 @@ int	env_len(t_env *env)
 	return (i);
 }
 
-char	**get_env_array()
+char	**get_env_array(void)
 {
 	char	**array;
-	char 	*key;
+	char	*key;
 	t_env	*env;
-	int 	i;
+	int		i;
 
 	env = g_vars.env;
 	i = env_len(env);

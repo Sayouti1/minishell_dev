@@ -34,8 +34,8 @@ int	cd(char **split)
 	home = NULL;
 	if (split_len(split) > 1)
 		return (printf("cd: too many arguments\n"), set_exit_status(1));
-	if (NULL == split || NULL == split[0] || (split[0]
-			&& split[0][0] == '~' && !split[0][1]))
+	if (NULL == split || NULL == split[0] || (split[0] && split[0][0] == '~'
+		&& !split[0][1]))
 		return (cd_home(home));
 	if (split[0][0] == '/')
 	{

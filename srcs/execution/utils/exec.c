@@ -31,8 +31,8 @@ int	execute_bin(t_command *cmd)
 			if (errno == EACCES || errno == EISDIR)
 				return (exit(126), 1);
 			if (errno == ENOENT)
-        		return (exit(127), 1);
-    	}
+				return (exit(127), 1);
+		}
 		exit(1);
 	}
 	wait(&g_vars.exit_status);

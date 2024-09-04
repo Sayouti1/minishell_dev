@@ -20,7 +20,7 @@ void	swap_pipes(int *curr_pipes, int *prev_pipes)
 
 int	init_commands_fds(t_command *cmd, int len, int *curr_pipes, int *prev_pipes)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (cmd)
@@ -31,7 +31,7 @@ int	init_commands_fds(t_command *cmd, int len, int *curr_pipes, int *prev_pipes)
 			return (perror("minishell "), 1);
 		if (i != 0)
 			cmd->fd_in = prev_pipes[0];
-		if (i != len -1)
+		if (i != len - 1)
 			cmd->fd_out = curr_pipes[1];
 		++i;
 		cmd = cmd->next;
@@ -42,7 +42,7 @@ int	init_commands_fds(t_command *cmd, int len, int *curr_pipes, int *prev_pipes)
 int	execute_pipes(int len, int i, t_command *cmd)
 {
 	t_command	*tmp;
-	int 		curr_pipes[2];
+	int			curr_pipes[2];
 	int			prev_pipes[2];
 
 	tmp = cmd;
@@ -56,9 +56,9 @@ int	execute_pipes(int len, int i, t_command *cmd)
 			exit(g_vars.exit_status);
 		}
 		if (tmp->fd_out != 1)
-			close (tmp->fd_out);
+			close(tmp->fd_out);
 		if (tmp->fd_in != 0)
-			close (tmp->fd_in);
+			close(tmp->fd_in);
 		tmp = tmp->next;
 	}
 	close(curr_pipes[1]);
@@ -68,11 +68,10 @@ int	execute_pipes(int len, int i, t_command *cmd)
 	return (0);
 }
 
-void		process_command(t_command *command)
+void	process_command(t_command *command)
 {
 	t_command	*tmp_cmd;
 	int			i;
-
 
 	if (list_len(command) == 1)
 		execute_command(command);
