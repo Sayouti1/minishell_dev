@@ -70,3 +70,33 @@ int	token_type_to_cmd_type(t_token_type type)
 	else
 		return (printf("error token_type to cmd_type\n"), 99);
 }
+
+void	*ft_realloc(void *ptr, size_t size)
+{
+	void	*new_ptr;
+
+	new_ptr = malloc(size);
+	if (NULL == new_ptr)
+		return (NULL);
+	ft_memset(new_ptr, 0, size);
+	if (ptr)
+	{
+		ft_memmove(new_ptr, ptr, size);
+		free(ptr);
+	}
+	return (new_ptr);
+}
+
+int	has_null(t_redirection *red)
+{
+	t_redirection	*tmp;
+
+	tmp = red;
+	while (tmp)
+	{
+		if (tmp->type != HEREDOC && NULL == tmp->file_name)
+			return (1);
+		tmp = tmp->next;
+	}
+	return (0);
+}

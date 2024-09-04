@@ -12,22 +12,6 @@
 
 #include "../../../include/include.h"
 
-void	*ft_realloc(void *ptr, size_t size)
-{
-	void	*new_ptr;
-
-	new_ptr = malloc(size);
-	if (NULL == new_ptr)
-		return (NULL);
-	ft_memset(new_ptr, 0, size);
-	if (ptr)
-	{
-		ft_memmove(new_ptr, ptr, size);
-		free(ptr);
-	}
-	return (new_ptr);
-}
-
 char	**add_to_list(char **old_list, char *to_add)
 {
 	int		i;
@@ -40,20 +24,6 @@ char	**add_to_list(char **old_list, char *to_add)
 	new_list[i] = to_add;
 	new_list[++i] = NULL;
 	return (new_list);
-}
-
-int	has_null(t_redirection *red)
-{
-	t_redirection	*tmp;
-
-	tmp = red;
-	while (tmp)
-	{
-		if (tmp->type != HEREDOC && NULL == tmp->file_name)
-			return (1);
-		tmp = tmp->next;
-	}
-	return (0);
 }
 
 t_redirection	*add_redirection(t_redirection *red, t_token **token)
@@ -88,11 +58,6 @@ void	copy_cmd_args(t_token **token, t_command **cmd)
 
 	args = NULL;
 	free_split((*cmd)->args);
-	if (*token && (*token)->type == TOKEN_WORD)
-	{
-		(*cmd)->command = (*token)->value;
-		*token = (*token)->next;
-	}
 	while (*token && (*token)->type != TOKEN_PIPE)
 	{
 		while ((*token) && (*token)->type == TOKEN_WORD)
@@ -123,6 +88,11 @@ int	token_to_command_convert(t_token *token, t_command **cmd)
 	while (tmp_token)
 	{
 		tmp_cmd = new_command(NULL, NULL, NULL);
+		if (tmp_token->type == TOKEN_WORD)
+		{
+			(*cmd)->command = tmp_token->value;
+			tmp_token = tmp_token->next;
+		}
 		copy_cmd_args(&tmp_token, &tmp_cmd);
 		remove_quotes(tmp_cmd);
 		add_to_cmds(cmd, tmp_cmd);
