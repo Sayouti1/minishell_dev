@@ -66,9 +66,10 @@ int	is_directory(char *path)
 	return (S_ISDIR(dir_stat.st_mode));
 }
 
-void	execute_command(t_command *cmd)
+void	execute_command(t_command *cmd, int piped)
 {
-	redirection_exec(cmd);
+	if (!piped)
+		redirection_exec(cmd);
 	if (g_vars.sig_c == 2 || check_redirection(cmd))
 		return ;
 	if (built_in(cmd->command))
