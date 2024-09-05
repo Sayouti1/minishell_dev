@@ -34,14 +34,13 @@ int	init_commands_fds(t_command *cmd, int len, int *curr_pipes, int *prev_pipes)
 		if (i != len -1)
 			cmd->fd_out = curr_pipes[1];
 		++i;
-		printf("[%s]=>[%d,%d]\n", cmd->command, cmd->fd_in, cmd->fd_out);
+		// printf("[%s]=>[%d,%d]\n", cmd->command, cmd->fd_in, cmd->fd_out);
 		cmd = cmd->next;
 	}
 	return (0);
 }
 
-
-int execute_pipes(int len, int i, t_command *cmd)
+int execute_pipes(int len, int i, t_command *cmd, int *pids)
 {
     int curr_pipes[2];
     int prev_pipes[2];
@@ -56,25 +55,34 @@ int execute_pipes(int len, int i, t_command *cmd)
 			execute_command(cmd);
 			exit(g_vars.exit_status);
 		}
+		pids[i] = pid;
 		if (cmd->prev)
 		{
 			close(cmd->prev->fd_out);
 			if (cmd->prev->fd_in != 0)
 				close(cmd->prev->fd_in);
 		}
-		if (cmd->fd_in != 0) close(cmd->fd_in);
-		if (cmd->fd_out != 1) close(cmd->fd_out);
+		if (cmd->fd_in != 0)
+			close(cmd->fd_in);
+		if (cmd->fd_out != 1)
+			close(cmd->fd_out);
 		cmd = cmd->next;
 		i++;
 	}
-	while (i-- > 0 && printf("%d => [%d]\n", i, g_vars.exit_status))
-		wait(&g_vars.exit_status);
-    return 0;
+	int j = 0;
+	while (j < i)
+	{
+		waitpid(pids[j++], &g_vars.exit_status, 0);
+		if (j == i)
+			set_exit_status(g_vars.exit_status);
+	}
+	return (0);
 }
 
 void		process_command(t_command *command)
 {
 	t_command	*tmp_cmd;
+	pid_t		*pids;
 	int			i;
 
 
@@ -82,8 +90,11 @@ void		process_command(t_command *command)
 		execute_command(command);
 	else
 	{
-		i = -1;
+		i = list_len(command);
+		pids = malloc(sizeof(int) * (i));
+		if (NULL == pids && printf("Error Allocating pids\n"))
+			return ;
 		tmp_cmd = command;
-		execute_pipes(list_len(command), i, tmp_cmd);
+		execute_pipes(i, i, tmp_cmd, pids);
 	}
 }
