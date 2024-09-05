@@ -18,6 +18,8 @@ void	swap_pipes(int *curr_pipes, int *prev_pipes)
 	prev_pipes[1] = curr_pipes[1];
 }
 
+void	redirection_exec(t_command *cmd);
+
 int	init_commands_fds(t_command *cmd, int len, int *curr_pipes, int *prev_pipes)
 {
 	int	i;
@@ -33,6 +35,7 @@ int	init_commands_fds(t_command *cmd, int len, int *curr_pipes, int *prev_pipes)
 			cmd->fd_in = prev_pipes[0];
 		if (i != len - 1)
 			cmd->fd_out = curr_pipes[1];
+		redirection_exec(cmd);
 		++i;
 		cmd = cmd->next;
 	}
@@ -55,9 +58,9 @@ void	close_fds(t_command *cmd)
 
 int	execute_pipes(int len, int i, t_command *cmd, int *pids)
 {
-	int	curr_pipes[2];
-	int	prev_pipes[2];
-	int	pid;
+	int			curr_pipes[2];
+	int			prev_pipes[2];
+	int			pid;
 
 	init_commands_fds(cmd, len, curr_pipes, prev_pipes);
 	i = 0;
@@ -67,7 +70,7 @@ int	execute_pipes(int len, int i, t_command *cmd, int *pids)
 		g_vars.parent = 0;
 		if (pid == 0)
 		{
-			execute_command(cmd);
+			execute_command(cmd, 1);
 			exit(g_vars.exit_status);
 		}
 		g_vars.parent = 1;
@@ -87,7 +90,7 @@ void	process_command(t_command *command)
 	int			j;
 
 	if (list_len(command) == 1)
-		execute_command(command);
+		execute_command(command, 0);
 	else
 	{
 		i = list_len(command);

@@ -189,7 +189,7 @@ char							*get_dollar_key_v1(char *line, int *i);
 char							*substitute_var(char *str);
 int								check_curly_braces(char *str);
 int								open_heredoc(t_redirection *redirection);
-void							execute_command(t_command *cmd);
+void							execute_command(t_command *cmd, int piped);
 int								check_redirection(t_command *cmd);
 void							free_env(void);
 void							delete_env(t_env *env);
