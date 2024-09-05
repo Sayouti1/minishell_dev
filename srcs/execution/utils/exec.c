@@ -58,25 +58,37 @@ void	redirection_exec(t_command *cmd)
 	}
 }
 
+int	is_directory(char *path)
+{
+	struct stat	dir_stat;
+
+	stat(path, &dir_stat);
+	return (S_ISDIR(dir_stat.st_mode));
+}
+
 void	execute_command(t_command *cmd)
 {
 	redirection_exec(cmd);
-	if (g_vars.sig_c == 2)
-		return ;
-	if (check_redirection(cmd) && set_exit_status(1))
+	if (g_vars.sig_c == 2 || check_redirection(cmd))
 		return ;
 	if (built_in(cmd->command))
 		execute_built_in(cmd);
 	else
 	{
 		if (NULL == cmd->command)
-			set_exit_status(0);
+			g_vars.exit_status = 0;
 		else if (fix_command_path(cmd))
-			set_exit_status(127);
+			g_vars.exit_status = 127;
 		else if (NULL == get_env_v1("PATH") && NULL == cmd->command)
 			printf("%s: No such file or directory\n", cmd->command);
 		else
-			execute_bin(cmd);
+		{
+			if (is_directory(cmd->command)
+				&& printf("minishell %s : Is a directory\n", cmd->command))
+				g_vars.exit_status = 126;
+			else
+				execute_bin(cmd);
+		}
 	}
 }
 
@@ -90,8 +102,11 @@ int	fix_command_path(t_command *cmd)
 	tmp_cmd = cmd->command;
 	cwd = getcwd(NULL, 0);
 	cmd->command = get_full_path(cmd->command, cwd);
-	if (NULL == cmd->command && ++ret && set_exit_status(127))
-		printf("=> %s: command not found\n", tmp_cmd);
+	if (NULL == cmd->command && ++ret)
+	{
+		printf("minishell %s: command not found\n", tmp_cmd);
+		g_vars.exit_status = 127;
+	}
 	free(cwd);
 	free(tmp_cmd);
 	if (cmd->command)

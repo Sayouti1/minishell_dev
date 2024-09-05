@@ -43,7 +43,7 @@ int	check_redirection(t_command *cmd)
 	while (red)
 	{
 		if (NULL == red->file_name)
-			return (1);
+			return (g_vars.exit_status = 1, 1);
 		red = red->next;
 	}
 	return (0);

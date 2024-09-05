@@ -19,7 +19,7 @@ char	*expand_heredoc(char *line, int *bad_sub)
 	if (check_curly_braces(line))
 	{
 		*bad_sub = 1;
-		set_exit_status(1);
+		g_vars.exit_status = 1;
 		return (line);
 	}
 	expanded = substitute_var(line);

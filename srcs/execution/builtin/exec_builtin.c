@@ -18,7 +18,7 @@ void	exec_echo(t_command *cmd)
 		ft_echo(cmd->args);
 	else
 		printf("\n");
-	set_exit_status(0);
+	g_vars.exit_status = 0;
 }
 
 void	exec_export(t_command *cmd)
@@ -34,7 +34,7 @@ void	exec_env(t_command *cmd)
 	if (NULL == cmd->args)
 		ft_env();
 	else
-		set_exit_status(127);
+		g_vars.exit_status = 127;
 }
 
 void	exec_unset(t_command *cmd)

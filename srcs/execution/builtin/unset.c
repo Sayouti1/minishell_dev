@@ -42,7 +42,7 @@ int	ft_unset(char **key)
 	int		i;
 
 	if (NULL == key || NULL == key[0])
-		return (set_exit_status(1));
+		return (g_vars.exit_status = 1, 1);
 	split = ft_split_del(key[0], " \t");
 	if (NULL == split)
 		return (1);
@@ -53,5 +53,5 @@ int	ft_unset(char **key)
 		search_and_delete(iter, split[i++]);
 	}
 	free_split(split);
-	return (set_exit_status(0));
+	return (g_vars.exit_status = 0, 0);
 }

@@ -25,11 +25,10 @@ int	ft_concat_env_var(char *var)
 		return (0);
 	if (var[i] == '=' && (!ft_isalnum(var[i - 1]) && var[i - 1] != '+'))
 		return (printf("export: `%s': not a valid identifier\n", var),
-			set_exit_status(1),
-			1);
+			g_vars.exit_status = 1, 1);
 	key_value = split_on_two(var, "+");
 	if (NULL == key_value)
-		return (set_exit_status(1), 1);
+		return (g_vars.exit_status = 1, 1);
 	x = 0;
 	if (key_value[1])
 		x = 2;
@@ -49,7 +48,7 @@ int	is_not_valid(char *var)
 	j = 0;
 	if (!ft_isalpha(var[0]) && var[0] != '_')
 		return (printf("export: `%s': not a valid identifier\n", var),
-			1);
+			g_vars.exit_status = 1, 1);
 	while (var[j] && var[j] != '=')
 		++j;
 	i = 1;
@@ -57,8 +56,7 @@ int	is_not_valid(char *var)
 	{
 		if (!ft_isalpha(var[i]) && var[i] != '_')
 			return (printf("export: `%s': not a valid identifier\n",
-					var),
-				1);
+					var), g_vars.exit_status = 1, 1);
 		++i;
 	}
 	return (0);
@@ -79,7 +77,7 @@ int	ft_export(char **var)
 			continue ;
 		key_value = split_on_two(var[i++], "=");
 		if (NULL == key_value)
-			return (set_exit_status(1), 1);
+			return (g_vars.exit_status = 1, 1);
 		x = 0;
 		if (key_value[1])
 			x = 1;
@@ -87,8 +85,9 @@ int	ft_export(char **var)
 			add_to_env(ft_strdup(key_value[0]), ft_strdup(key_value[1] + x),
 				ft_char_in('=', var[i - 1]));
 		free_split(key_value);
+		g_vars.exit_status = 0;
 	}
-	return (set_exit_status(0), 0);
+	return (0);
 }
 
 void	ft_print_export(void)
@@ -103,5 +102,5 @@ void	ft_print_export(void)
 			printf("=\"%s\"\n", tmp->value);
 		tmp = tmp->next;
 	}
-	set_exit_status(0);
+	g_vars.exit_status = 0;
 }

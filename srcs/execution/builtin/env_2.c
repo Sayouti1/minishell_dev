@@ -65,5 +65,6 @@ char	**get_env_array(void)
 		array[i++] = key;
 		env = env->next;
 	}
+	collect_garbage(array);
 	return (array);
 }

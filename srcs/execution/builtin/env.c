@@ -88,7 +88,7 @@ void	ft_env(void)
 			printf("%s=%s\n", tmp->key, tmp->value);
 		tmp = tmp->next;
 	}
-	set_exit_status(0);
+	g_vars.exit_status = 0;
 }
 
 /*

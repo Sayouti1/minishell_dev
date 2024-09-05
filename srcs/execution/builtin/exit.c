@@ -12,6 +12,33 @@
 
 #include "../../../include/include.h"
 
+int	exit_overflow(char *arg)
+{
+	int		i;
+	int		n;
+	int		sign;
+	long	result;
+
+	i = 0;
+	result = 0;
+	sign = 1;
+	while (ft_isspace(arg[i]))
+		++i;
+	if (ft_char_in(arg[i], "-+"))
+		if (arg[i++] == '-')
+			sign = -1;
+	while (arg[i] && ft_isdigit(arg[i]))
+	{
+		n = arg[i++] - '0';
+		if (sign == 1 && (result > (LONG_MAX - n) / 10))
+			return (printf("exit: %s: numeric argument required\n", arg), 1);
+		else if (sign == -1 && ((result * -1) < (LONG_MIN + n) / 10))
+			return (printf("exit: %s: numeric argument required\n", arg), 1);
+		result = result * 10 + n;
+	}
+	return (0);
+}
+
 int	ft_exit(char **arg)
 {
 	int	exit_status;
@@ -22,10 +49,14 @@ int	ft_exit(char **arg)
 	else if (str_isdigit(arg[0]) == 2)
 		exit_status = 2;
 	else if (split_len(arg) > 1)
-		return (printf("exit: too many arguments\n"), set_exit_status(1));
+		return (printf("exit: too many arguments\n"),
+			g_vars.exit_status = 1,
+			1);
+	else if (exit_overflow(arg[0]))
+		exit_status = 2;
 	else
 		exit_status = ft_atoi(arg[0]);
 	free_split(arg);
-	set_exit_status(exit_status);
+	g_vars.exit_status = exit_status;
 	exit(exit_status);
 }

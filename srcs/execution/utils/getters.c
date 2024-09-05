@@ -45,7 +45,7 @@ char	**get_exec_arg(char *fullpath, char *split)
 		i++;
 	exec_arg = (char **)malloc(sizeof(char *) * (i + 2));
 	if (NULL == exec_arg)
-		return (set_exit_status(1), NULL);
+		return (g_vars.exit_status = 1, NULL);
 	exec_arg[0] = ft_strdup(fullpath);
 	i = 0;
 	while (arg && arg[i])

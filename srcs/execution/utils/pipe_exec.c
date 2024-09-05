@@ -20,7 +20,7 @@ void	swap_pipes(int *curr_pipes, int *prev_pipes)
 
 int	init_commands_fds(t_command *cmd, int len, int *curr_pipes, int *prev_pipes)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (cmd)
@@ -31,60 +31,60 @@ int	init_commands_fds(t_command *cmd, int len, int *curr_pipes, int *prev_pipes)
 			return (perror("minishell "), 1);
 		if (i != 0)
 			cmd->fd_in = prev_pipes[0];
-		if (i != len -1)
+		if (i != len - 1)
 			cmd->fd_out = curr_pipes[1];
 		++i;
-		// printf("[%s]=>[%d,%d]\n", cmd->command, cmd->fd_in, cmd->fd_out);
 		cmd = cmd->next;
 	}
 	return (0);
 }
 
-int execute_pipes(int len, int i, t_command *cmd, int *pids)
+void	close_fds(t_command *cmd)
 {
-    int curr_pipes[2];
-    int prev_pipes[2];
+	if (cmd->prev)
+	{
+		close(cmd->prev->fd_out);
+		if (cmd->prev->fd_in != 0)
+			close(cmd->prev->fd_in);
+	}
+	if (cmd->fd_in != 0)
+		close(cmd->fd_in);
+	if (cmd->fd_out != 1)
+		close(cmd->fd_out);
+}
+
+int	execute_pipes(int len, int i, t_command *cmd, int *pids)
+{
+	int	curr_pipes[2];
+	int	prev_pipes[2];
+	int	pid;
 
 	init_commands_fds(cmd, len, curr_pipes, prev_pipes);
 	i = 0;
 	while (cmd)
 	{
-		int pid = fork();
+		pid = fork();
+		g_vars.parent = 0;
 		if (pid == 0)
 		{
 			execute_command(cmd);
 			exit(g_vars.exit_status);
 		}
+		g_vars.parent = 1;
 		pids[i] = pid;
-		if (cmd->prev)
-		{
-			close(cmd->prev->fd_out);
-			if (cmd->prev->fd_in != 0)
-				close(cmd->prev->fd_in);
-		}
-		if (cmd->fd_in != 0)
-			close(cmd->fd_in);
-		if (cmd->fd_out != 1)
-			close(cmd->fd_out);
+		close_fds(cmd);
 		cmd = cmd->next;
 		i++;
-	}
-	int j = 0;
-	while (j < i)
-	{
-		waitpid(pids[j++], &g_vars.exit_status, 0);
-		if (j == i)
-			set_exit_status(g_vars.exit_status);
 	}
 	return (0);
 }
 
-void		process_command(t_command *command)
+void	process_command(t_command *command)
 {
 	t_command	*tmp_cmd;
 	pid_t		*pids;
 	int			i;
-
+	int			j;
 
 	if (list_len(command) == 1)
 		execute_command(command);
@@ -96,5 +96,12 @@ void		process_command(t_command *command)
 			return ;
 		tmp_cmd = command;
 		execute_pipes(i, i, tmp_cmd, pids);
+		j = 0;
+		while (j < i)
+		{
+			waitpid(pids[j++], &g_vars.exit_status, 0);
+			if (j == i)
+				set_exit_status(g_vars.exit_status);
+		}
 	}
 }

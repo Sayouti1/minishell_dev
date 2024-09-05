@@ -12,7 +12,7 @@ minishell: ambiguous redirect
 include  Libft	Makefile  minishell  srcs  to_handle.txt
 ls shoud not work ✅
 
-5/ exit 11111111111111111111111111111111 | exit with 2
+5/ exit 11111111111111111111111111111111 | exit with 2 ✅ fixed ✅
 
 6/ export $sdasf=$asdas ✅ fixed ✅
 

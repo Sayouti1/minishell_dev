@@ -14,11 +14,9 @@
 
 int	set_exit_status(int n)
 {
-	if (WIFEXITED(n))
+	if (!WIFSIGNALED(n))
 		g_vars.exit_status = WEXITSTATUS(n);
-	else if (WIFSIGNALED(n))
-		g_vars.exit_status = WTERMSIG(n);
 	else
-		g_vars.exit_status = n;
+		g_vars.exit_status = 128 + WTERMSIG(n);
 	return (g_vars.exit_status);
 }
