@@ -11,7 +11,7 @@ SRCS= srcs/main.c \
 	srcs/execution/utils/utils.c srcs/execution/utils/pipe_exec.c srcs/execution/utils/signal.c srcs/execution/utils/heredoc.c \
 	srcs/execution/utils/length.c srcs/execution/utils/str_utils.c srcs/execution/builtin/env_2.c srcs/execution/utils/utils_2.c \
 	srcs/parsing/check_input/check_error_utils.c srcs/parsing/check_input/error_input.c srcs/parsing/expand/expand_utils.c \
-	srcs/parsing/expand/expand.c srcs/parsing/lexer/lexer_utils.c srcs/parsing/lexer/lexer.c \
+	srcs/parsing/expand/expand.c srcs/parsing/lexer/lexer_utils.c srcs/parsing/lexer/lexer.c srcs/more_utils.c \
 	# srcs/test_utils.c
 
 OBJS=$(SRCS:.c=.o)

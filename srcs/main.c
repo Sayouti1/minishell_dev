@@ -27,10 +27,10 @@ void	init_g_vars(char **envp)
 	g_vars.garbage_coll = NULL;
 }
 
-t_token *check_and_token(char *line)
+t_token	*check_and_token(char *line)
 {
-	char *line_trim ;
-	t_token *tokens;
+	char	*line_trim;
+	t_token	*tokens;
 
 	tokens = NULL;
 	line_trim = line;
@@ -47,9 +47,10 @@ t_token *check_and_token(char *line)
 	free(line_trim);
 	return (tokens);
 }
-void ft_printToken(t_token *tokens)
+void	ft_printToken(t_token *tokens)
 {
-	t_token *tmp;
+	t_token	*tmp;
+
 	tmp = tokens;
 	while (tmp)
 	{
@@ -63,6 +64,7 @@ void	print_commands(t_command *command)
 	int				i;
 	t_redirection	*red;
 	t_command		*cmd;
+	int				j;
 
 	i = 0;
 	cmd = command;
@@ -72,7 +74,7 @@ void	print_commands(t_command *command)
 		if (cmd->args)
 		{
 			printf("\targs = {\n");
-			int	j = 0;
+			j = 0;
 			while (cmd->args && cmd->args[j])
 			{
 				printf("\t\t[%d] = [%s],\n", j + 1, cmd->args[j]);
@@ -86,7 +88,8 @@ void	print_commands(t_command *command)
 			printf("\tredirection = {\n");
 			while (red)
 			{
-				printf("\t\ttype = %d, file_name = [%s]\n", red->type, red->file_name);
+				printf("\t\ttype = %d, file_name = [%s]\n", red->type,
+					red->file_name);
 				red = red->next;
 			}
 			printf("\t}\n");
@@ -95,11 +98,11 @@ void	print_commands(t_command *command)
 		cmd = cmd->next;
 	}
 }
-void main_loop(void)
+void	main_loop(void)
 {
-	char *line;
-	t_token *tokens;
-	t_token *ntokens;
+	char		*line;
+	t_token		*tokens;
+	t_token		*ntokens;
 	t_command	*command;
 
 	command = NULL;
@@ -108,9 +111,9 @@ void main_loop(void)
 		sig_init();
 		line = readline("minishell :)=> ");
 		if (!line)
-			break;
-		if(check_line(&line))
-			continue;
+			break ;
+		if (check_line(&line))
+			continue ;
 		add_history(line);
 		tokens = check_and_token(line);
 		if (!tokens)
@@ -119,12 +122,11 @@ void main_loop(void)
 		if (ft_ambiguous_err(tokens))
 		{
 			ft_putstr_fd("minishell: ambiguous redirect\n", 2);
-			//exit(1);
-			//continue;
-			//free_token(tokens);
+			// exit(1);
+			// continue ;
+			// free_token(tokens);
 		}
-
-		//ft_printToken(tokens);
+		// ft_printToken(tokens);
 		ntokens = expand_var(tokens);
 		free_token(tokens);
 		if (!ntokens)
@@ -137,8 +139,6 @@ void main_loop(void)
 		free_token(ntokens);
 	}
 }
-
-
 
 int	main(int ac, char **av, char **envp)
 {
