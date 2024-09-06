@@ -24,7 +24,7 @@ int	ft_concat_env_var(char *var)
 	if (i < 2 || !var[i] || var[i - 1] != '+')
 		return (0);
 	if (var[i] == '=' && (!ft_isalnum(var[i - 1]) && var[i - 1] != '+'))
-		return (printf("export: `%s': not a valid identifier\n", var),
+		return (ft_perror("export: `", var, "': not a valid identifier\n"),
 			g_vars.exit_status = 1, 1);
 	key_value = split_on_two(var, "+");
 	if (NULL == key_value)
@@ -47,7 +47,7 @@ int	is_not_valid(char *var)
 
 	j = 0;
 	if (!ft_isalpha(var[0]) && var[0] != '_')
-		return (printf("export: `%s': not a valid identifier\n", var),
+		return (ft_perror("export: `", var, "': not a valid identifier\n"),
 			g_vars.exit_status = 1, 1);
 	while (var[j] && var[j] != '=')
 		++j;
@@ -55,8 +55,8 @@ int	is_not_valid(char *var)
 	while (i < j)
 	{
 		if (!ft_isalpha(var[i]) && var[i] != '_')
-			return (printf("export: `%s': not a valid identifier\n",
-					var), g_vars.exit_status = 1, 1);
+			return (ft_perror("export: `", var, "': not a valid identifier\n"),
+				g_vars.exit_status = 1, 1);
 		++i;
 	}
 	return (0);
@@ -97,7 +97,7 @@ void	ft_print_export(void)
 	tmp = g_vars.env;
 	while (tmp)
 	{
-		printf("export %s", tmp->key);
+		printf("declare -x %s", tmp->key);
 		if (tmp->value)
 			printf("=\"%s\"\n", tmp->value);
 		tmp = tmp->next;
