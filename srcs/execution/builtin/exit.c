@@ -31,9 +31,11 @@ int	exit_overflow(char *arg)
 	{
 		n = arg[i++] - '0';
 		if (sign == 1 && (result > (LONG_MAX - n) / 10))
-			return (printf("exit: %s: numeric argument required\n", arg), 1);
+			return (ft_perror("exit: ", arg, ": numeric argument required\n"),
+				1);
 		else if (sign == -1 && ((result * -1) < (LONG_MIN + n) / 10))
-			return (printf("exit: %s: numeric argument required\n", arg), 1);
+			return (ft_perror("exit:", arg, ": numeric argument required\n"),
+				1);
 		result = result * 10 + n;
 	}
 	return (0);
@@ -49,7 +51,7 @@ int	ft_exit(char **arg)
 	else if (str_isdigit(arg[0]) == 2)
 		exit_status = 2;
 	else if (split_len(arg) > 1)
-		return (printf("exit: too many arguments\n"),
+		return (ft_putstr_fd("exit: too many arguments\n", 2),
 			g_vars.exit_status = 1,
 			1);
 	else if (exit_overflow(arg[0]))

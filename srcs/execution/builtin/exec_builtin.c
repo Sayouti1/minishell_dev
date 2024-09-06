@@ -17,7 +17,7 @@ void	exec_echo(t_command *cmd)
 	if (cmd->args)
 		ft_echo(cmd->args);
 	else
-		printf("\n");
+		ft_putstr_fd("\n", 1);
 	g_vars.exit_status = 0;
 }
 
@@ -46,9 +46,15 @@ void	exec_unset(t_command *cmd)
 void	execute_built_in(t_command *cmd)
 {
 	if (cmd->fd_in != 0)
+	{
 		dup2(cmd->fd_in, 0);
+		close(cmd->fd_in);
+	}
 	if (cmd->fd_out != 1)
+	{
 		dup2(cmd->fd_out, 1);
+		close(cmd->fd_out);
+	}
 	if (!ft_strcmp(cmd->command, "echo"))
 		exec_echo(cmd);
 	else if (!ft_strcmp(cmd->command, "export"))

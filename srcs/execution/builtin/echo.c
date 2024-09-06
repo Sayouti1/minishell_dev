@@ -48,10 +48,10 @@ void	ft_echo(char **str)
 	n_flag = n_option(&i, str);
 	while (str[i])
 	{
-		printf("%s", str[i++]);
+		ft_putstr_fd(str[i++], 1);
 		if (str[i] && str[i][0])
-			printf(" ");
+			ft_putstr_fd(" ", 1);
 	}
 	if (n_flag == 0)
-		printf("\n");
+		ft_putstr_fd("\n", 1);
 }

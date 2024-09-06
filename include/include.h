@@ -192,6 +192,7 @@ int								open_heredoc(t_redirection *redirection);
 void							execute_command(t_command *cmd, int piped);
 int								check_redirection(t_command *cmd);
 void							free_env(void);
+int								ft_perror(char *s1, char *s2, char *s3);
 void							delete_env(t_env *env);
 void							free_split(char **arr);
 void							free_cmds(t_command *cmd);
