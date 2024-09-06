@@ -47,6 +47,7 @@ t_token	*check_and_token(char *line)
 	free(line_trim);
 	return (tokens);
 }
+
 void	ft_printToken(t_token *tokens)
 {
 	t_token	*tmp;

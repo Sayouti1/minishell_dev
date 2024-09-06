@@ -12,6 +12,17 @@
 
 #include "../../../include/include.h"
 
+static void free_words(char **words) {
+    int i = 0;
+
+    while (words[i]) {
+        free(words[i]);
+        i++;
+    }
+
+    free(words);
+}
+
 char	*substitute_var1(char *str)
 {
 	int		i;
@@ -93,6 +104,7 @@ t_token	*expand_var(t_token *tokens)
 		else
 			add_token_to_list(&ntoken, new_token(token->type, token->value));
 		token = token->next;
+		free_words(words);
 	}
 	return (ntoken);
 }

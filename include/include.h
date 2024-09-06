@@ -15,28 +15,28 @@
 
 # include "../Libft/libft.h"
 # include <dirent.h>
+# include <errno.h>
 # include <fcntl.h>
+# include <limits.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
-# include <limits.h>
+# include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include <sys/stat.h>
-# include <errno.h>
 
 typedef enum s_token_type
 {
-	TOKEN_WORD,				// using for the cmd argm 0
-	TOKEN_PIPE,				// using for the pipe cmd 1
-	TOKEN_REDIR_IN,			// using like < 2
-	TOKEN_REDIR_OUT,		// using like > 3
-	TOKEN_REDIR_APPEND,		// using for >> 4
-	TOKEN_REDIR_HEREDOC,	// using for <<
+	TOKEN_WORD,          // using for the cmd argm 0
+	TOKEN_PIPE,          // using for the pipe cmd 1
+	TOKEN_REDIR_IN,      // using like < 2
+	TOKEN_REDIR_OUT,     // using like > 3
+	TOKEN_REDIR_APPEND,  // using for >> 4
+	TOKEN_REDIR_HEREDOC, // using for <<
 }								t_token_type;
 // tok
 // | >
@@ -47,9 +47,9 @@ typedef enum s_token_type
 // ("/bin/ls" , {"/bin/ls", }, )
 typedef struct s_token
 {
-	t_token_type			type;	// TOKEN
-	char					*value;	// "ls"
-	struct s_token			*next;
+	t_token_type type; // TOKEN
+	char *value;       // "ls"
+	struct s_token				*next;
 }								t_token;
 
 typedef struct s_env
@@ -92,7 +92,7 @@ enum							e_redirection
 
 typedef struct s_redirection
 {
-	int							type;	// output | append | input | her_doc
+	int type; // output | append | input | her_doc
 	char						*file_name;
 	int							fd;
 	struct s_redirection		*next;
@@ -101,8 +101,8 @@ typedef struct s_redirection
 
 typedef struct s_command
 {
-	char						*command;	// TOKEN_WORD 0
-	char						**args;		// white TYPE == TOKEN_WORND 0
+	char *command; // TOKEN_WORD 0
+	char **args;   // white TYPE == TOKEN_WORND 0
 	t_redirection				*redirection;
 	int							fd_in;
 	int							fd_out;
@@ -207,13 +207,14 @@ char							*string_concat(char *line, char *str);
 // char				*parse_command_vars(char *line);
 
 void							swap_pipes(int *curr_pipes, int *prev_pipes);
-int 							execute_pipes(int len, int i, t_command *cmd, int *pids);
+int								execute_pipes(int len, int i, t_command *cmd,
+									int *pids);
 int								execute_bin(t_command *cmd);
 int								set_exit_status(int n);
 
 void							sig_handler(int sig);
 void							heredoc_sig(int sig);
-void							sig_init();
+void							sig_init(void);
 
 int								ft_char_in(char c, char *str);
 char							**ft_split_del(char const *s, char *del);
