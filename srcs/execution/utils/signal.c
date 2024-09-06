@@ -31,6 +31,7 @@ void	heredoc_sig(int sig)
 	if (sig == SIGINT)
 	{
 		g_vars.sig_c = 1;
+		ft_putchar_fd('\n', 1);
 		close(STDIN_FILENO);
 	}
 }

@@ -33,7 +33,9 @@ int	read_heredoc(char *del, char **line)
 	if (g_vars.sig_c == 1)
 		return (g_vars.sig_c = 2, 1);
 	if (NULL == *line)
-		return (1);
+		return (
+			printf("here-document : delimited by end-of-file (wanted `%s')\n",
+				del), 1);
 	if (!ft_strcmp(*line, del))
 	{
 		free(*line);
