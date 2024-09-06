@@ -34,6 +34,7 @@ int	str_isdigit(char *str)
 		++i;
 	while (str[i] && i <= j)
 		if (!ft_isdigit(str[i++]))
-			return (printf("exit: %s : numeric argument required\n", str), 2);
+			return (ft_perror("exit: ", str, ": numeric argument required\n"),
+				2);
 	return (1);
 }

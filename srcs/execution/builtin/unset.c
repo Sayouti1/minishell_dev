@@ -38,20 +38,13 @@ void	search_and_delete(t_env *iter, char *split)
 int	ft_unset(char **key)
 {
 	t_env	*iter;
-	char	**split;
 	int		i;
 
-	if (NULL == key || NULL == key[0])
-		return (g_vars.exit_status = 1, 1);
-	split = ft_split_del(key[0], " \t");
-	if (NULL == split)
-		return (1);
 	i = 0;
-	while (split[i])
+	while (key && key[i])
 	{
 		iter = g_vars.env;
-		search_and_delete(iter, split[i++]);
+		search_and_delete(iter, key[i++]);
 	}
-	free_split(split);
-	return (g_vars.exit_status = 0, 0);
+	return (0);
 }

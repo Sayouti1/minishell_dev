@@ -80,21 +80,13 @@ char	*string_concat(char *line, char *str)
 	return (concat);
 }
 
-/*
- * TRIM USER INPUT IN A NEW ALLOCATED STRING,
- * AND RETURN IT , THEN FREE THE OLD READLINE
- */
-char	*trim_and_free(char *line)
+int	ft_perror(char *s1, char *s2, char *s3)
 {
-	char	*trimmed;
-
-	if (NULL == line)
-		return (NULL);
-	if (line[0] == '\0')
-		return (line);
-	trimmed = ft_strtrim(line, " 	");
-	if (NULL == trimmed)
-		return (NULL);
-	free(line);
-	return (trimmed);
+	if (s1)
+		ft_putstr_fd(s1, 2);
+	if (s2)
+		ft_putstr_fd(s2, 2);
+	if (s3)
+		ft_putstr_fd(s3, 2);
+	return (1);
 }

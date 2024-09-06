@@ -16,9 +16,10 @@ int	cd_home(char *home)
 {
 	home = get_env_v1("HOME");
 	if (NULL == home)
-		return (printf("cd: HOME not set\n"), g_vars.exit_status = 1, 1);
+		return (ft_putstr_fd("cd: HOME not set\n", 2),
+			g_vars.exit_status = 1, 1);
 	if (chdir(home))
-		return (printf("%s : No such file or directory\n", home),
+		return (ft_perror(home, " : No such file or directory\n", NULL),
 			g_vars.exit_status = 1, 1);
 	return (g_vars.exit_status = 0, 0);
 }
@@ -33,7 +34,8 @@ int	cd(char **split)
 
 	home = NULL;
 	if (split_len(split) > 1)
-		return (printf("cd: too many arguments\n"), g_vars.exit_status = 1, 1);
+		return (ft_putstr_fd("cd: too many arguments\n", 2),
+			g_vars.exit_status = 1, 1);
 	if (NULL == split || NULL == split[0] || (split[0] && split[0][0] == '~'
 		&& !split[0][1]))
 		return (cd_home(home));

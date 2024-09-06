@@ -62,7 +62,7 @@ int	treat_heredoc(char *del, int fd, int sub_var)
 	signal(SIGINT, sig_handler);
 	free(del);
 	if (bad_sub)
-		return (printf(" : bad substitution\n"), 1);
+		return (ft_putstr_fd(" : bad substitution\n", 2), 1);
 	return (0);
 }
 

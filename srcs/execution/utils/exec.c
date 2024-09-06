@@ -81,11 +81,11 @@ void	execute_command(t_command *cmd, int piped)
 		else if (fix_command_path(cmd))
 			g_vars.exit_status = 127;
 		else if (NULL == get_env_v1("PATH") && NULL == cmd->command)
-			printf("%s: No such file or directory\n", cmd->command);
+			ft_perror(cmd->command, ": No such file or directory\n", NULL);
 		else
 		{
 			if (is_directory(cmd->command)
-				&& printf("minishell %s : Is a directory\n", cmd->command))
+				&& ft_perror("minishell ", cmd->command, ": Is a directory\n"))
 				g_vars.exit_status = 126;
 			else
 				execute_bin(cmd);
@@ -105,7 +105,9 @@ int	fix_command_path(t_command *cmd)
 	cmd->command = get_full_path(cmd->command, cwd);
 	if (NULL == cmd->command && ++ret)
 	{
-		printf("minishell %s: command not found\n", tmp_cmd);
+		ft_putstr_fd("minishell ", 2);
+		ft_putstr_fd(tmp_cmd, 2);
+		ft_putstr_fd(": command not found\n", 2);
 		g_vars.exit_status = 127;
 	}
 	free(cwd);

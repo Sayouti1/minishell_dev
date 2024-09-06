@@ -20,7 +20,7 @@ char	**add_to_list(char **old_list, char *to_add)
 	i = split_len(old_list);
 	new_list = ft_realloc(old_list, (i + 2) * sizeof(char *));
 	if (NULL == new_list)
-		return (printf("ERROR allocating new_list\n"), NULL);
+		return (ft_putstr_fd("ERROR allocating new_list\n", 2), NULL);
 	new_list[i] = to_add;
 	new_list[++i] = NULL;
 	return (new_list);
