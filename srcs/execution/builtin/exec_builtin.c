@@ -41,6 +41,7 @@ void	exec_unset(t_command *cmd)
 {
 	if (cmd->args)
 		ft_unset(cmd->args);
+	g_vars.exit_status = 0;
 }
 
 void	execute_built_in(t_command *cmd)
