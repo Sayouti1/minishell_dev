@@ -1,0 +1,30 @@
+valgrind --track-fds=yes --suppressions=readline.supp ./minishell // to chek if there still a fd opend
+
+
+==========================
+TODO remove  readline.supp file before push
+=================================
+TODO dont open more than 16 herdoc:
+ls << l  << l  << l  << l  << l  << l  << l  << l  << l  << l  << l  << l  << l  << l  << l  << l  << l 
+bash: maximum here-document count exceeded
+
+===========================================
+
+TODO check if th outfile is a directorie before open it
+
+bash $> ls > dir
+bash: dir: Is a directory
+
+==================================================
+
+
+TODO check if the cmd is . or ..
+
+bash $> .
+bash: .: filename argument required
+
+bash $> ..
+..: command not found
+
+==================================================
+
