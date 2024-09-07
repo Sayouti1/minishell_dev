@@ -66,10 +66,15 @@ typedef struct s_garbage_collector
 	struct s_garbage_collector	*next;
 }								t_garbage_collector;
 
+typedef struct s_fd_collectors
+{
+	int							fd;
+	struct s_fd_collectors 	*next;
+}								t_fd_collectors;
+
 typedef struct s_global_vars
 {
 	t_env						*env;
-
 	char						**envp;
 	int							parent;
 	int							exit_status;
@@ -78,6 +83,8 @@ typedef struct s_global_vars
 	int							std_in;
 	int							std_out;
 	t_garbage_collector			*garbage_coll;
+	t_fd_collectors				*fd_collectors;
+
 }								t_global_vars;
 
 extern t_global_vars			g_vars;
@@ -113,6 +120,7 @@ typedef struct s_command
 // ---------------------------- PARSING -----------------
 char							**split_by_pipe(const char *str,
 									int *num_tokens, char c);
+void	close_file_ds();
 int								closed_quotes(char *str);
 void							update_quote_counts(char c, int *s_q_count,
 									int *d_q_count);

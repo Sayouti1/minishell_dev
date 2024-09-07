@@ -22,6 +22,7 @@ void	init_g_vars(char **envp)
 	g_vars.sig_c = 0;
 	g_vars.tmp_file = 0;
 	g_vars.parent = 1;
+	g_vars.fd_collectors = NULL;
 	g_vars.std_in = dup(0);
 	g_vars.std_out = dup(1);
 	g_vars.garbage_coll = NULL;

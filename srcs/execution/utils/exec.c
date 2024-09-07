@@ -22,9 +22,15 @@ int	execute_bin(t_command *cmd)
 	if (0 == pid)
 	{
 		if (cmd->fd_in != 0)
+		{
 			dup2(cmd->fd_in, 0);
+			close(cmd->fd_in);
+		}
 		if (cmd->fd_out != 1)
+		{
 			dup2(cmd->fd_out, 1);
+			close(cmd->fd_out);
+		}
 		if (execve(cmd->command, cmd->args, get_env_array()) == -1)
 		{
 			perror("minishell ");
