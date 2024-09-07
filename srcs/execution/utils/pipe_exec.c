@@ -95,6 +95,7 @@ void	process_command(t_command *command)
 	{
 		i = list_len(command);
 		pids = malloc(sizeof(int) * (i));
+		collect_garbage(pids);
 		if (NULL == pids && printf("Error Allocating pids\n"))
 			return ;
 		tmp_cmd = command;
