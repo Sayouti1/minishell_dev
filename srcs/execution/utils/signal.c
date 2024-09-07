@@ -14,12 +14,11 @@
 
 void	sig_handler(int sig)
 {
-	if (sig == SIGINT)
+	if (sig == SIGINT && g_vars.parent)
 	{
 		ft_putchar_fd('\n', 1);
 		rl_replace_line("", 0);
-		if (g_vars.parent)
-			rl_on_new_line();
+		rl_on_new_line();
 		rl_redisplay();
 	}
 	if (sig == SIGQUIT)
