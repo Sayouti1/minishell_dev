@@ -46,7 +46,6 @@ void	close_file_ds()
 	while (g_vars.fd_collectors)
 	{
 		tmp = g_vars.fd_collectors->next;
-		printf("closing %d\n", g_vars.fd_collectors->fd);
 		close(g_vars.fd_collectors->fd);
 		free(g_vars.fd_collectors);
 		g_vars.fd_collectors = tmp;
@@ -117,6 +116,7 @@ int	execute_pipes(int len, int i, t_command *cmd, int *pids)
 		if (pid == 0)
 		{
 			execute_command(cmd, 1);
+			close_file_ds();
 			exit(g_vars.exit_status);
 		}
 		g_vars.parent = 1;
@@ -153,6 +153,5 @@ void	process_command(t_command *command)
 			if (j == i)
 				set_exit_status(g_vars.exit_status);
 		}
-		close_file_ds();
 	}
 }
