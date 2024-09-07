@@ -52,6 +52,8 @@ int	reset_fd(void)
 {
 	dup2(g_vars.std_out, 1);
 	dup2(g_vars.std_in, 0);
+	close(g_vars.std_in);
+	close(g_vars.std_out);
 	return (1);
 }
 
