@@ -146,6 +146,11 @@ void							word_to_token(char **start, char **line,
 char							*substitute_var1(char *str);
 t_token							*expand_var(t_token *tokens);
 int								ft_ambiguous_err(t_token *tokens);
+void							helper_func(t_token *token);
+void							free_words(char **words);
+char							*handle_dollar_sign(char *str, int *i,
+									char *concat, int in_quotes);
+
 // ------------------------------------------------------
 
 void							exec_echo(t_command *cmd);

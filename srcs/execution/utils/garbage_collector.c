@@ -36,5 +36,4 @@ void	free_garbage(void)
 		g_vars.garbage_coll = tmp;
 	}
 	g_vars.garbage_coll = NULL;
-	
 }
