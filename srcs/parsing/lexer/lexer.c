@@ -74,3 +74,19 @@ void	do_speacil_chars(char **line, t_token **tokens)
 		add_token_to_list(tokens, new_token(TOKEN_PIPE, "|"));
 	(*line)++;
 }
+
+int	error_heredoc(t_token *token)
+{
+	int		i;
+	t_token	*tokens;
+
+	i = 0;
+	tokens = token;
+	while (tokens)
+	{
+		if (tokens == TOKEN_REDIR_HEREDOC)
+			i++;
+		token = token->next;
+	}
+	return (i >= 16);
+}

@@ -111,9 +111,6 @@ typedef struct s_command
 }								t_command;
 
 // ---------------------------- PARSING -----------------
-char							**split_by_pipe(const char *str,
-									int *num_tokens, char c);
-int								closed_quotes(char *str);
 void							update_quote_counts(char c, int *s_q_count,
 									int *d_q_count);
 char							*skip_spaces(char *input);
@@ -150,6 +147,7 @@ void							helper_func(t_token *token);
 void							free_words(char **words);
 char							*handle_dollar_sign(char *str, int *i,
 									char *concat, int in_quotes);
+int error_heredoc(t_token *token);
 
 // ------------------------------------------------------
 
