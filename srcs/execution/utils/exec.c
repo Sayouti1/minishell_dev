@@ -31,6 +31,7 @@ int	execute_bin(t_command *cmd)
 			dup2_and_close(cmd->fd_in, 0);
 		if (cmd->fd_out != 1)
 			dup2_and_close(cmd->fd_out, 1);
+		close_file_ds();
 		if (execve(cmd->command, cmd->args, get_env_array()) == -1)
 		{
 			perror("minishell ");
