@@ -48,3 +48,11 @@ int	check_redirection(t_command *cmd)
 	}
 	return (0);
 }
+
+int	is_directory(char *path)
+{
+	struct stat	dir_stat;
+
+	stat(path, &dir_stat);
+	return (S_ISDIR(dir_stat.st_mode));
+}

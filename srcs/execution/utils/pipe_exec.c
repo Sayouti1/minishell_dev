@@ -12,13 +12,19 @@
 
 #include "../../../include/include.h"
 
-void	swap_pipes(int *curr_pipes, int *prev_pipes)
+void	not_first_command(t_command *cmd, int prev_in)
 {
-	prev_pipes[0] = curr_pipes[0];
-	prev_pipes[1] = curr_pipes[1];
+	if (cmd->fd_in != 0)
+		close(cmd->fd_in);
+	cmd->fd_in = prev_in;
 }
 
-void	redirection_exec(t_command *cmd);
+void	not_last_command(t_command *cmd, int curr_out)
+{
+	if (cmd->fd_out != 1)
+		close(cmd->fd_out);
+	cmd->fd_out = curr_out;
+}
 
 int	init_commands_fds(t_command *cmd, int len, int *curr_pipes, int *prev_pipes)
 {
@@ -31,29 +37,17 @@ int	init_commands_fds(t_command *cmd, int len, int *curr_pipes, int *prev_pipes)
 			swap_pipes(curr_pipes, prev_pipes);
 		if (i < len - 1 && pipe(curr_pipes))
 			return (perror("minishell "), 1);
+		add_to_fds(curr_pipes[0]);
+		add_to_fds(curr_pipes[1]);
 		if (i != 0)
-			cmd->fd_in = prev_pipes[0];
+			not_first_command(cmd, prev_pipes[0]);
 		if (i != len - 1)
-			cmd->fd_out = curr_pipes[1];
+			not_last_command(cmd, curr_pipes[1]);
 		redirection_exec(cmd);
 		++i;
 		cmd = cmd->next;
 	}
 	return (0);
-}
-
-void	close_fds(t_command *cmd)
-{
-	if (cmd->prev)
-	{
-		close(cmd->prev->fd_out);
-		if (cmd->prev->fd_in != 0)
-			close(cmd->prev->fd_in);
-	}
-	if (cmd->fd_in != 0)
-		close(cmd->fd_in);
-	if (cmd->fd_out != 1)
-		close(cmd->fd_out);
 }
 
 int	execute_pipes(int len, int i, t_command *cmd, int *pids)
@@ -71,6 +65,7 @@ int	execute_pipes(int len, int i, t_command *cmd, int *pids)
 		if (pid == 0)
 		{
 			execute_command(cmd, 1);
+			close_file_ds();
 			exit(g_vars.exit_status);
 		}
 		g_vars.parent = 1;
