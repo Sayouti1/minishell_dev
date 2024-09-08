@@ -20,6 +20,9 @@ char	*file_name_permissions(char *file_name, int type, int create_file)
 		return (free(file_name), NULL);
 	if ((OUTPUT == type || APPEND == type) && create_file)
 	{
+		if (is_directory(file_name))
+			return (ft_perror("minishell ", file_name, ": Is a directory\n"),
+				NULL);
 		if (access(file_name, W_OK) == 0)
 			return (file_name);
 		return (perror("minishell "), NULL);
