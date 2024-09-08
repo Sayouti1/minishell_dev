@@ -18,7 +18,7 @@ char	**add_to_list(char **old_list, char *to_add)
 	char	**new_list;
 
 	i = split_len(old_list);
-	new_list = ft_realloc(old_list, (i + 2) * sizeof(char *));
+	new_list = ft_realloc(old_list, i * sizeof(char *), (i + 2) * sizeof(char *));
 	if (NULL == new_list)
 		return (ft_putstr_fd("ERROR allocating new_list\n", 2), NULL);
 	new_list[i] = to_add;

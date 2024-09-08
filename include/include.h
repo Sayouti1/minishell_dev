@@ -255,7 +255,7 @@ int								token_type_to_cmd_type(t_token_type type);
 int								collect_garbage(void *to_add);
 void							free_garbage(void);
 void							remove_quotes(t_command *cmd);
-void							*ft_realloc(void *ptr, size_t size);
+void							*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 int								reset_fd(void);
 char							*trim_str(char *str);
 t_redirection					*get_last_red(t_redirection *red);
