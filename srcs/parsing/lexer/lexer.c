@@ -84,9 +84,9 @@ int	error_heredoc(t_token *token)
 	tokens = token;
 	while (tokens)
 	{
-		if (tokens == TOKEN_REDIR_HEREDOC)
+		if (tokens->type == TOKEN_REDIR_HEREDOC)
 			i++;
-		token = token->next;
+		tokens = tokens->next;
 	}
 	return (i >= 16);
 }

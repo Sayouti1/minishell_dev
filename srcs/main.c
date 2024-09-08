@@ -127,6 +127,12 @@ void	main_loop(void)
 			// continue ;
 			// free_token(tokens);
 		}
+		if (error_heredoc(tokens))
+		{
+			ft_putstr_fd("minishell: maximum here-document count exceeded\n", 2);
+			free_token(tokens);
+			exit(1);
+		}
 		// ft_printToken(tokens);
 		ntokens = expand_var(tokens);
 		free_token(tokens);
