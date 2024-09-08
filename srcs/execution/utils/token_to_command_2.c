@@ -18,7 +18,8 @@ char	*trim_str(char *str)
 	int		i;
 
 	i = -1;
-	tmp = ft_strdup("");
+	tmp = NULL;
+	// tmp = ft_strdup("");
 	while (str && str[++i])
 	{
 		if (str[i] == '\'')
@@ -35,7 +36,7 @@ char	*trim_str(char *str)
 		}
 		else
 			tmp = char_concat(tmp, str[i]);
-		collect_garbage(tmp);
+		// collect_garbage(tmp);
 	}
 	free(str);
 	return (tmp);
