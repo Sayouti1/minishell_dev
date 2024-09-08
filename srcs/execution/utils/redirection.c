@@ -54,6 +54,7 @@ t_redirection	*new_redirection(int type, char *file_name, int fd,
 	redirection->file_name = file_name_permissions(file_name, type,
 			create_file);
 	redirection->fd = fd;
+	add_to_fds(fd);
 	redirection->next = NULL;
 	return (redirection);
 }

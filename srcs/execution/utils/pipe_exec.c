@@ -65,6 +65,7 @@ int	execute_pipes(int len, int i, t_command *cmd, int *pids)
 		if (pid == 0)
 		{
 			execute_command(cmd, 1);
+			g_vars.parent = 0;
 			close_file_ds();
 			exit(g_vars.exit_status);
 		}
