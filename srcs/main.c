@@ -137,6 +137,7 @@ void	main_loop(void)
 		process_command(command);
 		free_cmds(command);
 		free_token(ntokens);
+		free_garbage();
 	}
 }
 
