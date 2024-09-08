@@ -31,6 +31,7 @@ int	execute_bin(t_command *cmd)
 			dup2_and_close(cmd->fd_in, 0);
 		if (cmd->fd_out != 1)
 			dup2_and_close(cmd->fd_out, 1);
+		close_file_ds();
 		if (execve(cmd->command, cmd->args, get_env_array()) == -1)
 		{
 			perror("minishell ");
@@ -43,8 +44,7 @@ int	execute_bin(t_command *cmd)
 	}
 	wait(&g_vars.exit_status);
 	g_vars.parent = 1;
-	set_exit_status(g_vars.exit_status);
-	return (0);
+	return (set_exit_status(g_vars.exit_status), 0);
 }
 
 void	redirection_exec(t_command *cmd)

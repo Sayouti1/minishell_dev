@@ -28,3 +28,5 @@ bash $> ..
 
 ==================================================
 
+
+test to fix :  grep 1 << aa << bb | grep a << aa << bb | sort > sorted.txt

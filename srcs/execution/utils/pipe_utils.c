@@ -12,11 +12,27 @@
 
 #include "../../../include/include.h"
 
+int	fd_in_list(int fd)
+{
+	t_fd_collectors	*tmp;
+
+	tmp = g_vars.fd_collectors;
+	while (tmp)
+	{
+		if (tmp->fd == fd)
+			return (1);
+		tmp = tmp->next;
+	}
+	return (0);
+}
+
 void	add_to_fds(int val)
 {
 	t_fd_collectors	*node;
 	t_fd_collectors	*tmp;
 
+	if (fd_in_list(val))
+		return ;
 	node = malloc(sizeof(t_fd_collectors));
 	if (NULL == node)
 		return ;
@@ -40,9 +56,17 @@ void	close_file_ds(void)
 	while (g_vars.fd_collectors)
 	{
 		tmp = g_vars.fd_collectors->next;
-		close(g_vars.fd_collectors->fd);
+		if (g_vars.fd_collectors->fd != -1)
+			close(g_vars.fd_collectors->fd);
 		free(g_vars.fd_collectors);
 		g_vars.fd_collectors = tmp;
+	}
+	if (g_vars.parent == 0)
+	{
+		if (g_vars.std_in != -1)
+			close(g_vars.std_in);
+		if (g_vars.std_out != -1)
+			close(g_vars.std_out);
 	}
 	g_vars.fd_collectors = NULL;
 }

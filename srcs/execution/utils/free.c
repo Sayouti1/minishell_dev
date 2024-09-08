@@ -69,9 +69,7 @@ void	free_cmds(t_command *cmd)
 		while (cmd->redirection)
 		{
 			tmp_red = cmd->redirection->next;
-			if (cmd->redirection->fd > 2)
-				close(cmd->redirection->fd);
-			free(cmd->redirection);
+			free_redirection(cmd->redirection);
 			cmd->redirection = tmp_red;
 		}
 		if (cmd->fd_in != 0)
