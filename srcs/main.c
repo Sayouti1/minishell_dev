@@ -121,26 +121,18 @@ void	main_loop(void)
 			continue ;
 		command = NULL;
 		if (ft_ambiguous_err(tokens))
-		{
 			ft_putstr_fd("minishell: ambiguous redirect\n", 2);
-			// exit(1);
-			// continue ;
-			// free_token(tokens);
-		}
 		if (error_heredoc(tokens))
 		{
 			ft_putstr_fd("minishell: maximum here-document count exceeded\n", 2);
 			free_token(tokens);
-			exit(1);
+			exit(2);
 		}
-		// ft_printToken(tokens);
 		ntokens = expand_var(tokens);
 		free_token(tokens);
 		if (!ntokens)
 			printf("token is NULL go solve it \n");
-		// ft_printToken(ntokens);
 		token_to_command_convert(ntokens, &command);
-		// print_commands(command);
 		process_command(command);
 		free_cmds(command);
 		free_token(ntokens);
