@@ -12,7 +12,7 @@
 
 #include "../../../include/include.h"
 
-int fd_in_list(int fd)
+int	fd_in_list(int fd)
 {
 	t_fd_collectors	*tmp;
 

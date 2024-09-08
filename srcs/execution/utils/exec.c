@@ -44,8 +44,7 @@ int	execute_bin(t_command *cmd)
 	}
 	wait(&g_vars.exit_status);
 	g_vars.parent = 1;
-	set_exit_status(g_vars.exit_status);
-	return (0);
+	return (set_exit_status(g_vars.exit_status), 0);
 }
 
 void	redirection_exec(t_command *cmd)
