@@ -213,6 +213,7 @@ int								fix_command_path(t_command *cmd);
 void							free_env(void);
 void							delete_env(t_env *env);
 void							free_split(char **arr);
+void    						free_redirection(t_redirection *red);
 int								reset_fd(void);
 void							free_cmds(t_command *cmd);
 
