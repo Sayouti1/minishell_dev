@@ -24,9 +24,13 @@ static int	check_value(char *str)
 	while (str[i])
 	{
 		if (str[i] == ' ')
+		{
 			return (1);
+			free(file);
+		}
 		i++;
 	}
+	free(file);
 	return (0);
 }
 

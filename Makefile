@@ -1,6 +1,6 @@
 NAME = minishell
 CC = cc
-CFLAGS = -Wall -Wextra -Werror  -g3#-fsanitize=address 
+CFLAGS = -Wall -Wextra -Werror  -g3 #-fsanitize=address 
 
 SRCS= srcs/main.c \
 	srcs/execution/builtin/cd.c srcs/execution/builtin/env.c srcs/execution/builtin/pwd.c srcs/execution/builtin/export.c \
@@ -12,6 +12,7 @@ SRCS= srcs/main.c \
 	srcs/execution/utils/length.c srcs/execution/utils/str_utils.c srcs/execution/builtin/env_2.c srcs/execution/utils/utils_2.c \
 	srcs/parsing/check_input/check_error_utils.c srcs/parsing/check_input/error_input.c srcs/parsing/expand/expand_utils.c \
 	srcs/parsing/expand/expand.c srcs/parsing/lexer/lexer_utils.c srcs/parsing/lexer/lexer.c srcs/more_utils.c srcs/parsing/expand/more_utils_expand.c \
+	srcs/utils.c srcs/just_test_utils.c \
 
 OBJS=$(SRCS:.c=.o)
 LIBFT= Libft/libft.a
