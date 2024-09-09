@@ -47,7 +47,13 @@ int	ft_ambiguous_err(t_token *tokens)
 		{
 			value = substitute_var1(token->next->value);
 			if (check_value(value))
+			{
+				if (value)
+					free(value);
 				return (1);
+			}
+			if (value)
+				free (value);
 		}
 		token = token->next;
 	}

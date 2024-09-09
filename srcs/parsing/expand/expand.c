@@ -60,7 +60,7 @@ static void	handle_word_expansion(t_token **ntoken, t_token **token)
 	int		i;
 
 	expand = substitute_var1((*token)->value);
-	if (expand[0] == '"')
+	if (expand[0] == '"' || expand[0] == 'l')
 		add_token_to_list(ntoken, new_token((*token)->type, expand));
 	else
 	{
