@@ -52,6 +52,8 @@ int	reset_fd(void)
 {
 	dup2(g_vars.std_out, 1);
 	dup2(g_vars.std_in, 0);
+	close(g_vars.std_in);
+	close(g_vars.std_out);
 	return (1);
 }
 
@@ -67,9 +69,7 @@ void	free_cmds(t_command *cmd)
 		while (cmd->redirection)
 		{
 			tmp_red = cmd->redirection->next;
-			if (cmd->redirection->fd > 2)
-				close(cmd->redirection->fd);
-			free(cmd->redirection);
+			free_redirection(cmd->redirection);
 			cmd->redirection = tmp_red;
 		}
 		if (cmd->fd_in != 0)

@@ -20,14 +20,14 @@ static int	check_value(char *str)
 	i = 0;
 	file = ft_strtrim(str, " ");
 	if (file == NULL || *file == '\0')
-		return (1);
+		return (free(file), 1);
 	while (str[i])
 	{
 		if (str[i] == ' ')
-			return (1);
+			return (free(file), 1);
 		i++;
 	}
-	return (0);
+	return (free(file), 0);
 }
 
 int	ft_ambiguous_err(t_token *tokens)
@@ -44,6 +44,7 @@ int	ft_ambiguous_err(t_token *tokens)
 			value = substitute_var1(token->next->value);
 			if (check_value(value))
 				return (1);
+			free(value);
 		}
 		token = token->next;
 	}

@@ -62,6 +62,7 @@ char	**get_env_array(void)
 			key = ft_strjoin(env->key, "=");
 		else
 			key = ft_strjoin_prefixed(env->key, '=', env->value);
+		collect_garbage(array[i]);
 		array[i++] = key;
 		env = env->next;
 	}

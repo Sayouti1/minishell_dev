@@ -12,6 +12,12 @@
 
 #include "../../../include/include.h"
 
+void	dup2_and_close(int new_fd, int old_fd)
+{
+	dup2(new_fd, old_fd);
+	close(new_fd);
+}
+
 int	execute_bin(t_command *cmd)
 {
 	int	pid;
@@ -22,9 +28,10 @@ int	execute_bin(t_command *cmd)
 	if (0 == pid)
 	{
 		if (cmd->fd_in != 0)
-			dup2(cmd->fd_in, 0);
+			dup2_and_close(cmd->fd_in, 0);
 		if (cmd->fd_out != 1)
-			dup2(cmd->fd_out, 1);
+			dup2_and_close(cmd->fd_out, 1);
+		close_file_ds();
 		if (execve(cmd->command, cmd->args, get_env_array()) == -1)
 		{
 			perror("minishell ");
@@ -37,8 +44,7 @@ int	execute_bin(t_command *cmd)
 	}
 	wait(&g_vars.exit_status);
 	g_vars.parent = 1;
-	set_exit_status(g_vars.exit_status);
-	return (0);
+	return (set_exit_status(g_vars.exit_status), 0);
 }
 
 void	redirection_exec(t_command *cmd)
@@ -56,14 +62,6 @@ void	redirection_exec(t_command *cmd)
 			cmd->fd_in = tmp->fd;
 		tmp = tmp->next;
 	}
-}
-
-int	is_directory(char *path)
-{
-	struct stat	dir_stat;
-
-	stat(path, &dir_stat);
-	return (S_ISDIR(dir_stat.st_mode));
 }
 
 void	execute_command(t_command *cmd, int piped)

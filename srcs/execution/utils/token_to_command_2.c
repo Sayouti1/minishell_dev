@@ -18,7 +18,7 @@ char	*trim_str(char *str)
 	int		i;
 
 	i = -1;
-	tmp = ft_strdup("");
+	tmp = NULL;
 	while (str && str[++i])
 	{
 		if (str[i] == '\'')
@@ -35,7 +35,6 @@ char	*trim_str(char *str)
 		}
 		else
 			tmp = char_concat(tmp, str[i]);
-		collect_garbage(tmp);
 	}
 	free(str);
 	return (tmp);
@@ -71,17 +70,22 @@ int	token_type_to_cmd_type(t_token_type type)
 		return (printf("error token_type to cmd_type\n"), 99);
 }
 
-void	*ft_realloc(void *ptr, size_t size)
+void	*ft_realloc(void *ptr, size_t old_size, size_t new_size)
 {
 	void	*new_ptr;
 
-	new_ptr = malloc(size);
+	if (new_size == 0)
+		return (free(ptr), NULL);
+	new_ptr = malloc(new_size);
 	if (NULL == new_ptr)
-		return (NULL);
-	ft_memset(new_ptr, 0, size);
+		return (free(ptr), NULL);
+	ft_memset(new_ptr, 0, new_size);
 	if (ptr)
 	{
-		ft_memmove(new_ptr, ptr, size);
+		if (old_size <= new_size)
+			ft_memmove(new_ptr, ptr, old_size);
+		else
+			ft_memmove(new_ptr, ptr, new_size);
 		free(ptr);
 	}
 	return (new_ptr);
