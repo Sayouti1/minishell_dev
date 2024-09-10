@@ -12,6 +12,18 @@
 
 #include "../../../include/include.h"
 
+int	closing_found(char *str, int start, char c)
+{
+	int i;
+
+	i = 0;
+	while (str[start])
+	{
+		if (str[++start] == c)
+			return (1);
+	}
+	return (0);
+}
 char	*trim_str(char *str)
 {
 	char	*tmp;
@@ -21,13 +33,13 @@ char	*trim_str(char *str)
 	tmp = NULL;
 	while (str && str[++i])
 	{
-		if (str[i] == '\'')
+		if (str[i] == '\'' && closing_found(str, i, '\''))
 		{
 			++i;
 			while (str[i] && str[i] != '\'')
 				tmp = char_concat(tmp, str[i++]);
 		}
-		else if (str[i] == '"')
+		else if (str[i] == '"' && closing_found(str, i, '"'))
 		{
 			++i;
 			while (str[i] && str[i] != '"')

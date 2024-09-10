@@ -39,7 +39,7 @@ int	ft_ambiguous_err(t_token *tokens)
 	while (token)
 	{
 		if ((token->type == 3 || token->type == 2 || token->type == 4)
-			&& token->next->type == 0)
+			&& token->next->type == 0 && ft_strchr(token->next->value, '$'))
 		{
 			value = substitute_var1(token->next->value);
 			if (check_value(value))

@@ -12,46 +12,6 @@
 
 #include "../include/include.h"
 
-// void	print_commands(t_command *command)
-// {
-// 	int				i;
-// 	t_redirection	*red;
-// 	t_command		*cmd;
-// 	int				j;
-
-// 	i = 0;
-// 	cmd = command;
-// 	while (cmd)
-// 	{
-// 		printf("{\n\tcommand[%d] = [%s],\n", ++i, cmd->command);
-// 		if (cmd->args)
-// 		{
-// 			printf("\targs = {\n");
-// 			j = 0;
-// 			while (cmd->args && cmd->args[j])
-// 			{
-// 				printf("\t\t[%d] = [%s],\n", j + 1, cmd->args[j]);
-// 				++j;
-// 			}
-// 			printf("\t}\n");
-// 		}
-// 		red = cmd->redirection;
-// 		if (red)
-// 		{
-// 			printf("\tredirection = {\n");
-// 			while (red)
-// 			{
-// 				printf("\t\ttype = %d, file_name = [%s]\n", red->type,
-// 					red->file_name);
-// 				red = red->next;
-// 			}
-// 			printf("\t}\n");
-// 		}
-// 		printf("}\n");
-// 		cmd = cmd->next;
-// 	}
-// }
-
 static void	print_args(char **args)
 {
 	int	j;
