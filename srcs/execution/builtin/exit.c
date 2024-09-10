@@ -60,5 +60,7 @@ int	ft_exit(char **arg)
 		exit_status = ft_atoi(arg[0]);
 	free_split(arg);
 	g_vars.exit_status = exit_status;
+	close(g_vars.std_in);
+	close(g_vars.std_out);
 	exit(exit_status);
 }
