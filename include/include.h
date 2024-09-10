@@ -192,6 +192,7 @@ int								ft_concat_env_var(char *var);
 int								is_not_valid(char *var);
 int								ft_export(char **var);
 void							ft_print_export(void);
+int 							fix_shlvl();
 
 int								pwd(void);
 char							**get_path_dirs(void);

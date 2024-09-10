@@ -14,9 +14,6 @@
 
 int	closing_found(char *str, int start, char c)
 {
-	int i;
-
-	i = 0;
 	while (str[start])
 	{
 		if (str[++start] == c)

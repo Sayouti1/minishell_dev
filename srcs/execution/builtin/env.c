@@ -54,6 +54,7 @@ void	init_env(void)
 		free_split(split);
 		i++;
 	}
+	fix_shlvl();
 }
 
 /*
