@@ -28,83 +28,50 @@ void	init_g_vars(char **envp)
 	g_vars.garbage_coll = NULL;
 }
 
-t_token	*check_and_token(char *line)
-{
-	char	*line_trim;
-	t_token	*tokens;
+// void	main_loop(void)
+// {
+// 	char		*line;
+// 	t_token		*tokens;
+// 	t_token		*ntokens;
+// 	t_command	*command;
 
-	tokens = NULL;
-	line_trim = line;
-	line_trim = ft_strtrim(line, " \t\n\v\r");
-	free(line);
-	if (!line_trim)
-		return (NULL);
-	if (is_syntaxe_cmd(line_trim))
-	{
-		free(line_trim);
-		return (NULL);
-	}
-	tokens = token_line(line_trim);
-	free(line_trim);
-	return (tokens);
-}
+// 	command = NULL;
+// 	while (1)
+// 	{
+// 		sig_init();
+// 		line = readline("minishell :)=> ");
+// 		if (!line && printf("HIi\n"))
+// 			break ;
+// 		if (check_line(&line))
+// 			continue ;
+// 		add_history(line);
+// 		tokens = check_and_token(line);
+// 		if (!tokens)
+// 			continue ;
+// 		command = NULL;
+// 		if (ft_ambiguous_err(tokens))
+// 			ft_putstr_fd("minishell: ambiguous redirect\n", 2);
+// 		if (error_heredoc(tokens))
+// 		{
+// 			ft_putstr_fd("minishell: maximum here-document count exceeded\n",
+// 				2);
+// 			free_token(tokens);
+// 			exit(2);
+// 		}
+// 		ntokens = expand_var(tokens);
+// 		free_token(tokens);
+// 		if (!ntokens)
+// 			printf("token is NULL go solve it \n");
+// 		token_to_command_convert(ntokens, &command);
+// 		process_command(command);
+// 		free_cmds(command);
+// 		free_token(ntokens);
+// 	}
+// }
 
-void	ft_printToken(t_token *tokens)
-{
-	t_token	*tmp;
-
-	tmp = tokens;
-	while (tmp)
-	{
-		printf("value --> [%s] | type ---> %d\n", tmp->value, tmp->type);
-		tmp = tmp->next;
-	}
-}
-
-void	print_commands(t_command *command)
-{
-	int				i;
-	t_redirection	*red;
-	t_command		*cmd;
-	int				j;
-
-	i = 0;
-	cmd = command;
-	while (cmd)
-	{
-		printf("{\n\tcommand[%d] = [%s],\n", ++i, cmd->command);
-		if (cmd->args)
-		{
-			printf("\targs = {\n");
-			j = 0;
-			while (cmd->args && cmd->args[j])
-			{
-				printf("\t\t[%d] = [%s],\n", j + 1, cmd->args[j]);
-				++j;
-			}
-			printf("\t}\n");
-		}
-		red = cmd->redirection;
-		if (red)
-		{
-			printf("\tredirection = {\n");
-			while (red)
-			{
-				printf("\t\ttype = %d, file_name = [%s]\n", red->type,
-					red->file_name);
-				red = red->next;
-			}
-			printf("\t}\n");
-		}
-		printf("}\n");
-		cmd = cmd->next;
-	}
-}
 void	main_loop(void)
 {
 	char		*line;
-	t_token		*tokens;
-	t_token		*ntokens;
 	t_command	*command;
 
 	command = NULL;
@@ -114,45 +81,26 @@ void	main_loop(void)
 		line = readline("minishell :)=> ");
 		if (!line)
 			break ;
-		if (check_line(&line))
-			continue ;
-		add_history(line);
-		tokens = check_and_token(line);
-		if (!tokens)
-			continue ;
-		command = NULL;
-		if (ft_ambiguous_err(tokens))
-			ft_putstr_fd("minishell: ambiguous redirect\n", 2);
-		if (error_heredoc(tokens))
+		if (!check_line(&line))
 		{
-			ft_putstr_fd("minishell: maximum here-document count exceeded\n", 2);
-			free_token(tokens);
-			exit(2);
+			add_history(line);
+			process_line(line, &command);
 		}
-		ntokens = expand_var(tokens);
-		free_token(tokens);
-		if (!ntokens)
-			printf("token is NULL go solve it \n");
-		token_to_command_convert(ntokens, &command);
-		process_command(command);
-		free_cmds(command);
-		free_token(ntokens);
-		free_garbage();
+		if (!line)
+			free(line);
 	}
 }
 
 int	main(int ac, char **av, char **envp)
 {
-	t_command	*command;
-
 	(void)ac;
 	(void)av;
-	command = NULL;
 	init_g_vars(envp);
 	init_env();
 	main_loop();
 	rl_clear_history();
-	free_cmds(command);
 	free_env();
+	close(g_vars.std_in);
+	close(g_vars.std_out);
 	return (0);
 }

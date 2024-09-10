@@ -50,6 +50,11 @@ int	treat_heredoc(char *del, int fd, int sub_var)
 	int		bad_sub;
 
 	bad_sub = 0;
+	if (!del)
+	{
+		del = ft_strdup("");
+		sub_var = 1;
+	}
 	signal(SIGINT, heredoc_sig);
 	while (1)
 	{

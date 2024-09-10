@@ -14,7 +14,7 @@
 
 void	free_redirection(t_redirection *red)
 {
-	if (red->fd > 2)
+	if (red->fd >= 0)
 		close(red->fd);
 	free(red->file_name);
 	free(red);
