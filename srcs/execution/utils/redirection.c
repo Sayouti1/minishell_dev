@@ -47,13 +47,15 @@ t_redirection	*new_redirection(int type, char *file_name, int fd,
 	file_name = trim_str(ft_strdup(file_name));
 	redirection->type = type;
 	if (type != HEREDOC && NULL == file_name)
-		fd = -1337;
+		fd = -1;
 	else if (type == OUTPUT && create_file)
 		fd = open(file_name, O_CREAT | O_TRUNC | O_WRONLY, 0666);
 	else if (type == APPEND && create_file)
 		fd = open(file_name, O_CREAT | O_APPEND | O_WRONLY, 0666);
 	else if (type == INPUT && NULL != file_name)
 		fd = open(file_name, O_RDONLY);
+	if (type != HEREDOC && create_file && NULL == file_name)
+		ft_putstr_fd("minishell: : No such file or directory\n", 2);
 	redirection->file_name = file_name_permissions(file_name, type,
 			create_file);
 	redirection->fd = fd;

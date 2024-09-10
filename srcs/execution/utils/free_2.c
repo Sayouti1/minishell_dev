@@ -12,10 +12,10 @@
 
 #include "../../../include/include.h"
 
-void    free_redirection(t_redirection *red)
+void	free_redirection(t_redirection *red)
 {
-    if (red->fd > 2)
-        close(red->fd);
-    free(red->file_name);
-    free(red);
+	if (red->fd >= 0)
+		close(red->fd);
+	free(red->file_name);
+	free(red);
 }

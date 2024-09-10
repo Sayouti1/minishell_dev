@@ -68,7 +68,7 @@ static void	handle_word_expansion(t_token **ntoken, t_token **token)
 		i = -1;
 		while (words && words[++i])
 			add_token_to_list(ntoken, new_token(TOKEN_WORD, words[i]));
-		//free_words(words);
+		free_words(words);
 	}
 	free(expand);
 }
