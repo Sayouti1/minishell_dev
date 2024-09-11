@@ -44,7 +44,10 @@ t_redirection	*new_redirection(int type, char *file_name, int fd,
 	redirection = (t_redirection *)malloc(sizeof(t_redirection));
 	if (NULL == redirection)
 		return (NULL);
-	file_name = trim_str(ft_strdup(file_name));
+	if (type == HEREDOC)
+		file_name = ft_strdup(file_name);
+	else
+		file_name = trim_str(ft_strdup(file_name));
 	redirection->type = type;
 	if (type != HEREDOC && NULL == file_name)
 		fd = -1;
@@ -60,8 +63,7 @@ t_redirection	*new_redirection(int type, char *file_name, int fd,
 			create_file);
 	redirection->fd = fd;
 	add_to_fds(fd);
-	redirection->next = NULL;
-	return (redirection);
+	return (redirection->next = NULL, redirection);
 }
 
 t_command	*new_command(char *command, char **args, t_redirection *redirection)
