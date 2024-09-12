@@ -16,8 +16,8 @@ int	cd_home(char *home)
 {
 	home = get_env_v1("HOME");
 	if (NULL == home)
-		return (ft_putstr_fd("cd: HOME not set\n", 2),
-			g_vars.exit_status = 1, 1);
+		return (ft_putstr_fd("cd: HOME not set\n", 2), g_vars.exit_status = 1,
+			1);
 	if (chdir(home))
 		return (ft_perror(home, " : No such file or directory\n", NULL),
 			g_vars.exit_status = 1, 1);
@@ -51,8 +51,7 @@ int	cd(char **split)
 	if (NULL == full_path)
 		return (g_vars.exit_status = 1, 1);
 	if (chdir(full_path))
-		return (perror("cd "), free(full_path),
-			g_vars.exit_status = 1, 1);
+		return (perror("cd "), free(full_path), g_vars.exit_status = 1, 1);
 	return (free(full_path), g_vars.exit_status = 0, 0);
 }
 
@@ -62,6 +61,8 @@ void	exec_cd(char **split)
 
 	old_pwd = getcwd(NULL, 0);
 	if (cd(split) == 0 && old_pwd != NULL)
-		ft_env_replace("OLDPWD", old_pwd);		
+	{
+		ft_env_replace("OLDPWD", old_pwd);
+	}
 	free(old_pwd);
 }

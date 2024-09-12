@@ -31,12 +31,12 @@
 
 typedef enum s_token_type
 {
-	TOKEN_WORD,				// using for the cmd argm 0
-	TOKEN_PIPE,				// using for the pipe cmd 1
-	TOKEN_REDIR_IN,			// using like < 2
-	TOKEN_REDIR_OUT,		// using like > 3
-	TOKEN_REDIR_APPEND,		// using for >> 4
-	TOKEN_REDIR_HEREDOC,	// using for <<
+	TOKEN_WORD, // using for the cmd argm 0
+	TOKEN_PIPE, // using for the pipe cmd 1
+	TOKEN_REDIR_IN, // using like < 2
+	TOKEN_REDIR_OUT, // using like > 3
+	TOKEN_REDIR_APPEND, // using for >> 4
+	TOKEN_REDIR_HEREDOC, // using for <<
 }								t_token_type;
 
 typedef struct s_token
@@ -83,7 +83,7 @@ typedef struct s_global_vars
 
 extern t_global_vars			g_vars;
 
-enum							e_redirection
+enum	e_redirection
 {
 	OUTPUT,
 	APPEND,
@@ -93,10 +93,10 @@ enum							e_redirection
 
 typedef struct s_redirection
 {
-	int							type;	// output | append | input | her_doc
-	char						*file_name;
-	int							fd;
-	struct s_redirection		*next;
+	int						type;
+	char					*file_name;
+	int						fd;
+	struct s_redirection	*next;
 
 }								t_redirection;
 
@@ -156,6 +156,8 @@ void							process_line(char *line, t_command **command);
 t_token							*check_and_token(char *line);
 void							print_commands(t_command *command);
 void							ft_print_token(t_token *tokens);
+char							*surround_quotes(char *str);
+int								closing_found(char *str, int start, char c);
 
 // ------------------------------------------------------
 
@@ -193,7 +195,7 @@ int								ft_concat_env_var(char *var);
 int								is_not_valid(char *var);
 int								ft_export(char **var);
 void							ft_print_export(void);
-int 							fix_shlvl();
+int								fix_shlvl(void);
 
 int								pwd(void);
 char							**get_path_dirs(void);
@@ -215,7 +217,7 @@ int								fix_command_path(t_command *cmd);
 void							free_env(void);
 void							delete_env(t_env *env);
 void							free_split(char **arr);
-void    						free_redirection(t_redirection *red);
+void							free_redirection(t_redirection *red);
 int								reset_fd(void);
 void							free_cmds(t_command *cmd);
 

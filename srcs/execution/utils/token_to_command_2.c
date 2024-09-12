@@ -12,15 +12,6 @@
 
 #include "../../../include/include.h"
 
-int	closing_found(char *str, int start, char c)
-{
-	while (str[start])
-	{
-		if (str[++start] == c)
-			return (1);
-	}
-	return (0);
-}
 char	*trim_str(char *str)
 {
 	char	*tmp;

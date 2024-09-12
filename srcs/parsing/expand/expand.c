@@ -53,26 +53,6 @@ static void	handle_heredoc(t_token **ntoken, t_token **token)
 		add_token_to_list(ntoken, new_token((*token)->type, (*token)->value));
 }
 
-char	*surround_quotes(char *str)
-{
-	int		i;
-	int		j;
-	char	*new_str;
-
-	new_str = malloc((ft_strlen(str) + 3) * sizeof(char));
-	if (NULL == new_str)
-		return (free(str), NULL);
-	new_str[0] = '"';
-	j = 1;
-	i = 0;
-	while (str[i])
-		new_str[j++] = str[i++];
-	new_str[j++] = '"';
-	new_str[j++] = '\0';
-	free(str);
-	return (new_str);
-}
-
 static void	handle_word_expansion(t_token **ntoken, t_token **token)
 {
 	char	*expand;

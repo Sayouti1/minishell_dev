@@ -1,6 +1,6 @@
 NAME = minishell
 CC = cc
-CFLAGS = -Wall -Wextra -Werror  -g3 #-fsanitize=address 
+CFLAGS = -Wall -Wextra -Werror  -g3 -fsanitize=address 
 
 SRCS= srcs/main.c \
 	srcs/execution/builtin/cd.c srcs/execution/builtin/env.c srcs/execution/builtin/pwd.c srcs/execution/builtin/export.c srcs/execution/builtin/export_2.c \

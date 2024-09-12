@@ -90,3 +90,13 @@ int	ft_perror(char *s1, char *s2, char *s3)
 		ft_putstr_fd(s3, 2);
 	return (1);
 }
+
+int	closing_found(char *str, int start, char c)
+{
+	while (str[start])
+	{
+		if (str[++start] == c)
+			return (1);
+	}
+	return (0);
+}
