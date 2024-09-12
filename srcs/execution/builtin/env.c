@@ -105,6 +105,7 @@ int	ft_env_replace(char *key, char *new_value)
 		if (!ft_strcmp(key, tmp->key))
 		{
 			free(tmp->value);
+			tmp->to_export = 1;
 			tmp->value = ft_strdup(new_value);
 			return (1);
 		}
