@@ -17,23 +17,27 @@ int	is_syntaxe_cmd(char *line)
 	if (is_closed_qoute(line))
 	{
 		ft_putstr_fd("Syntax error: unclosed quote\n", STDERR_FILENO);
+		g_vars.exit_status = 2;
 		return (1);
 	}
 	else if (is_error_logic(line))
 	{
 		ft_putstr_fd("Error: Logical operators '&&' and '||' \
 		are not supported.\n", STDERR_FILENO);
+		g_vars.exit_status = 2;
 		return (1);
 	}
 	else if (is_error_misplaced(line))
 	{
 		ft_putstr_fd("minishell: syntax error near unexpected \
 		token `|` or `&`\n", STDERR_FILENO);
+		g_vars.exit_status = 2;
 		return (1);
 	}
 	else if (is_invalid_redirection(line))
 	{
 		ft_putstr_fd("sytax error : in invalid redirection\n", STDERR_FILENO);
+		g_vars.exit_status = 2;
 		return (1);
 	}
 	return (0);

@@ -102,5 +102,5 @@ int	main(int ac, char **av, char **envp)
 	free_env();
 	close(g_vars.std_in);
 	close(g_vars.std_out);
-	return (0);
+	exit (g_vars.exit_status);
 }
