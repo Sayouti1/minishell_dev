@@ -35,3 +35,93 @@ ERRORs and leaks in :
 
                         minishell :)=> ls > " "
                         minishell: ambiguous redirect
+
+TODO : don't update we use export 
+TODO : we have some error in command like : "" or '' or ls '' or ls ""
+
+=========================================================================
+
+env -i bash
+aez-zoui@c4r6p7:/nfs/homes/aez-zoui/Desktop/1337/minishell_dev$ ls
+Libft  Makefile  TODO  include  minishell  out  readline.supp  srcs  to_handle.txt
+aez-zoui@c4r6p7:/nfs/homes/aez-zoui/Desktop/1337/minishell_dev$ cat
+aez-zoui@c4r6p7:/nfs/homes/aez-zoui/Desktop/1337/minishell_dev$ env
+PWD=/nfs/homes/aez-zoui/Desktop/1337/minishell_dev
+SHLVL=1
+_=/usr/bin/env
+aez-zoui@c4r6p7:/nfs/homes/aez-zoui/Desktop/1337/minishell_dev$ 
+
+======================================================================
+
+minishell :)=> export b+=jkkkk
+value --> [export] | type ---> 0
+value --> [b+=jkkkk] | type ---> 0
+
+{
+        command[1] = [export],
+        args = {
+                [1] = [b+=jkkkk],
+        }
+}
+
+export: `b+=jkkkk': not a valid identifier
+
+=================================================================
+
+minishell :)=> mkdir -p a/b/c
+value --> [mkdir] | type ---> 0
+value --> [-p] | type ---> 0
+value --> [a/b/c] | type ---> 0
+
+{
+        command[1] = [mkdir],
+        args = {
+                [1] = [-p],
+                [2] = [a/b/c],
+        }
+}
+
+minishell :)=> cd a/b/c/
+value --> [cd] | type ---> 0
+value --> [a/b/c/] | type ---> 0
+
+{
+        command[1] = [cd],
+        args = {
+                [1] = [a/b/c##  you have to close the fd
+/],
+        }
+}
+
+minishell :)=> rm -r ../../../a/
+value --> [rm] | type ---> 0
+value --> [-r] | type ---> 0
+value --> [../../../a/] | type ---> 0
+
+{
+        command[1] = [rm],
+        args = {
+                [1] = [-r],
+                [2] = [../../../a/],
+        }
+}
+
+minishell :)=> pwd
+value --> [pwd] | type ---> 0
+
+{
+        command[1] = [pwd],
+}
+
+pwd: error retrieving current directory: getcwd:cannot access parent directories: No such file or directory
+
+===============================================================================
+
+ez-zoui@c4r6p7:~/Desktop/1337/minishell_dev$ cat | ls
+include  Libft  Makefile  minishell  out  readline.supp  srcs  TODO  to_handle.txt
+
+aez-zoui@c4r6p7:~/Desktop/1337/minishell_dev$ 
+
+##  you have to close the fd
+
+============================================================================
