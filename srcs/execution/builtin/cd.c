@@ -55,3 +55,13 @@ int	cd(char **split)
 			g_vars.exit_status = 1, 1);
 	return (free(full_path), g_vars.exit_status = 0, 0);
 }
+
+void	exec_cd(char **split)
+{
+	char	*old_pwd;
+
+	old_pwd = getcwd(NULL, 0);
+	if (cd(split) == 0 && old_pwd != NULL)
+		ft_env_replace("OLDPWD", old_pwd);		
+	free(old_pwd);
+}

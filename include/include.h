@@ -163,6 +163,7 @@ void							ft_print_token(t_token *tokens);
 
 int								cd_home(char *home);
 int								cd(char **split);
+void							exec_cd(char **split);
 
 int								n_option(int *i, char **str);
 void							ft_echo(char **str);

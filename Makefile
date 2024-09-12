@@ -3,7 +3,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror  -g3 #-fsanitize=address 
 
 SRCS= srcs/main.c \
-	srcs/execution/builtin/cd.c srcs/execution/builtin/env.c srcs/execution/builtin/pwd.c srcs/execution/builtin/export.c \
+	srcs/execution/builtin/cd.c srcs/execution/builtin/env.c srcs/execution/builtin/pwd.c srcs/execution/builtin/export.c srcs/execution/builtin/export_2.c \
 	srcs/execution/builtin/exit.c srcs/execution/builtin/unset.c srcs/execution/builtin/echo.c srcs/execution/builtin/exec_builtin.c \
 	srcs/execution/utils/free.c srcs/execution/utils/redirection.c srcs/execution/utils/exec.c srcs/execution/utils/checkers.c srcs/execution/utils/free_2.c \
 	srcs/execution/utils/token_to_command.c srcs/execution/utils/token_to_command_2.c srcs/execution/utils/garbage_collector.c srcs/execution/utils/pipe_utils.c \

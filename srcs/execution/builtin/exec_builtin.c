@@ -65,7 +65,7 @@ void	execute_built_in(t_command *cmd)
 	else if (!ft_strcmp(cmd->command, "env"))
 		exec_env(cmd);
 	else if (!ft_strcmp(cmd->command, "cd"))
-		cd(cmd->args);
+		exec_cd(cmd->args);
 	else if (!ft_strcmp(cmd->command, "pwd"))
 		pwd();
 	else if (!ft_strcmp(cmd->command, "exit"))
