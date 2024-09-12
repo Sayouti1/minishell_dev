@@ -47,6 +47,25 @@ int	execute_bin(t_command *cmd)
 	return (set_exit_status(g_vars.exit_status), 0);
 }
 
+int	execute_bin_pipe(t_command *cmd)
+{
+	signal(SIGQUIT, sig_handler);
+	if (cmd->fd_in != 0)
+		dup2_and_close(cmd->fd_in, 0);
+	if (cmd->fd_out != 1)
+		dup2_and_close(cmd->fd_out, 1);
+	close_file_ds();
+	if (execve(cmd->command, cmd->args, get_env_array()) == -1)
+	{
+		perror("minishell ");
+		if (errno == EACCES || errno == EISDIR)
+			return (exit(126), 1);
+		if (errno == ENOENT)
+			return (exit(127), 1);
+	}
+	exit(1);
+}
+
 void	redirection_exec(t_command *cmd)
 {
 	t_redirection	*tmp;
@@ -85,6 +104,8 @@ void	execute_command(t_command *cmd, int piped)
 			if (is_directory(cmd->command)
 				&& ft_perror("minishell ", cmd->command, ": Is a directory\n"))
 				g_vars.exit_status = 126;
+			else if (piped)
+				execute_bin_pipe(cmd);
 			else
 				execute_bin(cmd);
 		}

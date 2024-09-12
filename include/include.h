@@ -210,6 +210,7 @@ int								is_directory(char *path);
 
 void							dup2_and_close(int new_fd, int old_fd);
 int								execute_bin(t_command *cmd);
+int								execute_bin_pipe(t_command *cmd);
 void							redirection_exec(t_command *cmd);
 void							execute_command(t_command *cmd, int piped);
 int								fix_command_path(t_command *cmd);

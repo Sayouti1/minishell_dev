@@ -42,16 +42,27 @@ char	*trim_str(char *str)
 
 void	remove_quotes(t_command *cmd)
 {
-	int	i;
+	int		i;
+	char	*tmp;
 
 	if (NULL == cmd)
 		return ;
+	tmp = trim_str(ft_strdup(cmd->command));
 	if (cmd->command)
-		cmd->command = trim_str(ft_strdup(cmd->command));
+	{
+		if (tmp == NULL)
+			cmd->command = ft_strdup("");
+		else
+			cmd->command = tmp;
+	}
 	i = 0;
 	while (cmd->args && cmd->args[i])
 	{
-		cmd->args[i] = trim_str(ft_strdup(cmd->args[i]));
+		tmp = trim_str(ft_strdup(cmd->args[i]));
+		if (tmp == NULL)
+			cmd->args[i] = ft_strdup("");
+		else
+			cmd->args[i] = tmp;
 		++i;
 	}
 }
