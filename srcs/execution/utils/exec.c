@@ -111,27 +111,3 @@ void	execute_command(t_command *cmd, int piped)
 		}
 	}
 }
-
-int	fix_command_path(t_command *cmd)
-{
-	char	*cwd;
-	char	*tmp_cmd;
-	int		ret;
-
-	ret = 0;
-	tmp_cmd = cmd->command;
-	cwd = getcwd(NULL, 0);
-	cmd->command = get_full_path(cmd->command, cwd);
-	if (NULL == cmd->command && ++ret)
-	{
-		ft_putstr_fd("minishell ", 2);
-		ft_putstr_fd(tmp_cmd, 2);
-		ft_putstr_fd(": command not found\n", 2);
-		g_vars.exit_status = 127;
-	}
-	free(cwd);
-	free(tmp_cmd);
-	if (cmd->command)
-		fix_command_arg(cmd);
-	return (ret);
-}

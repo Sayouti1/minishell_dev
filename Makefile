@@ -23,8 +23,6 @@ $(NAME) : $(OBJS)
 	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -lreadline -o $(NAME)
 	clear
 
-test : re
-	./minishell
 clean :
 	@$(MAKE) -C Libft clean
 	@rm -f $(OBJS)

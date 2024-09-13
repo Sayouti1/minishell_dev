@@ -23,7 +23,8 @@ int	ft_concat_env_var(char *var, char *tmp)
 		++i;
 	if (i < 2 || !var[i] || var[i - 1] != '+')
 		return (0);
-	if (var[i] == '=' && (!ft_isalnum(var[i - 1]) && var[i - 1] != '+' && var[i - 1] != '_'))
+	if (var[i] == '=' && (!ft_isalnum(var[i - 1]) && var[i - 1] != '+'
+			&& var[i - 1] != '_'))
 		return (ft_perror("export: `", var, "': not a valid identifier\n"),
 			g_vars.exit_status = 1, 1);
 	key_value = split_on_two(var, "+");
@@ -35,7 +36,7 @@ int	ft_concat_env_var(char *var, char *tmp)
 	tmp = string_concat(ft_strdup(get_env_v1(key_value[0])),
 			ft_strdup(key_value[1] + x));
 	if (!ft_env_replace(key_value[0], key_value[1]))
-		add_to_env(ft_strdup(key_value[0]),tmp, 1);
+		add_to_env(ft_strdup(key_value[0]), tmp, 1);
 	free_split(key_value);
 	return (1);
 }

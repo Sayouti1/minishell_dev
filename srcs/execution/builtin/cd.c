@@ -58,11 +58,17 @@ int	cd(char **split)
 void	exec_cd(char **split)
 {
 	char	*old_pwd;
+	char	*pwd;
 
 	old_pwd = getcwd(NULL, 0);
 	if (cd(split) == 0 && old_pwd != NULL)
 	{
-		ft_env_replace("OLDPWD", old_pwd);
+		if (!ft_env_replace("OLDPWD", old_pwd))
+			add_to_env(ft_strdup("OLDPWD"), ft_strdup(old_pwd), 1);
+		pwd = getcwd(NULL, 0);
+		if (pwd != NULL && !ft_env_replace("PWD", pwd))
+			add_to_env(ft_strdup("PWD"), ft_strdup(pwd), 1);
+		free(pwd);
 	}
 	free(old_pwd);
 }
