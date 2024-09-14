@@ -35,6 +35,7 @@ void	process_line(char *line, t_command **command)
 	tokens = check_and_token(line);
 	if (tokens && !handle_tokens(&tokens, &ntokens))
 	{
+		g_vars.token = ntokens;
 		token_to_command_convert(ntokens, command);
 		ft_print_token(ntokens);
 		printf("\n");
@@ -44,6 +45,7 @@ void	process_line(char *line, t_command **command)
 		free_cmds(*command);
 		*command = NULL;
 		free_token(ntokens);
+		free_garbage();
 		ntokens = NULL;
 	}
 }

@@ -66,8 +66,8 @@ char	*get_dollar_key_v1(char *line, int *i)
 	j = *i + 1;
 	if (NULL == line)
 		return (NULL);
-	while (line[j] && !ft_char_in(line[j], " $\'\"\n{}><")
-		&& ft_isalnum(line[j]))
+	while (line[j] && !ft_char_in(line[j], " \t$\'\"\n{}><")
+		&& (ft_isalnum(line[j]) || line[j] == '_'))
 		j++;
 	key = (char *)malloc(sizeof(char) * (j - *i));
 	if (NULL == key)

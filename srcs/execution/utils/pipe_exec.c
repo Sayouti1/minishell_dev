@@ -66,6 +66,9 @@ int	execute_pipes(int len, int i, t_command *cmd, int *pids)
 		{
 			execute_command(cmd, 1);
 			close_file_ds();
+			free_cmds(g_vars.cmd);
+			free_token(g_vars.token);
+			free_garbage();
 			exit(g_vars.exit_status);
 		}
 		g_vars.parent = 1;
@@ -74,6 +77,7 @@ int	execute_pipes(int len, int i, t_command *cmd, int *pids)
 		cmd = cmd->next;
 		i++;
 	}
+	close_file_ds();
 	return (0);
 }
 

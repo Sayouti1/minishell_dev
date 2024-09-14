@@ -31,11 +31,12 @@ void	init_g_vars(char **envp)
 void	main_loop(void)
 {
 	char		*line;
-	t_command	*command;
-
-	command = NULL;
+	
 	while (1)
 	{
+
+		g_vars.cmd = NULL;
+		g_vars.token = NULL;
 		sig_init();
 		line = readline("minishell :)=> ");
 		if (!line)
@@ -43,10 +44,10 @@ void	main_loop(void)
 		if (!check_line(&line))
 		{
 			add_history(line);
-			process_line(line, &command);
+			process_line(line, &g_vars.cmd);
 		}
-		if (!line)
-			free(line);
+		// if (!line)
+		// 	free(line);
 	}
 }
 
@@ -63,3 +64,12 @@ int	main(int ac, char **av, char **envp)
 	close(g_vars.std_out);
 	exit (g_vars.exit_status);
 }
+
+
+
+
+
+
+
+
+

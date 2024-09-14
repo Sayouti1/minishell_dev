@@ -66,6 +66,8 @@ typedef struct s_fd_collectors
 	struct s_fd_collectors		*next;
 }								t_fd_collectors;
 
+typedef struct s_command t_command;
+
 typedef struct s_global_vars
 {
 	t_env						*env;
@@ -76,6 +78,8 @@ typedef struct s_global_vars
 	int							tmp_file;
 	int							std_in;
 	int							std_out;
+	t_command					*cmd;
+	t_token						*token;
 	t_garbage_collector			*garbage_coll;
 	t_fd_collectors				*fd_collectors;
 
