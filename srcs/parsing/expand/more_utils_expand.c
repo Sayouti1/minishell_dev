@@ -30,6 +30,7 @@ void	helper_func(t_token *token)
 	i = 0;
 	while (words && words[i])
 		add_token_to_list(&token, new_token(TOKEN_WORD, words[i++]));
+	free_words(words);
 }
 
 void	free_words(char **words)
