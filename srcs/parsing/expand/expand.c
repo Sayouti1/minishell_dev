@@ -67,7 +67,7 @@ static void	handle_word_expansion(t_token **ntoken, t_token **token)
 		add_token_to_list(ntoken, new_token((*token)->type, expand));
 	else
 	{
-		words = ft_split(expand, ' ');
+		words = split_expand(expand);
 		i = -1;
 		while (words && words[++i])
 		{

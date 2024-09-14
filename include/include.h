@@ -162,6 +162,7 @@ void							print_commands(t_command *command);
 void							ft_print_token(t_token *tokens);
 char							*surround_quotes(char *str);
 int								closing_found(char *str, int start, char c);
+char							**split_expand(char const *s);
 
 // ------------------------------------------------------
 
