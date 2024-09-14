@@ -22,16 +22,16 @@ char	*file_name_permissions(char *file_name, int type, int create_file)
 	{
 		if (is_directory(file_name))
 			return (ft_perror("minishell ", file_name, ": Is a directory\n"),
-				NULL);
+				free(file_name), NULL);
 		if (access(file_name, W_OK) == 0)
 			return (file_name);
-		return (perror("minishell "), NULL);
+		return (perror("minishell "), free(file_name), NULL);
 	}
 	else if (INPUT == type && create_file)
 	{
 		if (access(file_name, R_OK) == 0)
 			return (file_name);
-		return (perror("minishell "), NULL);
+		return (perror("minishell "), free(file_name), NULL);
 	}
 	return (file_name);
 }

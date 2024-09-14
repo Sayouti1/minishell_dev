@@ -125,3 +125,4 @@ aez-zoui@c4r6p7:~/Desktop/1337/minishell_dev$
 ##  you have to close the fd
 
 ============================================================================
+leaks : ls > $dfd
