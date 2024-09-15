@@ -26,7 +26,7 @@ void	helper_func(t_token *token)
 		token = token->next;
 		return ;
 	}
-	words = ft_split(expand, ' ');
+	words = split_expand(expand);
 	i = 0;
 	while (words && words[i])
 		add_token_to_list(&token, new_token(TOKEN_WORD, words[i++]));
