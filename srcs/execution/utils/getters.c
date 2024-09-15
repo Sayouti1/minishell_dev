@@ -66,8 +66,9 @@ char	*get_dollar_key_v1(char *line, int *i)
 	j = *i + 1;
 	if (NULL == line)
 		return (NULL);
-	if (!line[j] || ft_isdigit(line[j]) || ft_char_in(line[j], " \n\t$\'\"\n{}><@+-/*"))
-		return ((*i)++, (*i)++,NULL);
+	if (!line[j] || ft_isdigit(line[j]) || ft_char_in(line[j],
+			" \n\t$\'\"\n{}><@+-/*"))
+		return ((*i)++, (*i)++, NULL);
 	while (line[j] && !ft_char_in(line[j], " \t$\'\"\n{}><")
 		&& (ft_isalnum(line[j]) || line[j] == '_'))
 		j++;

@@ -66,7 +66,7 @@ typedef struct s_fd_collectors
 	struct s_fd_collectors		*next;
 }								t_fd_collectors;
 
-typedef struct s_command t_command;
+typedef struct s_command	t_command;
 
 typedef struct s_global_vars
 {
@@ -85,7 +85,7 @@ typedef struct s_global_vars
 
 }								t_global_vars;
 
-extern t_global_vars			g_vars;
+extern t_global_vars		g_vars;
 
 enum	e_redirection
 {
@@ -226,6 +226,7 @@ void							free_redirection(t_redirection *red);
 int								reset_fd(void);
 void							free_cmds(t_command *cmd);
 
+void							free_cmd_token_garbage(void);
 int								collect_garbage(void *to_add);
 void							free_garbage(void);
 

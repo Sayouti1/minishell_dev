@@ -30,11 +30,10 @@ void	init_g_vars(char **envp)
 
 void	main_loop(void)
 {
-	char		*line;
-	
+	char	*line;
+
 	while (1)
 	{
-
 		g_vars.cmd = NULL;
 		g_vars.token = NULL;
 		sig_init();
@@ -62,14 +61,5 @@ int	main(int ac, char **av, char **envp)
 	free_env();
 	close(g_vars.std_in);
 	close(g_vars.std_out);
-	exit (g_vars.exit_status);
+	exit(g_vars.exit_status);
 }
-
-
-
-
-
-
-
-
-

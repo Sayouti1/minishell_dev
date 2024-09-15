@@ -19,3 +19,10 @@ void	free_redirection(t_redirection *red)
 	free(red->file_name);
 	free(red);
 }
+
+void	free_cmd_token_garbage(void)
+{
+	free_cmds(g_vars.cmd);
+	free_token(g_vars.token);
+	free_garbage();
+}
