@@ -23,6 +23,8 @@ void	free_redirection(t_redirection *red)
 void	free_cmd_token_garbage(void)
 {
 	free_cmds(g_vars.cmd);
+	g_vars.cmd = NULL;
 	free_token(g_vars.token);
+	free_env();
 	free_garbage();
 }

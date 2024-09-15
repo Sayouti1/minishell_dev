@@ -20,6 +20,11 @@ int	handle_tokens(t_token **tokens, t_token **ntokens)
 	{
 		ft_putstr_fd("minishell: maximum here-document count exceeded\n", 2);
 		free_token(*tokens);
+		free_cmds(g_vars.cmd);
+		free_garbage();
+		free_env();
+		close(g_vars.std_in);
+		close(g_vars.std_out);
 		exit (2);
 	}
 	*ntokens = expand_var(*tokens);

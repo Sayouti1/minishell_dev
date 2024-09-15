@@ -53,6 +53,7 @@ int	is_directory(char *path)
 {
 	struct stat	dir_stat;
 
-	stat(path, &dir_stat);
+	if (stat(path, &dir_stat) != 0)
+		return (0);
 	return (S_ISDIR(dir_stat.st_mode));
 }

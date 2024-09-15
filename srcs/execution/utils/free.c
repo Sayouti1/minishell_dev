@@ -27,6 +27,7 @@ void	free_env(void)
 		free(tmp);
 		tmp = g_vars.env;
 	}
+	g_vars.env = NULL;
 }
 
 void	delete_env(t_env *env)

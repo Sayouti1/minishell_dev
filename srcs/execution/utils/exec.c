@@ -20,7 +20,7 @@ void	dup2_and_close(int new_fd, int old_fd)
 
 int	execute_bin(t_command *cmd)
 {
-	int	pid;
+	int		pid;
 
 	g_vars.parent = 0;
 	pid = fork();
@@ -32,15 +32,14 @@ int	execute_bin(t_command *cmd)
 		if (cmd->fd_out != 1)
 			dup2_and_close(cmd->fd_out, 1);
 		close_file_ds();
-		if (execve(cmd->command, cmd->args, get_env_array()) == -1)
-		{
-			perror("minishell ");
-			if (errno == EACCES || errno == EISDIR)
-				return (exit(126), 1);
-			if (errno == ENOENT)
-				return (exit(127), 1);
-		}
-		exit(1);
+		execve(cmd->command, cmd->args, get_env_array());
+		perror("minishell ");
+		if (errno == EACCES || errno == EISDIR)
+			g_vars.exit_status = 126;
+		if (errno == ENOENT)
+			g_vars.exit_status = 127;
+		free_cmd_token_garbage();
+		exit(g_vars.exit_status);
 	}
 	wait(&g_vars.exit_status);
 	g_vars.parent = 1;
@@ -55,15 +54,13 @@ int	execute_bin_pipe(t_command *cmd)
 	if (cmd->fd_out != 1)
 		dup2_and_close(cmd->fd_out, 1);
 	close_file_ds();
-	if (execve(cmd->command, cmd->args, get_env_array()) == -1)
-	{
-		perror("minishell ");
-		if (errno == EACCES || errno == EISDIR)
-			return (exit(126), 1);
-		if (errno == ENOENT)
-			return (exit(127), 1);
-	}
-	exit(1);
+	execve(cmd->command, cmd->args, get_env_array());
+	perror("minishell ");
+	if (errno == EACCES || errno == EISDIR)
+		g_vars.exit_status = 126;
+	if (errno == ENOENT)
+		g_vars.exit_status = 127;
+	return (g_vars.exit_status);
 }
 
 void	redirection_exec(t_command *cmd)

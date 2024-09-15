@@ -54,7 +54,6 @@ char	**get_env_array(void)
 	array = malloc(sizeof(char *) * (i + 1));
 	if (array == NULL)
 		return (NULL);
-	array[i] = NULL;
 	i = 0;
 	while (env)
 	{
@@ -62,10 +61,11 @@ char	**get_env_array(void)
 			key = ft_strjoin(env->key, "=");
 		else
 			key = ft_strjoin_prefixed(env->key, '=', env->value);
-		collect_garbage(array[i]);
+		collect_garbage(key);
 		array[i++] = key;
 		env = env->next;
 	}
+	array[i] = NULL;
 	collect_garbage(array);
 	return (array);
 }

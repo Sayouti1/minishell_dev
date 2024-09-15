@@ -66,6 +66,7 @@ int	execute_pipes(int len, int i, t_command *cmd, int *pids)
 		{
 			execute_command(cmd, 1);
 			close_file_ds();
+			free_cmd_token_garbage();
 			exit(g_vars.exit_status);
 		}
 		g_vars.parent = 1;
