@@ -46,6 +46,8 @@ void	main_loop(void)
 			add_history(line);
 			process_line(line, &g_vars.cmd);
 		}
+		// if (!line)
+		// 	free(line);
 	}
 }
 
