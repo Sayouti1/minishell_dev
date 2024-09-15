@@ -18,12 +18,12 @@ static int	check_value(char *str)
 	char	*file;
 
 	i = 0;
-	file = ft_strtrim(str, " ");
+	file = ft_strtrim(str, " \t\n\v");
 	if (file == NULL || *file == '\0')
 		return (free(file), 1);
-	while (str[i])
+	while (file[i])
 	{
-		if (str[i] == ' ')
+		if (is_trim(file[i]))
 			return (free(file), 1);
 		i++;
 	}
@@ -70,3 +70,4 @@ char	*surround_quotes(char *str)
 	free(str);
 	return (new_str);
 }
+

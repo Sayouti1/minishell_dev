@@ -23,7 +23,6 @@ static int	ft_wcount(char const *s)
 
 	i = 0;
 	wcount = 0;
-    //printf("ft_wcount\n");
 	while (s && s[i])
 	{
 		while (s[i] && is_trim(s[i]))
@@ -63,7 +62,7 @@ char	**split_expand(char const *s)
 	if (!s || !ft_wcount(s))
 		return (NULL);
 	words = (char **)malloc((ft_wcount(s) + 1) * sizeof(char *));
-\	if (!words)
+	if (!words)
 		return (NULL);
 	i = 0;
 	start = 0;

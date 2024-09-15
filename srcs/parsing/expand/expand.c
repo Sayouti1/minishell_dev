@@ -59,9 +59,7 @@ static void	handle_word_expansion(t_token **ntoken, t_token **token)
 	char	**words;
 	int		i;
 
-	printf("BEFOR------> %s <-------\n\n", (*token)->value);
 	expand = substitute_var1((*token)->value);
-	printf("AFTER------> %s <-------\n\n\n", expand);
 	if (ft_strchr(expand, '"') || ft_strchr(expand, '=')
 		|| ft_strchr(expand, '\''))
 		add_token_to_list(ntoken, new_token((*token)->type, expand));
@@ -78,6 +76,8 @@ static void	handle_word_expansion(t_token **ntoken, t_token **token)
 	}
 	free(expand);
 }
+
+		
 
 t_token	*expand_var(t_token *tokens)
 {
@@ -98,3 +98,4 @@ t_token	*expand_var(t_token *tokens)
 	}
 	return (ntoken);
 }
+
