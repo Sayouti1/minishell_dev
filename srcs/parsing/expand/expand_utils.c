@@ -70,4 +70,3 @@ char	*surround_quotes(char *str)
 	free(str);
 	return (new_str);
 }
-

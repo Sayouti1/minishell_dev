@@ -77,8 +77,6 @@ static void	handle_word_expansion(t_token **ntoken, t_token **token)
 	free(expand);
 }
 
-		
-
 t_token	*expand_var(t_token *tokens)
 {
 	t_token	*token;
@@ -98,4 +96,3 @@ t_token	*expand_var(t_token *tokens)
 	}
 	return (ntoken);
 }
-
