@@ -90,6 +90,12 @@ t_token	*expand_var(t_token *tokens)
 			handle_heredoc(&ntoken, &token);
 		else if (token->type == TOKEN_WORD && ft_strchr(token->value, '$'))
 			handle_word_expansion(&ntoken, &token);
+		else if (token->type != TOKEN_WORD && ft_ambiguous_err(token))
+		{
+			add_token_to_list(&ntoken, new_token(token->type, token->value));
+			token = token->next;
+			add_token_to_list(&ntoken, new_token(token->type, NULL));
+		}
 		else
 			add_token_to_list(&ntoken, new_token(token->type, token->value));
 		token = token->next;

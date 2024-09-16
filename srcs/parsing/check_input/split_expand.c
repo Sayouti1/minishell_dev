@@ -79,17 +79,3 @@ char	**split_expand(char const *s)
 	words[i] = NULL;
 	return (words);
 }
-
-// #include <stdio.h>
-// int main(int argc, char *argv[])
-// {
-// 	int i = 0;
-//     printf("1\n");
-// 	char **words = split_expand(argv[1]);
-
-// 	while (words[i])
-// 	{
-// 		printf("%s\n",words[i]);
-// 		i++;
-// 	} 
-// }
