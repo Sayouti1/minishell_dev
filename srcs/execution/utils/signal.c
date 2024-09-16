@@ -16,6 +16,7 @@ void	sig_handler(int sig)
 {
 	if (sig == SIGINT && g_vars.parent)
 	{
+		g_vars.exit_status = 130;
 		ft_putchar_fd('\n', 1);
 		rl_replace_line("", 0);
 		rl_on_new_line();
@@ -30,6 +31,7 @@ void	heredoc_sig(int sig)
 	if (sig == SIGINT)
 	{
 		g_vars.sig_c = 1;
+		g_vars.exit_status = 130;
 		ft_putchar_fd('\n', 1);
 		close(STDIN_FILENO);
 	}
