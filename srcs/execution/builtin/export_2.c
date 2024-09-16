@@ -27,11 +27,30 @@ int	ft_str_isdigit(char *str)
 	return (1);
 }
 
+int	fix_env(void)
+{
+	char	*tmp;
+
+	tmp = get_env_v1("PWD");
+	if (NULL == tmp)
+	{
+		tmp = getcwd(NULL, 0);
+		add_to_env(ft_strdup("PWD"), ft_strdup(tmp), 1);
+		free(tmp);
+	}
+	tmp = NULL;
+	tmp = get_env_v1("OLDPWD");
+	if (NULL == tmp)
+		add_to_env(ft_strdup("OLDPWD"), NULL, 0);
+	return (0);
+}
+
 int	fix_shlvl(void)
 {
 	char	*level;
 	int		val;
 
+	fix_env();
 	level = get_env_v1("SHLVL");
 	if (NULL == level)
 		return (add_to_env(ft_strdup("SHLVL"), ft_strdup("1"), 1), 1);

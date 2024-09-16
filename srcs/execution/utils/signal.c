@@ -14,13 +14,14 @@
 
 void	sig_handler(int sig)
 {
-	if (sig == SIGINT && g_vars.parent)
+	if (sig == SIGINT)
 	{
 		g_vars.exit_status = 130;
 		ft_putchar_fd('\n', 1);
 		rl_replace_line("", 0);
 		rl_on_new_line();
-		rl_redisplay();
+		if (g_vars.parent)
+			rl_redisplay();
 	}
 	if (sig == SIGQUIT)
 		printf("Quit (core dumped)\n");
