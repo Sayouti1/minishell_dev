@@ -124,7 +124,7 @@ int	is_error_logic(char *line)
 	i = 0;
 	while (line[i])
 	{
-		update_quote_counts(*line, &sq_count, &dq_count);
+		update_quote_counts(line[i], &sq_count, &dq_count);
 		if (!(dq_count % 2) && !(sq_count % 2))
 		{
 			if ((line[i] == '|' && line[i + 1] == '|') || (line[i] == '&'
