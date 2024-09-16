@@ -47,7 +47,7 @@ int	ft_exit(char **arg)
 
 	printf("exit\n");
 	if (NULL == arg)
-		exit_status = 0;
+		exit_status = g_vars.exit_status;
 	else if (str_isdigit(arg[0]) == 2)
 		exit_status = 2;
 	else if (split_len(arg) > 1)

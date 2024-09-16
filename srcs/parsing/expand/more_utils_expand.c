@@ -60,8 +60,8 @@ char	*handle_dollar_sign(char *str, int *i, char *concat, int in_quotes)
 		if (str[*i + 1] == '{')
 			++(*i);
 		key = get_dollar_key_v1(str, i);
-		while (str[*i] && ft_char_in(str[*i], " \t}"))
-			++(*i);
+		// while (str[*i] && ft_char_in(str[*i], " \t}"))
+		// 	++(*i);
 		concat = string_concat(concat, ft_strdup(get_env_v1(key)));
 		free(key);
 		return (concat);
