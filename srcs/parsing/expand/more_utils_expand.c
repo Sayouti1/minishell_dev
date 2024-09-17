@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand.c                                           :+:      :+:    :+:   */
+/*   more_utils_expand.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aez-zoui <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 22:38:03 by aez-zoui          #+#    #+#             */
-/*   Updated: 2024/09/05 22:38:05 by aez-zoui         ###   ########.fr       */
+/*   Updated: 2024/09/17 00:30:49 by aez-zoui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,6 @@ char	*handle_dollar_sign(char *str, int *i, char *concat, int in_quotes)
 		if (str[*i + 1] == '{')
 			++(*i);
 		key = get_dollar_key_v1(str, i);
-		// while (str[*i] && ft_char_in(str[*i], " \t}"))
-		// 	++(*i);
 		concat = string_concat(concat, ft_strdup(get_env_v1(key)));
 		free(key);
 		return (concat);
