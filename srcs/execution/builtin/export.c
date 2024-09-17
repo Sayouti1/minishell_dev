@@ -12,11 +12,9 @@
 
 #include "../../../include/include.h"
 
-int	ft_concat_env_var(char *var, char *tmp)
+int	ft_concat_env_var(char *var, char *tmp, int i, int x)
 {
-	int		i;
 	char	**key_value;
-	int		x;
 
 	i = 0;
 	while (var && var[i] && var[i] != '=')
@@ -35,8 +33,10 @@ int	ft_concat_env_var(char *var, char *tmp)
 		x = 2;
 	tmp = string_concat(ft_strdup(get_env_v1(key_value[0])),
 			ft_strdup(key_value[1] + x));
-	if (!ft_env_replace(key_value[0], key_value[1]))
+	if (!ft_env_replace(key_value[0], tmp))
 		add_to_env(ft_strdup(key_value[0]), tmp, 1);
+	else
+		free(tmp);
 	free_split(key_value);
 	return (1);
 }
@@ -75,7 +75,7 @@ int	ft_export(char **var)
 	{
 		if (is_not_valid(var[i]) && ++i)
 			continue ;
-		if (ft_concat_env_var(var[i], NULL) && ++i)
+		if (ft_concat_env_var(var[i], NULL, 0, 0) && ++i)
 			continue ;
 		key_value = split_on_two(var[i++], "=");
 		if (NULL == key_value)

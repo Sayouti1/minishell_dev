@@ -197,7 +197,7 @@ void							execute_built_in(t_command *cmd);
 int								exit_overflow(char *arg);
 int								ft_exit(char **arg);
 
-int								ft_concat_env_var(char *var, char *tmp);
+int								ft_concat_env_var(char *var, char *tmp, int i, int x);
 int								is_not_valid(char *var);
 int								ft_export(char **var);
 void							ft_print_export(void);
