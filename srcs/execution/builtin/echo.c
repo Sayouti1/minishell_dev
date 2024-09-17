@@ -49,7 +49,7 @@ void	ft_echo(char **str)
 	while (str[i])
 	{
 		ft_putstr_fd(str[i++], 1);
-		if (str[i] && str[i][0])
+		if (str[i])
 			ft_putstr_fd(" ", 1);
 	}
 	if (n_flag == 0)
