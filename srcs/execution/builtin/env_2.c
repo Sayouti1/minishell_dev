@@ -42,12 +42,10 @@ int	env_len(t_env *env)
 	return (i);
 }
 
-char	**get_env_array(void)
+char	**get_env_array(int i, char *key)
 {
 	char	**array;
-	char	*key;
 	t_env	*env;
-	int		i;
 
 	env = g_vars.env;
 	i = env_len(env);
@@ -57,12 +55,15 @@ char	**get_env_array(void)
 	i = 0;
 	while (env)
 	{
-		if (NULL == env->value)
-			key = ft_strjoin(env->key, "=");
-		else
-			key = ft_strjoin_prefixed(env->key, '=', env->value);
-		collect_garbage(key);
-		array[i++] = key;
+		if (ft_strcmp(env->key, "_") != 0)
+		{
+			if (NULL == env->value)
+				key = ft_strjoin(env->key, "=");
+			else
+				key = ft_strjoin_prefixed(env->key, '=', env->value);
+			collect_garbage(key);
+			array[i++] = key;
+		}
 		env = env->next;
 	}
 	array[i] = NULL;

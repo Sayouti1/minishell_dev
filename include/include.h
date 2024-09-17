@@ -179,7 +179,7 @@ void							ft_echo(char **str);
 t_env							*new_node(char *key, char *value,
 									int to_export);
 int								env_len(t_env *env);
-char							**get_env_array(void);
+char							**get_env_array(int i, char *key);
 
 int								add_to_env(char *key, char *value,
 									int to_export);

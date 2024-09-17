@@ -99,10 +99,13 @@ void	ft_print_export(void)
 	tmp = g_vars.env;
 	while (tmp)
 	{
-		printf("declare -x %s", tmp->key);
-		if (tmp->value)
-			printf("=\"%s\"", tmp->value);
-		printf("\n");
+		if (ft_strcmp(tmp->key, "_") != 0)
+		{
+			printf("declare -x %s", tmp->key);
+			if (tmp->value)
+				printf("=\"%s\"", tmp->value);
+			printf("\n");
+		}
 		tmp = tmp->next;
 	}
 	g_vars.exit_status = 0;

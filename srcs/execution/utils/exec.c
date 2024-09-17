@@ -32,7 +32,7 @@ int	execute_bin(t_command *cmd)
 		if (cmd->fd_out != 1)
 			dup2_and_close(cmd->fd_out, 1);
 		close_file_ds();
-		execve(cmd->command, cmd->args, get_env_array());
+		execve(cmd->command, cmd->args, get_env_array(0, NULL));
 		perror("minishell ");
 		if (errno == EACCES || errno == EISDIR)
 			g_vars.exit_status = 126;
@@ -54,7 +54,7 @@ int	execute_bin_pipe(t_command *cmd)
 	if (cmd->fd_out != 1)
 		dup2_and_close(cmd->fd_out, 1);
 	close_file_ds();
-	execve(cmd->command, cmd->args, get_env_array());
+	execve(cmd->command, cmd->args, get_env_array(0, NULL));
 	perror("minishell ");
 	if (errno == EACCES || errno == EISDIR)
 		g_vars.exit_status = 126;
