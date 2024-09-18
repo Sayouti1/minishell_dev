@@ -42,6 +42,10 @@ void	process_line(char *line, t_command **command)
 	{
 		g_vars.token = ntokens;
 		token_to_command_convert(ntokens, command);
+		ft_print_token(ntokens);
+		printf("\n");
+		print_commands(*command);
+		printf("\n");
 		process_command(*command);
 		free_cmds(*command);
 		*command = NULL;
