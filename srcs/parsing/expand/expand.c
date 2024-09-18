@@ -60,7 +60,6 @@ static void	handle_heredoc(t_token **ntoken, t_token **token)
 	$ls'' --> will be split it .
 */
 
-
 int is_split(char *data)
 {
 	int is_close_double;
@@ -93,7 +92,7 @@ static void	handle_word_expansion(t_token **ntoken, t_token **token)
 	int		i;
 
 	expand = substitute_var1((*token)->value);
-d
+
 	if (!is_split((*token)->value) || ft_strchr(expand, '='))
 		add_token_to_list(ntoken, new_token((*token)->type, expand));
 	else
