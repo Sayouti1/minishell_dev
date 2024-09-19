@@ -197,7 +197,8 @@ void							execute_built_in(t_command *cmd);
 int								exit_overflow(char *arg);
 int								ft_exit(char **arg);
 
-int								ft_concat_env_var(char *var, char *tmp, int i, int x);
+int								ft_concat_env_var(char *var, char *tmp, int i,
+									int x);
 int								is_not_valid(char *var);
 int								ft_export(char **var);
 void							ft_print_export(void);
@@ -243,7 +244,8 @@ int								check_curly_braces(char *str);
 char							*expand_heredoc(char *line, int *bad_sub);
 int								read_heredoc(char *del, char **line);
 int								treat_heredoc(char *del, int fd, int sub_var);
-int								open_heredoc(t_redirection *red);
+int								open_heredoc(t_redirection *red, char *del,
+									char *file_name);
 
 int								list_len(t_command *head);
 int								split_len(char **split);

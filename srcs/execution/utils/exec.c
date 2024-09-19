@@ -74,7 +74,7 @@ void	redirection_exec(t_command *cmd)
 			cmd->fd_out = tmp->fd;
 		else if (tmp->type == INPUT)
 			cmd->fd_in = tmp->fd;
-		else if (tmp->type == HEREDOC && 0 == open_heredoc(tmp))
+		else if (tmp->type == HEREDOC && 0 == open_heredoc(tmp, NULL, NULL))
 			cmd->fd_in = tmp->fd;
 		tmp = tmp->next;
 	}

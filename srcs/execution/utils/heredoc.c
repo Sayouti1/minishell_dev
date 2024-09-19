@@ -73,27 +73,55 @@ int	treat_heredoc(char *del, int fd, int sub_var)
 	return (0);
 }
 
-int	open_heredoc(t_redirection *red)
+char	*open_tmp_file(int *fd)
 {
-	char	*del;
+	char	*file_name;
+	char	*tmp;
+
+	fd[0] = -1;
+	fd[1] = -1;
+	tmp = ft_itoa(g_vars.tmp_file++);
+	file_name = ft_strjoin("/tmp/minishell_", tmp);
+	free(tmp);
+	while (file_name && access(file_name, F_OK) == 0)
+	{
+		free(file_name);
+		tmp = ft_itoa(g_vars.tmp_file++);
+		file_name = ft_strjoin("/tmp/minishell_", tmp);
+		free(tmp);
+	}
+	if (NULL == file_name)
+		return (ft_putstr_fd("Error creating /tmp/file\n", 2), NULL);
+	fd[1] = open(file_name, O_CREAT | O_TRUNC | O_WRONLY, 0666);
+	if (-1 == fd[1])
+		return (ft_putstr_fd("Error opening /tmp/file\n", 2), file_name);
+	return (file_name);
+}
+
+int	open_heredoc(t_redirection *red, char *del, char *file_name)
+{
 	int		sub_var;
 	int		fd[2];
 
 	if (g_vars.sig_c == 2)
 		return (1);
-	if (pipe(fd))
-		return (printf("Error in pipe();\n"), 1);
 	sub_var = ft_char_in('\'', red->file_name) + ft_char_in('"',
 			red->file_name);
+	file_name = open_tmp_file(fd);
+	if (NULL == file_name || fd[1] == -1)
+		return (1);
 	del = trim_str(ft_strdup(red->file_name));
 	if (treat_heredoc(del, fd[1], sub_var))
-		return (1);
+		return (free(file_name), 1);
 	close(fd[1]);
+	fd[0] = open(file_name, O_RDONLY);
+	free(file_name);
+	if (fd[0] == -1)
+		return (ft_putstr_fd("Error opening /tmp/file\n", 2), 1);
 	if (g_vars.sig_c == 2)
 	{
 		close(fd[0]);
-		red->fd = 0;
-		return (1);
+		return (red->fd = 0, 1);
 	}
 	red->fd = fd[0];
 	return (0);

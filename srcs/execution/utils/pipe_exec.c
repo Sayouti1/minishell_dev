@@ -69,7 +69,6 @@ int	execute_pipes(int len, int i, t_command *cmd, int *pids)
 			free_cmd_token_garbage();
 			exit(g_vars.exit_status);
 		}
-		g_vars.parent = 1;
 		pids[i] = pid;
 		close_fds(cmd);
 		cmd = cmd->next;
@@ -104,5 +103,6 @@ void	process_command(t_command *command)
 			if (j == i)
 				set_exit_status(g_vars.exit_status);
 		}
+		g_vars.parent = 1;
 	}
 }
