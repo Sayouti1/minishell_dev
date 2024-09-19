@@ -193,10 +193,10 @@ void							exec_echo(t_command *cmd);
 void							exec_export(t_command *cmd);
 void							exec_env(t_command *cmd);
 void							exec_unset(t_command *cmd);
-void							execute_built_in(t_command *cmd);
+void							execute_built_in(t_command *cmd, int piped);
 
 int								exit_overflow(char *arg);
-int								ft_exit(char **arg);
+int								ft_exit(char **arg, int piped);
 
 int								ft_concat_env_var(char *var, char *tmp, int i,
 									int x);

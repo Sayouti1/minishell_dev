@@ -87,7 +87,7 @@ void	execute_command(t_command *cmd, int piped)
 	if (g_vars.sig_c == 2 || check_redirection(cmd))
 		return ;
 	if (built_in(cmd->command))
-		execute_built_in(cmd);
+		execute_built_in(cmd, piped);
 	else
 	{
 		if (NULL == cmd->command)

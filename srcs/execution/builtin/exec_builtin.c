@@ -44,7 +44,7 @@ void	exec_unset(t_command *cmd)
 	g_vars.exit_status = 0;
 }
 
-void	execute_built_in(t_command *cmd)
+void	execute_built_in(t_command *cmd, int piped)
 {
 	if (cmd->fd_in != 0)
 	{
@@ -70,5 +70,5 @@ void	execute_built_in(t_command *cmd)
 	else if (!ft_strcmp(cmd->command, "pwd"))
 		pwd();
 	else if (!ft_strcmp(cmd->command, "exit"))
-		ft_exit(cmd->args);
+		ft_exit(cmd->args, piped);
 }

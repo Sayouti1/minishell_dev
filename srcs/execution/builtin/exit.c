@@ -41,11 +41,12 @@ int	exit_overflow(char *arg)
 	return (0);
 }
 
-int	ft_exit(char **arg)
+int	ft_exit(char **arg, int piped)
 {
 	int	exit_status;
 
-	printf("exit\n");
+	if (piped == 0)
+		printf("exit\n");
 	if (NULL == arg)
 		exit_status = g_vars.exit_status;
 	else if (str_isdigit(arg[0]) == 2)
