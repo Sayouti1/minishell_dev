@@ -51,22 +51,24 @@ int	ft_ambiguous_err(t_token *tokens)
 	return (0);
 }
 
-char	*surround_quotes(char *str)
+int	is_split(char *data)
 {
-	int		i;
-	int		j;
-	char	*new_str;
+	int	is_close_double;
+	int	is_close_single;
+	int	i;
 
-	new_str = malloc((ft_strlen(str) + 3) * sizeof(char));
-	if (NULL == new_str)
-		return (free(str), NULL);
-	new_str[0] = '"';
-	j = 1;
 	i = 0;
-	while (str[i])
-		new_str[j++] = str[i++];
-	new_str[j++] = '"';
-	new_str[j++] = '\0';
-	free(str);
-	return (new_str);
+	is_close_double = 0;
+	is_close_single = 0;
+	while (data[i])
+	{
+		if (data[i] == '\'')
+			is_close_single = !is_close_single;
+		else if (data[i] == '"')
+			is_close_double = !is_close_double;
+		else if (data[i] == '$' && !is_close_double && !is_close_single)
+			return (1);
+		i++;
+	}
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: aes-sayo <aes-sayo@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 09:33:50 by aes-sayo          #+#    #+#             */
-/*   Updated: 2024/08/14 20:34:53 by aez-zoui         ###   ########.fr       */
+/*   Updated: 2024/09/19 14:54:49 by aez-zoui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ typedef struct s_command
 }								t_command;
 
 // ---------------------------- PARSING -----------------
+int								is_split(char *data);
 void							close_file_ds(void);
 void							update_quote_counts(char c, int *s_q_count,
 									int *d_q_count);

@@ -6,7 +6,7 @@
 /*   By: aez-zoui <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 22:38:03 by aez-zoui          #+#    #+#             */
-/*   Updated: 2024/09/05 22:38:05 by aez-zoui         ###   ########.fr       */
+/*   Updated: 2024/09/19 14:18:45 by aez-zoui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,38 +52,6 @@ static void	handle_heredoc(t_token **ntoken, t_token **token)
 	if (*token && (*token)->type == TOKEN_WORD)
 		add_token_to_list(ntoken, new_token((*token)->type, (*token)->value));
 }
-/*
-	this function will be handler value like:
-	''$ls --> will be split it .
-	""$ls --> will be split it .
-	$ls"" --> will be split it .
-	$ls'' --> will be split it .
-*/
-
-int is_split(char *data)
-{
-	int is_close_double;
-	int is_close_single;
-	int	i;
-
-	i = 0;
-	is_close_double = 0;
-	is_close_single = 0;
-
-	while (data[i])
-	{
-		if (data[i] == '\'')
-			is_close_single = !is_close_single;
-		else if(data[i] == '"')
-			is_close_double = !is_close_double;
-		else if (data[i] == '$' && !is_close_double && !is_close_single)
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-
 
 static void	handle_word_expansion(t_token **ntoken, t_token **token)
 {
@@ -92,7 +60,6 @@ static void	handle_word_expansion(t_token **ntoken, t_token **token)
 	int		i;
 
 	expand = substitute_var1((*token)->value);
-
 	if (!is_split((*token)->value) || ft_strchr(expand, '='))
 		add_token_to_list(ntoken, new_token((*token)->type, expand));
 	else
@@ -101,7 +68,6 @@ static void	handle_word_expansion(t_token **ntoken, t_token **token)
 		i = -1;
 		while (words && words[++i])
 		{
-			//words[i] = surround_quotes(words[i]);
 			add_token_to_list(ntoken, new_token(TOKEN_WORD, words[i]));
 		}
 		free_words(words);
