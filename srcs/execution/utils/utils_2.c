@@ -60,5 +60,26 @@ int	fix_command_path(t_command *cmd)
 	free(tmp_cmd);
 	if (cmd->command)
 		fix_command_arg(cmd);
+	update_under_s(cmd);
 	return (ret);
+}
+
+void	update_under_s(t_command *command)
+{
+	char		*tmp;
+	int			i;
+	t_command	*cmd;
+
+	if (NULL == command)
+		return ;
+	cmd = command;
+	i = 0;
+	tmp = cmd->command;
+	while (cmd->args && cmd->args[i])
+	{
+		tmp = cmd->args[i];
+		++i;
+	}
+	if (ft_env_replace("_", tmp) == 0)
+		add_to_env(ft_strdup("_"), ft_strdup(tmp), 1);
 }

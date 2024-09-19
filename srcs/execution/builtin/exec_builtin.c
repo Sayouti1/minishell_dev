@@ -56,6 +56,7 @@ void	execute_built_in(t_command *cmd)
 		dup2(cmd->fd_out, 1);
 		close(cmd->fd_out);
 	}
+	update_under_s(cmd);
 	if (!ft_strcmp(cmd->command, "echo"))
 		exec_echo(cmd);
 	else if (!ft_strcmp(cmd->command, "export"))

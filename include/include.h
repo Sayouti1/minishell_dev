@@ -309,5 +309,5 @@ int								ft_strcmp(char *s1, char *s2);
 char							**split_on_two(char *line, char *del);
 
 void							init_g_vars(char **envp);
-
+void							update_under_s(t_command *command);
 #endif

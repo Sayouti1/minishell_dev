@@ -20,6 +20,8 @@ int	pwd(void)
 	char	*curr_dir;
 
 	curr_dir = getcwd(NULL, 0);
+	if (NULL == curr_dir && NULL != get_env_v1("PWD"))
+		return (printf("%s\n", get_env_v1("PWD")), g_vars.exit_status = 0, 1);
 	if (NULL == curr_dir)
 		return (ft_putstr_fd("pwd: error retrieving current directory: getcwd:"
 				"cannot access parent directories:"

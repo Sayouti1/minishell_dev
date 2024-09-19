@@ -60,7 +60,10 @@ void	exec_cd(char **split)
 	char	*old_pwd;
 	char	*pwd;
 
-	old_pwd = getcwd(NULL, 0);
+	if (get_env_v1("PWD") == NULL)
+		old_pwd = getcwd(NULL, 0);
+	else
+		old_pwd = ft_strdup(get_env_v1("PWD"));
 	if (cd(split) == 0 && old_pwd != NULL)
 	{
 		if (!ft_env_replace("OLDPWD", old_pwd))
