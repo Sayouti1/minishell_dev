@@ -1,30 +1,30 @@
-1/ cat <a => file does not exist ✅ fixed ✅
+1/ cat <a => file does not exist 
 
-2/ cat <<A<<A<<A<<A<<A<<A | cat <<A<<A<<A<A<<A<<A<<A<<A | cat <<A<<A<<A ✅ 50% fixed 🟥 input redirection need to be fixed 🆘
+2/ cat <<A<<A<<A<<A<<A<<A | cat <<A<<A<<A<A<<A<<A<<A<<A | cat <<A<<A<<A  input redirection need to be fixed
 >>2004h>
 minishell :)=> ^C>>minishell :)=> 
  CTL+C 
 
 3/ cat > a > /dev/stdout  | shoud write in a
 
-4/ ls > $a ✅ Probably Fixed ✅
+4/ ls > $a Probably Fixed 
 minishell: ambiguous redirect
 include  Libft	Makefile  minishell  srcs  to_handle.txt
-ls shoud not work ✅
+ls shoud not work 
 
-5/ exit 11111111111111111111111111111111 | exit with 2 ✅ fixed ✅
+5/ exit 11111111111111111111111111111111 | exit with 2 
 
-6/ export $sdasf=$asdas ✅ fixed ✅
+6/ export $sdasf=$asdas 
 
-7 /env should be in the current state ✅ fixed ✅
+7 /env should be in the current state 
 
-8/ ls < $ada 🔴🟥 ambiguous error needs to be displayed 🟥🔴 ✅ fixed ✅
+8/ ls < $ada ambiguous error needs to be displayed 
 include  Libft	Makefile  minishell  srcs  to_handle.txt
 
  ambiguous redirect
 
-9/  cat << $asfasf | shoudn't expand ✅ fixed ✅
+9/  cat << $asfasf | shoudn't expand 
 
-10/ ls >> '"' ✅ fixed ✅
+10/ ls >> '"' 
 
-11/ <Libft/ft_memset.c cat  < Makefile | cat | cat | cat > a  problem in multi pipes ✅fixed✅ 
+11/ <Libft/ft_memset.c cat  < Makefile | cat | cat | cat > a  problem in multi pipes 
