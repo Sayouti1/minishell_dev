@@ -35,10 +35,13 @@ int	init_commands_fds(t_command *cmd, int len, int *curr_pipes, int *prev_pipes)
 	{
 		if (i != 0)
 			swap_pipes(curr_pipes, prev_pipes);
-		if (i < len - 1 && pipe(curr_pipes))
-			return (perror("minishell "), 1);
-		add_to_fds(curr_pipes[0]);
-		add_to_fds(curr_pipes[1]);
+		if (i < len - 1)
+		{
+			if (pipe(curr_pipes))
+				return (perror("minishell "), 1);
+			add_to_fds(curr_pipes[0]);
+			add_to_fds(curr_pipes[1]);
+		}
 		if (i != 0)
 			not_first_command(cmd, prev_pipes[0]);
 		if (i != len - 1)

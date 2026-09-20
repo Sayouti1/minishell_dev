@@ -55,7 +55,8 @@ int	main(int ac, char **av, char **envp)
 	init_g_vars(envp);
 	init_env();
 	main_loop();
-	rl_clear_history();
+	/* rl_clear_history is not available in the system readline on macOS. */
+	clear_history();
 	free_env();
 	close(g_vars.std_in);
 	close(g_vars.std_out);

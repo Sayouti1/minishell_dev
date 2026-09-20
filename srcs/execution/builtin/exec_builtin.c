@@ -57,18 +57,5 @@ void	execute_built_in(t_command *cmd, int piped)
 		close(cmd->fd_out);
 	}
 	update_under_s(cmd);
-	if (!ft_strcmp(cmd->command, "echo"))
-		exec_echo(cmd);
-	else if (!ft_strcmp(cmd->command, "export"))
-		exec_export(cmd);
-	else if (!ft_strcmp(cmd->command, "unset"))
-		exec_unset(cmd);
-	else if (!ft_strcmp(cmd->command, "env"))
-		exec_env(cmd);
-	else if (!ft_strcmp(cmd->command, "cd"))
-		exec_cd(cmd->args);
-	else if (!ft_strcmp(cmd->command, "pwd"))
-		pwd();
-	else if (!ft_strcmp(cmd->command, "exit"))
-		ft_exit(cmd->args, piped);
+	command_handler(cmd, piped);
 }

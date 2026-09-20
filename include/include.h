@@ -20,6 +20,7 @@
 # include <limits.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <readline/readline.h>
 # include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -194,6 +195,7 @@ void							exec_export(t_command *cmd);
 void							exec_env(t_command *cmd);
 void							exec_unset(t_command *cmd);
 void							execute_built_in(t_command *cmd, int piped);
+int							command_handler(t_command *cmd, int piped);
 
 int								exit_overflow(char *arg);
 int								ft_exit(char **arg, int piped);

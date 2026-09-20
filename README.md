@@ -39,6 +39,19 @@ To remove build files:
 make fclean
 ```
 
+## How the shell works
+
+The input follows this pipeline:
+
+`readline -> syntax check -> lexer -> expansion -> command builder -> executor`
+
+The lexer produces words and operator tokens. The command builder groups those
+tokens around pipes into commands with arguments and redirections. The executor
+opens redirections, connects pipes, dispatches built-ins, resolves external
+commands through `PATH`, and waits for child processes. See
+[ARCHITECTURE.md](ARCHITECTURE.md) for the data structures, ownership rules,
+and the role of each source directory.
+
 ## Team
 
 - Abdelaziz Sayouti
