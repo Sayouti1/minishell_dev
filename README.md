@@ -54,8 +54,8 @@ and the role of each source directory.
 
 ## Team
 
+- AHMED EZ-ZOUINE
 - Abdelaziz Sayouti
-- Ahmed Ez-Zouine
 
 ## License
 
